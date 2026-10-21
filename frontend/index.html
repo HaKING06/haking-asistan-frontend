@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="HaKING ile yazılım öğren, kodunu geliştir ve teknik sorularına yanıt bul." />
+  <meta name="author" content="Halit Güneş (HaKING)" />
+  <meta name="theme-color" content="#0b0d12" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="HaKING — Yazılım ve Kodlama Asistanı" />
+  <meta property="og:description" content="Kodlama öğrenirken, projelerini geliştirirken ve hataları çözerken HaKING'den destek al." />
+  <title>HaKING — Yazılım Asistanı</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/main.css" />
+  <link rel="stylesheet" href="./assets/css/auth.css" />
+  <link rel="stylesheet" href="./assets/css/chat.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section id="login-card" class="auth-screen">
+      <div class="auth-showcase">
+        <a class="brand-lockup" href="#" aria-label="HaKING ana sayfa">
+          <img src="./assets/img/logo.svg" alt="" class="brand-mark" />
+          <span class="brand-name">HaKING<span class="brand-period">.</span></span>
+        </a>
+
+        <div class="showcase-copy">
+          <span class="eyebrow"><span class="status-dot"></span> YAZILIM GELİŞTİRME ASİSTANI</span>
+          <h1>Fikirlerini<br />koda dönüştür<span class="accent-text">.</span></h1>
+          <p>Kodlama yolculuğunda takıldığın yerde yanında. Öğren, üret ve projelerini güvenle ileri taşı.</p>
+
+          <div class="showcase-code" aria-label="Kod örneği">
+            <div class="code-topbar"><span></span><span></span><span></span><small>hello-world.js</small></div>
+            <pre><code><span class="code-muted">01</span> <span class="code-purple">const</span> idea = <span class="code-green">"something great"</span>;
+<span class="code-muted">02</span>
+<span class="code-muted">03</span> <span class="code-purple">while</span> (learning) {
+<span class="code-muted">04</span>   <span class="code-blue">build</span>(idea);
+<span class="code-muted">05</span> }</code></pre>
+          </div>
+        </div>
+
+        <div class="showcase-bottom">
+          <div class="avatar-stack" aria-hidden="true"><span>&lt;/&gt;</span><span>AI</span><span>JS</span></div>
+          <p>Öğrenmek, geliştirmek ve üretmek için.</p>
+          <span class="showcase-credit">Halit Güneş tarafından geliştirildi</span>
+        </div>
+      </div>
+
+      <div class="auth-panel">
+        <div class="auth-mobile-brand">
+          <img src="./assets/img/logo.svg" alt="" class="brand-mark" />
+          <span class="brand-name">HaKING<span class="brand-period">.</span></span>
+        </div>
+
+        <div class="auth-form-wrap">
+          <header class="auth-heading">
+            <span class="eyebrow auth-eyebrow">KİŞİSEL GELİŞTİRME ALANIN</span>
+            <h2 id="auth-title">Tekrar hoş geldin</h2>
+            <p id="auth-subtitle">Hesabına giriş yap ve kaldığın yerden devam et.</p>
+          </header>
+
+          <form id="login-form" class="form">
+            <div class="form-group hidden" id="name-group">
+              <label for="fullName">Ad Soyad</label>
+              <input type="text" id="fullName" placeholder="Adın Soyadın" autocomplete="name" />
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-posta adresi</label>
+              <input type="email" id="email" placeholder="ornek@eposta.com" autocomplete="email" required />
+            </div>
+
+            <div class="form-group">
+              <div class="label-row">
+                <label for="password">Şifre</label>
+              </div>
+              <input type="password" id="password" placeholder="Şifreni gir" autocomplete="current-password" required />
+            </div>
+
+            <button type="submit" class="btn primary full auth-submit" id="submit-btn">
+              <span>Giriş yap</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
+            </button>
+
+            <p id="login-error" class="error-text" role="alert" aria-live="polite"></p>
+          </form>
+
+          <div class="auth-switch">
+            <p class="toggle-auth" id="to-register-row">
+              Henüz hesabın yok mu?
+              <button type="button" id="show-register" class="link-btn">Ücretsiz hesap oluştur</button>
+            </p>
+            <p class="toggle-auth hidden" id="to-login-row">
+              Zaten hesabın var mı?
+              <button type="button" id="show-login" class="link-btn">Giriş yap</button>
+            </p>
+          </div>
+
+          <div class="auth-assurance">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5 4 5v4.4c0 3.8 2.6 6.7 6 8.1 3.4-1.4 6-4.3 6-8.1V5l-6-2.5Z"/><path d="m7.5 9.8 1.7 1.7 3.4-3.7"/></svg>
+            <span>Hesabın ve sohbetlerin güvende</span>
+          </div>
+        </div>
+
+        <footer class="auth-footer">© 2026 HaKING <span>·</span> Kodla, öğren, geliştir.</footer>
+      </div>
+    </section>
+
+    <section id="chat-card" class="chat-app hidden">
+      <aside class="chat-sidebar">
+        <a class="brand-lockup sidebar-brand" href="#" aria-label="HaKING">
+          <img src="./assets/img/logo.svg" alt="" class="brand-mark" />
+          <span class="brand-name">HaKING<span class="brand-period">.</span></span>
+        </a>
+
+        <button type="button" id="new-chat-btn" class="new-chat-btn">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12"/></svg>
+          <span>Yeni sohbet</span>
+          <span class="shortcut">Ctrl K</span>
+        </button>
+
+        <div class="sidebar-section">
+          <span class="sidebar-label">KEŞFET</span>
+          <div class="sidebar-item active">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4.5A1.5 1.5 0 0 1 4.5 3H15a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4.5A1.5 1.5 0 0 1 3 15.5v-11Z"/><path d="M3 5h14M6 8h4m-4 3h8"/></svg>
+            <span>Yazılım asistanı</span>
+          </div>
+        </div>
+
+        <div class="sidebar-tip">
+          <span class="tip-icon">✳</span>
+          <p><strong>İyi bir soru,</strong><br />iyi bir başlangıçtır.</p>
+          <span class="tip-caption">Kodunu paylaş, birlikte çözelim.</span>
+        </div>
+
+        <div class="sidebar-profile">
+          <div id="user-avatar" class="user-avatar">H</div>
+          <div class="profile-copy">
+            <strong id="profile-name">Geliştirici</strong>
+            <span id="user-email-display" class="user-email"></span>
+          </div>
+          <button id="logout-btn" class="icon-button logout-btn" type="button" aria-label="Çıkış yap" title="Çıkış yap">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 3H4.5A1.5 1.5 0 0 0 3 4.5v11A1.5 1.5 0 0 0 4.5 17H8m4-3 4-4-4-4m4 4H7"/></svg>
+          </button>
+        </div>
+      </aside>
+
+      <div class="chat-main">
+        <header class="chat-topbar">
+          <div class="mobile-brand">
+            <img src="./assets/img/logo.svg" alt="" class="brand-mark" />
+            <span class="brand-name">HaKING<span class="brand-period">.</span></span>
+          </div>
+          <div class="model-label"><span class="model-status"></span> Yazılım Asistanı <span class="model-chevron">⌄</span></div>
+          <div class="topbar-right"><span class="topbar-caption">HAKING AI</span></div>
+        </header>
+
+        <div id="chat-window" class="chat-window" aria-live="polite">
+          <div id="welcome-state" class="welcome-state">
+            <div class="welcome-symbol"><img src="./assets/img/logo.svg" alt="" /></div>
+            <span class="eyebrow welcome-eyebrow">BUGÜN NE GELİŞTİRİYORUZ?</span>
+            <h1>Merhaba<span class="accent-text">.</span><br />Aklında ne var?</h1>
+            <p>Kodunu, fikrini veya takıldığın konuyu paylaş.<br class="desktop-break" /> Birlikte adım adım çözelim.</p>
+
+            <div class="prompt-grid">
+              <button type="button" class="prompt-card" data-prompt="HTML'de meta etiketleri ne işe yarar?">
+                <span class="prompt-icon prompt-violet">&lt;/&gt;</span>
+                <span><strong>Web geliştirme</strong><small>HTML'de meta etiketleri ne işe yarar?</small></span>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+              </button>
+              <button type="button" class="prompt-card" data-prompt="Bana basit bir C# Stack yapısı yazar mısın?">
+                <span class="prompt-icon prompt-blue">C#</span>
+                <span><strong>Kod örneği</strong><small>Basit bir C# Stack yapısı yaz</small></span>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+              </button>
+              <button type="button" class="prompt-card" data-prompt="Node.js ile nasıl sunucu ayağa kaldırılır?">
+                <span class="prompt-icon prompt-green">JS</span>
+                <span><strong>Backend</strong><small>Node.js ile nasıl sunucu kurulur?</small></span>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+              </button>
+              <button type="button" class="prompt-card" data-prompt="Gönderdiğim kodu inceleyip hatayı bulmama yardım eder misin?">
+                <span class="prompt-icon prompt-orange">⌘</span>
+                <span><strong>Hata ayıklama</strong><small>Kodumdaki hatayı bulmama yardım et</small></span>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <footer class="chat-composer-area">
+          <div id="typing-indicator" class="typing hidden"><span></span><span></span><span></span><span>HaKING düşünüyor...</span></div>
+          <div class="composer">
+            <textarea id="chat-input" rows="1" placeholder="Bir kod yapıştırın veya C#, Python, HTML hakkında bir soru sorun..." aria-label="Mesajını yaz"></textarea>
+            <div class="composer-bottom">
+              <span class="composer-hint"><kbd>Enter</kbd> gönder <span>·</span> <kbd>Shift + Enter</kbd> yeni satır</span>
+              <button id="send-btn" class="send-btn" type="button" aria-label="Mesajı gönder" title="Mesajı gönder">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m3 9 14-6-6 14-2.3-5.7L3 9Z"/><path d="m8.7 11.3 4-4"/></svg>
+              </button>
+            </div>
+          </div>
+          <p class="disclaimer">HaKING yanıtları yapay zeka tarafından oluşturulur. Önemli bilgileri doğrulamayı unutma.</p>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <script src="./assets/js/state.js"></script>
+  <script src="./assets/js/api.js"></script>
+  <script src="./assets/js/ui.js"></script>
+  <script src="./assets/js/auth.js"></script>
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
