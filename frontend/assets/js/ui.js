@@ -8,6 +8,7 @@ const profileNameEl = document.getElementById("profile-name");
 const userAvatarEl = document.getElementById("user-avatar");
 const typingIndicatorEl = document.getElementById("typing-indicator");
 const welcomeTemplate = document.getElementById("welcome-state");
+const assistantStreamContent = new WeakMap();
 
 function uiShowLogin() {
   loginCardEl.classList.remove("hidden");
@@ -66,6 +67,31 @@ function uiAddAssistantMessage(text) {
   row.appendChild(bubble);
   chatWindowEl.appendChild(meta);
   chatWindowEl.appendChild(row);
+  uiScrollChat();
+}
+
+function uiCreateAssistantStreamMessage() {
+  document.getElementById("welcome-state")?.remove();
+  const meta = document.createElement("div");
+  meta.className = "message-meta";
+  meta.textContent = `HaKING • ${uiGetTime()}`;
+
+  const row = document.createElement("div");
+  row.className = "message-row assistant";
+
+  const bubble = document.createElement("div");
+  bubble.className = "message-bubble";
+  row.appendChild(bubble);
+  chatWindowEl.append(meta, row);
+  assistantStreamContent.set(bubble, "");
+  uiScrollChat();
+  return bubble;
+}
+
+function uiAppendAssistantStream(bubble, chunk) {
+  const content = assistantStreamContent.get(bubble) + chunk;
+  assistantStreamContent.set(bubble, content);
+  bubble.innerHTML = uiRenderMarkdown(content);
   uiScrollChat();
 }
 

@@ -67,23 +67,27 @@ async function sendMessageFromUI() {
   uiShowTyping(true);
 
   try {
-    const { ok, reply, message: errorMessage } = await apiChat(
+    let assistantBubble = null;
+    let hasReceivedChunk = false;
+    const result = await apiChat(
       message,
       AppState.email,
-      AppState.token
+      AppState.token,
+      (chunk) => {
+        if (!hasReceivedChunk) {
+          hasReceivedChunk = true;
+          uiShowTyping(false);
+          assistantBubble = uiCreateAssistantStreamMessage();
+        }
+        uiAppendAssistantStream(assistantBubble, chunk);
+      }
     );
 
-    if (!ok) {
-      uiAddAssistantMessage(
-        errorMessage || "Mesaj gönderilemedi. Lütfen tekrar deneyin."
-      );
-      return;
+    if (!result.ok) {
+      uiAddAssistantMessage(result.message || "Mesaj gönderilemedi. Lütfen tekrar deneyin.");
+    } else if (!hasReceivedChunk) {
+      uiAddAssistantMessage("Asistan boş bir yanıt verdi. Lütfen tekrar deneyin.");
     }
-
-    uiAddAssistantMessage(
-      reply ||
-        "Beklenmeyen bir yanıt aldım, lütfen sorunu biraz daha farklı ifade etmeyi dene."
-    );
   } catch (err) {
     console.error(err);
     uiAddAssistantMessage(
