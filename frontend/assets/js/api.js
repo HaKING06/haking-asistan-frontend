@@ -35,14 +35,8 @@ async function apiRegister(email, password, name) {
 }
 
 const CHAT_TIMEOUT_MS = 90000;
-const CHAT_RETRY_DELAY_MS = 2000;
-const CHAT_RETRYABLE_STATUSES = new Set([500, 502, 504]);
 
-function wait(milliseconds) {
-  return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
-}
-
-async function readChatStream(response, onChunk, markChunkReceived) {
+async function readChatStream(response, onChunk) {
   if (!response.body) {
     throw new Error("Sunucu akış yanıtı göndermedi.");
   }
@@ -50,40 +44,30 @@ async function readChatStream(response, onChunk, markChunkReceived) {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
-  let streamError = null;
-  let completed = false;
+  let streamError = "";
 
   const processEvent = (eventText) => {
-    const data = eventText
-      .split(/\r?\n/)
-      .filter((line) => line.startsWith("data:"))
-      .map((line) => line.slice(5).trimStart())
-      .join("\n");
-    if (!data) return;
-
-    let event;
-    try {
-      event = JSON.parse(data);
-    } catch (error) {
-      console.error("Sohbet akışı olayı çözümlenemedi:", error);
-      throw new Error("Sunucudan geçersiz bir sohbet akışı alındı.");
-    }
-
-    if (event.type === "chunk") {
-      if (typeof event.text !== "string") {
-        throw new Error("Sunucudan geçersiz bir metin parçası alındı.");
+    let eventType = "message";
+    const data = [];
+    for (const line of eventText.split(/\r?\n/)) {
+      if (line.startsWith("event:")) {
+        eventType = line.slice(6).trim();
+      } else if (line.startsWith("data:")) {
+        data.push(line.slice(5).replace(/^ /, ""));
       }
-      markChunkReceived();
-      onChunk(event.text);
-    } else if (event.type === "error") {
-      streamError = event.message || "Asistan yanıt üretirken bir hata oluştu.";
-    } else if (event.type === "done") {
-      completed = true;
+    }
+    if (!data.length) return;
+
+    const text = data.join("\n");
+    if (eventType === "error") {
+      streamError = text || "Asistan yanıt üretirken bir hata oluştu.";
+    } else if (eventType === "message") {
+      onChunk(text);
     }
   };
 
   try {
-    while (!completed) {
+    while (true) {
       const { done, value } = await reader.read();
       buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
 
@@ -91,7 +75,7 @@ async function readChatStream(response, onChunk, markChunkReceived) {
       buffer = events.pop() || "";
       for (const eventText of events) {
         processEvent(eventText);
-        if (completed || streamError) break;
+        if (streamError) break;
       }
 
       if (done) {
@@ -101,14 +85,11 @@ async function readChatStream(response, onChunk, markChunkReceived) {
       if (streamError) break;
     }
   } finally {
+    if (streamError) await reader.cancel();
     reader.releaseLock();
   }
 
-  if (streamError) return { ok: false, message: streamError };
-  if (!completed) {
-    throw new Error("Asistan yanıt akışı beklenmedik şekilde sonlandı.");
-  }
-  return { ok: true };
+  return streamError ? { ok: false, message: streamError } : { ok: true };
 }
 
 async function apiChat(message, userId, token, onChunk) {
@@ -119,54 +100,32 @@ async function apiChat(message, userId, token, onChunk) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    const controller = new AbortController();
-    let timeoutId;
-    let receivedChunk = false;
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), CHAT_TIMEOUT_MS);
 
-    try {
-      timeoutId = window.setTimeout(() => controller.abort(), CHAT_TIMEOUT_MS);
-      const res = await fetch(`${API_URL}/chat`, {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ message, userId }),
-        signal: controller.signal,
-      });
+  try {
+    const res = await fetch(`${API_URL}/chat`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ message, userId }),
+      signal: controller.signal,
+    });
 
-      if (attempt === 0 && CHAT_RETRYABLE_STATUSES.has(res.status)) {
-        await res.body?.cancel();
-        await wait(CHAT_RETRY_DELAY_MS);
-        continue;
+    if (!res.ok) {
+      let data = {};
+      try {
+        data = await res.json();
+      } catch (error) {
+        console.error("Chat hata yanıtı JSON olarak okunamadı:", error);
       }
-
-      if (!res.ok) {
-        let data = {};
-        try {
-          data = await res.json();
-        } catch (error) {
-          console.error("Chat hata yanıtı JSON olarak okunamadı:", error);
-        }
-        return {
-          ok: false,
-          message: data.detail || data.message || "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
-        };
-      }
-
-      return await readChatStream(res, onChunk, () => {
-        receivedChunk = true;
-      });
-    } catch (error) {
-      const retryableNetworkError =
-        error?.name === "TypeError" || error?.name === "AbortError";
-      if (attempt === 0 && !receivedChunk && retryableNetworkError) {
-        await wait(CHAT_RETRY_DELAY_MS);
-        continue;
-      }
-      throw error;
-    } finally {
-      window.clearTimeout(timeoutId);
+      return {
+        ok: false,
+        message: data.detail || data.message || "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+      };
     }
-  }
 
-  return { ok: false, message: "Mesaj gönderilemedi. Lütfen tekrar deneyin." };
+    return await readChatStream(res, onChunk);
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
 }
