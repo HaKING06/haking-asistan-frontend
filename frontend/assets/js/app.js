@@ -66,9 +66,9 @@ async function sendMessageFromUI() {
   newChatBtnEl.disabled = true;
   uiShowTyping(true);
 
+  let assistantBubble = null;
+  let hasReceivedChunk = false;
   try {
-    let assistantBubble = null;
-    let hasReceivedChunk = false;
     const result = await apiChat(
       message,
       AppState.email,
@@ -94,6 +94,7 @@ async function sendMessageFromUI() {
       "Canlı asistana bağlanırken bir sorun oluştu. Biraz sonra tekrar deneyin."
     );
   } finally {
+    if (assistantBubble) uiFinishAssistantStream(assistantBubble);
     uiShowTyping(false);
     sendBtnEl.disabled = false;
     newChatBtnEl.disabled = false;

@@ -83,15 +83,32 @@ function uiCreateAssistantStreamMessage() {
   bubble.className = "message-bubble";
   row.appendChild(bubble);
   chatWindowEl.append(meta, row);
-  assistantStreamContent.set(bubble, "");
+  assistantStreamContent.set(bubble, { content: "", frameId: null });
   uiScrollChat();
   return bubble;
 }
 
 function uiAppendAssistantStream(bubble, chunk) {
-  const content = assistantStreamContent.get(bubble) + chunk;
-  assistantStreamContent.set(bubble, content);
-  bubble.innerHTML = uiRenderMarkdown(content);
+  const stream = assistantStreamContent.get(bubble);
+  if (!stream) return;
+  stream.content += chunk;
+  if (stream.frameId !== null) return;
+
+  stream.frameId = requestAnimationFrame(() => {
+    stream.frameId = null;
+    bubble.innerHTML = uiRenderMarkdown(stream.content);
+    uiScrollChat();
+  });
+}
+
+function uiFinishAssistantStream(bubble) {
+  const stream = assistantStreamContent.get(bubble);
+  if (!stream) return;
+  if (stream.frameId !== null) {
+    cancelAnimationFrame(stream.frameId);
+    stream.frameId = null;
+  }
+  bubble.innerHTML = uiRenderMarkdown(stream.content);
   uiScrollChat();
 }
 
