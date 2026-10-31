@@ -9,6 +9,7 @@ const fullNameInputEl = document.getElementById("fullName");
 const nameGroupEl = document.getElementById("name-group");
 const verificationGroupEl = document.getElementById("verification-group");
 const verificationCodeInputEl = document.getElementById("verification-code");
+const copyVerificationCodeBtnEl = document.getElementById("copy-verification-code-btn");
 const resendCodeBtnEl = document.getElementById("resend-code-btn");
 const editRegistrationBtnEl = document.getElementById("edit-registration-btn");
 
@@ -22,21 +23,97 @@ const toRegisterRowEl = document.getElementById("to-register-row");
 const toLoginRowEl = document.getElementById("to-login-row");
 const showRegisterBtnEl = document.getElementById("show-register");
 const showLoginBtnEl = document.getElementById("show-login");
+const PENDING_VERIFICATION_KEY = "haking_pending_verification";
 
 let authMode = "login"; // "login" | "register"
 let verificationMode = false;
 let pendingVerificationEmail = "";
+let pendingVerificationToken = "";
+let pendingEmailLinkToken = "";
 let resendCooldownTimer = null;
+let verificationPollTimer = null;
+let verificationPollInFlight = false;
+let copyCodeResetTimer = null;
 
 function showAuthError(message) {
   loginErrorEl.removeAttribute("data-state");
   loginErrorEl.textContent = message;
 }
 
-function clearVerificationMode() {
+function readStoredVerification() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PENDING_VERIFICATION_KEY) || "null");
+    if (saved?.verificationToken && saved.expiresAt > Date.now()) return saved;
+  } catch (error) {
+    console.warn("Bekleyen doğrulama bilgisi okunamadı.", error);
+  }
+  localStorage.removeItem(PENDING_VERIFICATION_KEY);
+  return null;
+}
+
+function storePendingVerification(verificationToken, emailLinkToken) {
+  if (!verificationToken) return;
+  const saved = {
+    verificationToken,
+    emailLinkToken: emailLinkToken || "",
+    expiresAt: Date.now() + 10 * 60 * 1000,
+  };
+  localStorage.setItem(PENDING_VERIFICATION_KEY, JSON.stringify(saved));
+}
+
+function stopVerificationStatusPolling() {
+  if (verificationPollTimer !== null) {
+    window.clearInterval(verificationPollTimer);
+    verificationPollTimer = null;
+  }
+  verificationPollInFlight = false;
+}
+
+function finishAuthentication(token, email) {
+  if (!token || !email) return;
+  clearVerificationMode();
+  saveSession(token, email);
+  uiShowChat(email);
+  startBackendKeepAlive();
+  void apiWarmup().catch((error) => console.info("Backend hazırlanıyor:", error.message));
+}
+
+function startVerificationStatusPolling(verificationToken) {
+  stopVerificationStatusPolling();
+  if (!verificationToken) return;
+
+  const poll = async () => {
+    if (verificationPollInFlight || document.visibilityState === "hidden") return;
+    verificationPollInFlight = true;
+    try {
+      const result = await apiRegistrationStatus(verificationToken);
+      if (result.status === "verified" && result.token && result.email) {
+        finishAuthentication(result.token, result.email);
+      } else if (result.status === "expired") {
+        stopVerificationStatusPolling();
+        localStorage.removeItem(PENDING_VERIFICATION_KEY);
+        showAuthError("Doğrulama süresi doldu. Kayıt formunu yeniden gönderip yeni kod iste.");
+      }
+    } catch (error) {
+      console.info("Doğrulama durumu kontrol edilemedi; tekrar denenecek.", error.message);
+    } finally {
+      verificationPollInFlight = false;
+    }
+  };
+
+  void poll();
+  verificationPollTimer = window.setInterval(poll, 5000);
+}
+
+function clearVerificationMode(clearStoredToken = true) {
+  stopVerificationStatusPolling();
   verificationMode = false;
   pendingVerificationEmail = "";
+  pendingVerificationToken = "";
+  pendingEmailLinkToken = "";
+  if (clearStoredToken) localStorage.removeItem(PENDING_VERIFICATION_KEY);
   verificationCodeInputEl.value = "";
+  copyVerificationCodeBtnEl.textContent = "Kodu kopyala";
   verificationGroupEl.classList.add("hidden");
   emailGroupEl.classList.remove("hidden");
   passwordGroupEl.classList.remove("hidden");
@@ -68,28 +145,67 @@ function startResendCooldown(seconds = 60) {
   resendCooldownTimer = window.setInterval(updateLabel, 1000);
 }
 
-function enterVerificationMode(email, message) {
+copyVerificationCodeBtnEl.addEventListener("click", async () => {
+  const code = verificationCodeInputEl.value.trim();
+  if (!/^\d{6}$/.test(code)) {
+    showAuthError("Önce e-postadaki 6 haneli kodu gir veya e-postadaki doğrulama düğmesini aç.");
+    verificationCodeInputEl.focus();
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(code);
+  } catch (error) {
+    verificationCodeInputEl.focus();
+    verificationCodeInputEl.select();
+    const copied = document.execCommand("copy");
+    verificationCodeInputEl.setSelectionRange(code.length, code.length);
+    if (!copied) {
+      showAuthError("Kod otomatik kopyalanamadı. Seçili kodu Ctrl+C ile kopyala.");
+      return;
+    }
+  }
+
+  showAuthError("");
+  copyVerificationCodeBtnEl.textContent = "Kopyalandı";
+  if (copyCodeResetTimer !== null) window.clearTimeout(copyCodeResetTimer);
+  copyCodeResetTimer = window.setTimeout(() => {
+    copyVerificationCodeBtnEl.textContent = "Kodu kopyala";
+    copyCodeResetTimer = null;
+  }, 1800);
+});
+
+function enterVerificationMode(email, message, credentials = {}) {
   verificationMode = true;
-  pendingVerificationEmail = email;
-  emailInputEl.value = email;
+  pendingVerificationEmail = email || "";
+  pendingVerificationToken = credentials.verificationToken || "";
+  pendingEmailLinkToken = credentials.emailLinkToken || "";
+  if (pendingVerificationToken) {
+    storePendingVerification(pendingVerificationToken, pendingEmailLinkToken);
+  }
+  emailInputEl.value = pendingVerificationEmail;
   emailInputEl.readOnly = true;
-  emailGroupEl.classList.remove("hidden");
+  emailGroupEl.classList.toggle("hidden", !pendingVerificationEmail);
   passwordGroupEl.classList.add("hidden");
   nameGroupEl.classList.add("hidden");
   verificationGroupEl.classList.remove("hidden");
-  verificationCodeInputEl.value = "";
+  verificationCodeInputEl.value = credentials.code || "";
   toRegisterRowEl.classList.add("hidden");
   toLoginRowEl.classList.add("hidden");
   authTitleEl.textContent = "E-postanı doğrula";
-  authSubtitleEl.textContent = message || `6 haneli kodu ${email} adresine gönderdik.`;
+  authSubtitleEl.textContent = message || (pendingVerificationEmail
+    ? `6 haneli kodu ${pendingVerificationEmail} adresine gönderdik.`
+    : "E-postandaki 6 haneli kodu gir.");
   submitBtnEl.querySelector("span").textContent = "Kodu doğrula";
   showAuthError("");
   startResendCooldown();
-  verificationCodeInputEl.focus();
+  if (pendingVerificationToken) startVerificationStatusPolling(pendingVerificationToken);
+  if (credentials.code) submitBtnEl.focus();
+  else verificationCodeInputEl.focus();
 }
 
-function switchToLogin() {
-  clearVerificationMode();
+function switchToLogin(clearStoredToken = true) {
+  clearVerificationMode(clearStoredToken);
   authMode = "login";
   nameGroupEl.classList.add("hidden");
   fullNameInputEl.required = false;
@@ -134,7 +250,7 @@ function setAuthLoading(isLoading) {
 }
 
 // Başlangıç durumu
-switchToLogin();
+switchToLogin(false);
 
 showRegisterBtnEl.addEventListener("click", switchToRegister);
 showLoginBtnEl.addEventListener("click", switchToLogin);
@@ -150,10 +266,18 @@ resendCodeBtnEl.addEventListener("click", async () => {
   showAuthError("");
   startResendCooldown();
   try {
-    const result = await apiResendRegistrationCode(pendingVerificationEmail);
+    const result = await apiResendRegistrationCode(
+      pendingVerificationEmail || null,
+      pendingVerificationToken || null,
+      pendingEmailLinkToken || null,
+    );
     if (!result.ok || !result.success) {
       showAuthError(result.message || "Yeni kod gönderilemedi.");
       return;
+    }
+    verificationCodeInputEl.value = "";
+    if (pendingVerificationToken) {
+      storePendingVerification(pendingVerificationToken, pendingEmailLinkToken);
     }
     authSubtitleEl.textContent = result.message || `Yeni kod ${pendingVerificationEmail} adresine gönderildi.`;
   } catch (error) {
@@ -211,18 +335,18 @@ loginFormEl.addEventListener("submit", async (e) => {
         return;
       }
 
-      const result = await apiVerifyRegistration(email, code);
+      const result = await apiVerifyRegistration(
+        email || null,
+        code,
+        pendingVerificationToken || null,
+        pendingEmailLinkToken || null,
+      );
       if (!result.ok || !result.success || !result.token) {
         showAuthError(result.message || "Kod doğrulanamadı.");
         return;
       }
 
-      const accountEmail = result.email || email;
-      clearVerificationMode();
-      saveSession(result.token, accountEmail);
-      uiShowChat(accountEmail);
-      startBackendKeepAlive();
-      void apiWarmup().catch((error) => console.info("Backend hazırlanıyor:", error.message));
+      finishAuthentication(result.token, result.email || email);
     } else if (authMode === "login") {
       // GİRİŞ
       const result = await apiLogin(email, password);
@@ -257,7 +381,10 @@ loginFormEl.addEventListener("submit", async (e) => {
 
       passwordInputEl.value = "";
       fullNameInputEl.value = "";
-      enterVerificationMode(result.email || email, result.message);
+      enterVerificationMode(result.email || email, result.message, {
+        verificationToken: result.verification_token,
+        emailLinkToken: result.email_link_token,
+      });
     }
   } catch (err) {
     console.error("AUTH HATASI:", err);
@@ -281,3 +408,68 @@ logoutBtnEl.addEventListener("click", () => {
   uiShowLogin();
   switchToLogin();
 });
+
+async function openRegistrationEmailLink() {
+  const fragment = window.location.hash.slice(1);
+  if (!fragment) return;
+
+  const params = new URLSearchParams(fragment);
+  const emailLinkToken = params.get("verify");
+  const code = params.get("code") || "";
+  if (!emailLinkToken) return;
+
+  // The capability and OTP are carried only in the URL fragment. Remove them
+  // before making any network request so they never enter HTTP logs/referrers.
+  window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}`);
+  if (!/^[A-Za-z0-9_-]{32,128}$/.test(emailLinkToken) || (code && !/^\d{6}$/.test(code))) {
+    showAuthError("Doğrulama bağlantısı geçersiz. E-postadaki son kodu kullan veya yeni kod iste.");
+    return;
+  }
+
+  showAuthError("Doğrulama bağlantısı kontrol ediliyor...");
+  try {
+    const link = await apiRegistrationLink(emailLinkToken);
+    if (!link.ok || !link.email) {
+      showAuthError("Bu doğrulama bağlantısının süresi dolmuş. Kayıt formundan yeni kod iste.");
+      return;
+    }
+
+    const stored = readStoredVerification();
+    if (link.status === "verified") {
+      if (stored?.verificationToken) {
+        const status = await apiRegistrationStatus(stored.verificationToken);
+        if (status.status === "verified" && status.token && status.email) {
+          finishAuthentication(status.token, status.email);
+          return;
+        }
+      }
+      if (/^\d{6}$/.test(code)) {
+        enterVerificationMode(link.email, "Hesap zaten doğrulanmış. Bu cihazda da oturum açmak için kodu onayla.", {
+          verificationToken: stored?.verificationToken || "",
+          emailLinkToken,
+          code,
+        });
+      } else {
+        switchToLogin(false);
+        showAuthError("E-posta zaten doğrulanmış. Giriş yapabilirsin.");
+      }
+      return;
+    }
+
+    if (link.status !== "pending") {
+      showAuthError("Doğrulama bağlantısının süresi dolmuş. Kayıt formundan yeni kod iste.");
+      return;
+    }
+
+    enterVerificationMode(link.email, "E-postadaki kod hazır. Doğrulamak için düğmeye bas.", {
+      verificationToken: stored?.verificationToken || "",
+      emailLinkToken,
+      code,
+    });
+  } catch (error) {
+    console.error("E-posta doğrulama bağlantısı açılamadı:", error);
+    showAuthError("Doğrulama bağlantısı açılamadı. İnternet bağlantını kontrol edip tekrar dene.");
+  }
+}
+
+void openRegistrationEmailLink();

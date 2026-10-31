@@ -79,11 +79,11 @@ async function apiRegister(email, password, name) {
   return { ok: res.ok, ...data, message: apiErrorMessage(data, "Kayıt yapılamadı.") };
 }
 
-async function apiVerifyRegistration(email, code) {
+async function apiVerifyRegistration(email, code, verificationToken = null, emailLinkToken = null) {
   const response = await fetch(`${API_URL}/register/verify`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, code }),
+    body: JSON.stringify({ email, code, verification_token: verificationToken, email_link_token: emailLinkToken }),
   });
   let data = {};
   try {
@@ -94,11 +94,11 @@ async function apiVerifyRegistration(email, code) {
   return { ok: response.ok, ...data, message: apiErrorMessage(data, "E-posta doğrulanamadı.") };
 }
 
-async function apiResendRegistrationCode(email) {
+async function apiResendRegistrationCode(email, verificationToken = null, emailLinkToken = null) {
   const response = await fetch(`${API_URL}/register/resend`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ email, verification_token: verificationToken, email_link_token: emailLinkToken }),
   });
   let data = {};
   try {
@@ -107,6 +107,36 @@ async function apiResendRegistrationCode(email) {
     console.error("Kod yenileme yanıtı JSON olarak okunamadı:", error);
   }
   return { ok: response.ok, ...data, message: apiErrorMessage(data, "Yeni kod gönderilemedi.") };
+}
+
+async function apiRegistrationLink(emailLinkToken) {
+  const response = await fetch(`${API_URL}/register/link`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email_link_token: emailLinkToken }),
+  });
+  let data = {};
+  try {
+    data = await response.json();
+  } catch (error) {
+    console.error("Doğrulama bağlantısı yanıtı JSON olarak okunamadı:", error);
+  }
+  return { ok: response.ok, ...data, message: apiErrorMessage(data, "Doğrulama bağlantısı açılamadı.") };
+}
+
+async function apiRegistrationStatus(verificationToken) {
+  const response = await fetch(`${API_URL}/register/status`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ verification_token: verificationToken }),
+  });
+  let data = {};
+  try {
+    data = await response.json();
+  } catch (error) {
+    console.error("Doğrulama durumu JSON olarak okunamadı:", error);
+  }
+  return { ok: response.ok, ...data, message: apiErrorMessage(data, "Doğrulama durumu alınamadı.") };
 }
 
 async function apiValidateSession(token) {
