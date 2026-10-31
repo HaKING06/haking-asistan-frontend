@@ -4,7 +4,31 @@ function apiErrorMessage(data, fallback) {
   if (!data || typeof data !== "object") return fallback;
   if (typeof data.message === "string" && data.message) return data.message;
   if (typeof data.detail === "string" && data.detail) return data.detail;
-  if (Array.isArray(data.detail)) return "Gönderdiğiniz bilgileri kontrol edip tekrar deneyin.";
+  if (Array.isArray(data.detail)) {
+    const issue = data.detail.find((item) => item && Array.isArray(item.loc)) || data.detail[0];
+    const field = issue?.loc?.at(-1);
+    const type = issue?.type;
+
+    if (field === "password" && type === "string_too_short") {
+      return "Şifre en az 8 karakter olmalıdır.";
+    }
+    if (field === "password" && type === "string_too_long") {
+      return "Şifre en fazla 128 karakter olabilir.";
+    }
+    if (field === "email" && type === "string_too_long") {
+      return "E-posta adresi en fazla 254 karakter olabilir.";
+    }
+    if (field === "name" && type === "string_too_long") {
+      return "Ad soyad en fazla 80 karakter olabilir.";
+    }
+    if (field === "email" && type === "value_error") {
+      return "Geçerli bir e-posta adresi gir.";
+    }
+    if (field === "name" && type === "missing") {
+      return "Kayıt için ad soyad girmen gerekiyor.";
+    }
+    return "Gönderdiğin bilgileri kontrol edip tekrar dene.";
+  }
   return fallback;
 }
 
@@ -42,6 +66,40 @@ async function apiRegister(email, password, name) {
   return { ok: res.ok, ...data, message: apiErrorMessage(data, "Kayıt yapılamadı.") };
 }
 
+async function apiValidateSession(token) {
+  try {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 90000);
+    try {
+      const response = await fetch(`${API_URL}/session`, {
+        headers: { Authorization: `Bearer ${token}` },
+        signal: controller.signal,
+      });
+
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (error) {
+        console.error("Oturum yanıtı JSON olarak okunamadı:", error);
+      }
+
+      return {
+        ok: response.ok && data.success === true && typeof data.email === "string",
+        unauthorized: response.status === 401,
+        email: data.email,
+        message: apiErrorMessage(data, "Oturum doğrulanamadı. Lütfen yeniden giriş yap."),
+      };
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Oturum kontrolü zaman aşımına uğradı.");
+    }
+    throw error;
+  }
+}
+
 async function apiLogout(token) {
   if (!token) return;
   const response = await fetch(`${API_URL}/logout`, {
@@ -68,7 +126,7 @@ async function apiWarmup() {
   }
 }
 
-const CHAT_TIMEOUT_MS = 150000;
+const CHAT_TIMEOUT_MS = 480000;
 
 async function readChatStream(response, onChunk) {
   if (!response.body) {

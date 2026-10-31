@@ -4,16 +4,41 @@ const chatInputEl = document.getElementById("chat-input");
 const sendBtnEl = document.getElementById("send-btn");
 const newChatBtnEl = document.getElementById("new-chat-btn");
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   loadSession();
 
-  if (AppState.email && AppState.token) {
-    uiShowChat(AppState.email);
+  if (!AppState.email || !AppState.token) {
+    clearSession();
+    uiShowLogin();
+    loginErrorEl.textContent = "Sohbeti kullanmak için önce hesabına giriş yapmalısın.";
+    return;
+  }
+
+  uiShowLogin();
+  loginErrorEl.dataset.state = "pending";
+  loginErrorEl.textContent = "Oturum doğrulanıyor...";
+
+  try {
+    const session = await apiValidateSession(AppState.token);
+    if (!session.ok) {
+      if (session.unauthorized) clearSession();
+      loginErrorEl.removeAttribute("data-state");
+      loginErrorEl.textContent = session.message;
+      return;
+    }
+
+    saveSession(AppState.token, session.email);
+    loginErrorEl.removeAttribute("data-state");
+    loginErrorEl.textContent = "";
+    uiShowChat(session.email);
     void apiWarmup().catch((error) => {
       console.info("Backend hazırlanıyor:", error.message);
     });
-  } else {
-    uiShowLogin();
+  } catch (error) {
+    console.info("Oturum doğrulaması tamamlanamadı:", error.message);
+    loginErrorEl.removeAttribute("data-state");
+    loginErrorEl.textContent =
+      "Oturum doğrulanamadı. Sunucu bağlantısını kontrol edip yeniden dene.";
   }
 });
 
@@ -65,8 +90,9 @@ async function sendMessageFromUI() {
   const message = chatInputEl.value.trim();
   if (!message || sendBtnEl.disabled) return;
 
-  if (!AppState.email) {
-    uiAddAssistantMessage("Önce giriş yapmalısın.");
+  if (!AppState.email || !AppState.token) {
+    uiShowLogin();
+    loginErrorEl.textContent = "Sohbeti kullanmak için hesabına giriş yapmalısın.";
     return;
   }
 

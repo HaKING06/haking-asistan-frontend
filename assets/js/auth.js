@@ -19,6 +19,11 @@ const showLoginBtnEl = document.getElementById("show-login");
 
 let authMode = "login"; // "login" | "register"
 
+function showAuthError(message) {
+  loginErrorEl.removeAttribute("data-state");
+  loginErrorEl.textContent = message;
+}
+
 function switchToLogin() {
   authMode = "login";
   nameGroupEl.classList.add("hidden");
@@ -30,7 +35,7 @@ function switchToLogin() {
   authTitleEl.textContent = "Tekrar hoş geldin";
   authSubtitleEl.textContent = "Hesabına giriş yap ve kaldığın yerden devam et.";
   submitBtnEl.querySelector("span").textContent = "Giriş yap";
-  loginErrorEl.textContent = "";
+  showAuthError("");
 }
 
 function switchToRegister() {
@@ -44,7 +49,7 @@ function switchToRegister() {
   authTitleEl.textContent = "Hesabını oluştur";
   authSubtitleEl.textContent = "Ücretsiz hesabını oluştur. Şifren en az 8 karakter olmalı.";
   submitBtnEl.querySelector("span").textContent = "Hesap oluştur";
-  loginErrorEl.textContent = "";
+  showAuthError("");
 }
 
 function setAuthLoading(isLoading) {
@@ -64,16 +69,40 @@ switchToLogin();
 showRegisterBtnEl.addEventListener("click", switchToRegister);
 showLoginBtnEl.addEventListener("click", switchToLogin);
 
+for (const input of [emailInputEl, passwordInputEl, fullNameInputEl]) {
+  input.addEventListener("input", () => {
+    if (loginErrorEl.textContent) showAuthError("");
+  });
+}
+
 loginFormEl.addEventListener("submit", async (e) => {
   e.preventDefault();
-  loginErrorEl.textContent = "";
+  showAuthError("");
 
   const email = emailInputEl.value.trim();
   const password = passwordInputEl.value;
   const fullName = fullNameInputEl.value.trim();
 
   if (!email || !password) {
-    loginErrorEl.textContent = "Lütfen mail ve şifreyi gir.";
+    showAuthError("Lütfen e-posta adresini ve şifreni gir.");
+    return;
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showAuthError("Geçerli bir e-posta adresi gir.");
+    emailInputEl.focus();
+    return;
+  }
+
+  if (password.length > 128) {
+    showAuthError("Şifre en fazla 128 karakter olabilir.");
+    passwordInputEl.focus();
+    return;
+  }
+
+  if (authMode === "register" && password.length < 8) {
+    showAuthError("Şifre en az 8 karakter olmalıdır.");
+    passwordInputEl.focus();
     return;
   }
 
@@ -94,7 +123,8 @@ loginFormEl.addEventListener("submit", async (e) => {
     } else {
       // KAYIT
       if (!fullName) {
-        loginErrorEl.textContent = "Kayıt için ad soyad girmen gerekiyor.";
+        showAuthError("Kayıt için ad soyad girmen gerekiyor.");
+        fullNameInputEl.focus();
         return;
       }
 
@@ -104,8 +134,7 @@ loginFormEl.addEventListener("submit", async (e) => {
         fullName
       );
       if (!ok || !success) {
-        loginErrorEl.textContent =
-          message || "Kayıt başarısız. Daha sonra tekrar dene.";
+        showAuthError(message || "Kayıt başarısız. Daha sonra tekrar dene.");
         return;
       }
 
@@ -114,8 +143,7 @@ loginFormEl.addEventListener("submit", async (e) => {
 
       if (!loginRes.ok || !loginRes.success || !loginRes.token) {
         switchToLogin();
-        loginErrorEl.textContent =
-          "Kayıt başarılı ama girişte sorun oluştu, lütfen elle giriş yap.";
+        showAuthError("Kayıt başarılı ama girişte sorun oluştu, lütfen elle giriş yap.");
         return;
       }
 
@@ -125,10 +153,11 @@ loginFormEl.addEventListener("submit", async (e) => {
     }
   } catch (err) {
     console.error("AUTH HATASI:", err);
-    loginErrorEl.textContent =
+    showAuthError(
       err instanceof TypeError
         ? "Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edip tekrar deneyin."
-        : "İşlem tamamlanamadı. Lütfen bilgilerinizi kontrol edip tekrar deneyin.";
+        : "İşlem tamamlanamadı. Lütfen bilgilerini kontrol edip tekrar deneyin."
+    );
   } finally {
     setAuthLoading(false);
   }

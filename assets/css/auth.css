@@ -346,6 +346,10 @@
   line-height: 1.5;
 }
 
+.error-text[data-state="pending"] {
+  color: var(--text-soft);
+}
+
 .error-text:empty {
   display: none;
 }
