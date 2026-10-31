@@ -9,8 +9,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (AppState.email && AppState.token) {
     uiShowChat(AppState.email);
+    void apiWarmup().catch((error) => {
+      console.info("Backend hazırlanıyor:", error.message);
+    });
   } else {
     uiShowLogin();
+  }
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && AppState.email && AppState.token) {
+    void apiWarmup().catch((error) => {
+      console.info("Backend hazırlanıyor:", error.message);
+    });
   }
 });
 
@@ -74,7 +85,7 @@ async function sendMessageFromUI() {
       message,
       AppState.email,
       AppState.token,
-      AppState.history.slice(-10),
+      AppState.history.slice(-8),
       (chunk) => {
         assistantReply += chunk;
         if (!hasReceivedChunk) {
@@ -87,6 +98,12 @@ async function sendMessageFromUI() {
     );
 
     if (!result.ok) {
+      if (result.unauthorized) {
+        clearSession();
+        uiShowLogin();
+        loginErrorEl.textContent = result.message || "Oturumun sona erdi. Lütfen tekrar giriş yap.";
+        return;
+      }
       uiAddAssistantMessage(result.message || "Mesaj gönderilemedi. Lütfen tekrar deneyin.");
     } else if (!hasReceivedChunk) {
       uiAddAssistantMessage("Asistan boş bir yanıt verdi. Lütfen tekrar deneyin.");

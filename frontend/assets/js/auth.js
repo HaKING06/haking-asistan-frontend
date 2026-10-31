@@ -24,6 +24,7 @@ function switchToLogin() {
   nameGroupEl.classList.add("hidden");
   fullNameInputEl.required = false;
   passwordInputEl.autocomplete = "current-password";
+  passwordInputEl.minLength = 1;
   toRegisterRowEl.classList.remove("hidden");
   toLoginRowEl.classList.add("hidden");
   authTitleEl.textContent = "Tekrar hoş geldin";
@@ -37,10 +38,11 @@ function switchToRegister() {
   nameGroupEl.classList.remove("hidden");
   fullNameInputEl.required = true;
   passwordInputEl.autocomplete = "new-password";
+  passwordInputEl.minLength = 8;
   toRegisterRowEl.classList.add("hidden");
   toLoginRowEl.classList.remove("hidden");
   authTitleEl.textContent = "Hesabını oluştur";
-  authSubtitleEl.textContent = "Ücretsiz hesabını oluştur, kodlamaya kaldığın yerden devam et.";
+  authSubtitleEl.textContent = "Ücretsiz hesabını oluştur. Şifren en az 8 karakter olmalı.";
   submitBtnEl.querySelector("span").textContent = "Hesap oluştur";
   loginErrorEl.textContent = "";
 }
@@ -80,14 +82,15 @@ loginFormEl.addEventListener("submit", async (e) => {
     if (authMode === "login") {
       // GİRİŞ
       const { ok, success, token, message } = await apiLogin(email, password);
-      if (!ok || !success) {
+      if (!ok || !success || !token) {
         loginErrorEl.textContent =
           message || "Giriş başarısız. Mail veya şifre hatalı.";
         return;
       }
 
-      saveSession(token || "demo-token", email);
+      saveSession(token, email);
       uiShowChat(email);
+      void apiWarmup().catch((error) => console.info("Backend hazırlanıyor:", error.message));
     } else {
       // KAYIT
       if (!fullName) {
@@ -109,15 +112,16 @@ loginFormEl.addEventListener("submit", async (e) => {
       // Kayıt başarılı → otomatik giriş
       const loginRes = await apiLogin(email, password);
 
-      if (!loginRes.ok || !loginRes.success) {
+      if (!loginRes.ok || !loginRes.success || !loginRes.token) {
         switchToLogin();
         loginErrorEl.textContent =
           "Kayıt başarılı ama girişte sorun oluştu, lütfen elle giriş yap.";
         return;
       }
 
-      saveSession(loginRes.token || "demo-token", email);
+      saveSession(loginRes.token, email);
       uiShowChat(email);
+      void apiWarmup().catch((error) => console.info("Backend hazırlanıyor:", error.message));
     }
   } catch (err) {
     console.error("AUTH HATASI:", err);
@@ -131,6 +135,9 @@ loginFormEl.addEventListener("submit", async (e) => {
 });
 
 logoutBtnEl.addEventListener("click", () => {
+  void apiLogout(AppState.token).catch((error) => {
+    console.warn("Sunucu oturumu kapatılamadı:", error);
+  });
   clearSession();
   chatWindowEl.innerHTML = "";
   uiShowLogin();

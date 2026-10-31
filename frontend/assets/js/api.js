@@ -1,5 +1,13 @@
 const API_URL = "https://haking-asistan-backend.onrender.com";
 
+function apiErrorMessage(data, fallback) {
+  if (!data || typeof data !== "object") return fallback;
+  if (typeof data.message === "string" && data.message) return data.message;
+  if (typeof data.detail === "string" && data.detail) return data.detail;
+  if (Array.isArray(data.detail)) return "Gönderdiğiniz bilgileri kontrol edip tekrar deneyin.";
+  return fallback;
+}
+
 async function apiLogin(email, password) {
   const res = await fetch(`${API_URL}/login`, {
     method: "POST",
@@ -14,7 +22,7 @@ async function apiLogin(email, password) {
     console.error("Login JSON parse hatası:", e);
   }
 
-  return { ok: res.ok, ...data };
+  return { ok: res.ok, ...data, message: apiErrorMessage(data, "Giriş yapılamadı.") };
 }
 
 async function apiRegister(email, password, name) {
@@ -31,7 +39,33 @@ async function apiRegister(email, password, name) {
     console.error("Register JSON parse hatası:", e);
   }
 
-  return { ok: res.ok, ...data };
+  return { ok: res.ok, ...data, message: apiErrorMessage(data, "Kayıt yapılamadı.") };
+}
+
+async function apiLogout(token) {
+  if (!token) return;
+  const response = await fetch(`${API_URL}/logout`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error("Oturum sunucuda kapatılamadı.");
+}
+
+async function apiWarmup() {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), 90000);
+  uiSetBackendStatus("checking", "Asistan sunucusu hazırlanıyor...");
+  try {
+    const response = await fetch(`${API_URL}/health`, { signal: controller.signal });
+    if (!response.ok) throw new Error("Backend henüz hazır değil.");
+    uiSetBackendStatus("ready", "Asistan sunucusu hazır.");
+    return await response.json();
+  } catch (error) {
+    uiSetBackendStatus("error", "Asistan sunucusuna şu anda ulaşılamıyor.");
+    throw error;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
 }
 
 const CHAT_TIMEOUT_MS = 150000;
@@ -112,6 +146,7 @@ async function apiChat(message, userId, token, history, onChunk) {
     });
 
     if (!res.ok) {
+      uiSetBackendStatus("error", `Asistan isteği başarısız oldu (HTTP ${res.status}).`);
       let data = {};
       try {
         data = await res.json();
@@ -120,12 +155,19 @@ async function apiChat(message, userId, token, history, onChunk) {
       }
       return {
         ok: false,
-        message: data.detail || data.message || "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+        unauthorized: res.status === 401,
+        message: apiErrorMessage(data, "Mesaj gönderilemedi. Lütfen tekrar deneyin."),
       };
     }
 
-    return await readChatStream(res, onChunk);
+    const streamResult = await readChatStream(res, onChunk);
+    uiSetBackendStatus(
+      streamResult.ok ? "ready" : "error",
+      streamResult.ok ? "Asistan sunucusu hazır." : "Asistan modeli şu anda yanıt üretemiyor."
+    );
+    return streamResult;
   } catch (error) {
+    uiSetBackendStatus("error", "Asistan yanıt üretirken bağlantı sorunu oluştu.");
     if (error.name === "AbortError") {
       throw new Error("Yanıt bekleme süresi doldu. Lütfen tekrar deneyin.");
     }

@@ -65,19 +65,19 @@
           <form id="login-form" class="form">
             <div class="form-group hidden" id="name-group">
               <label for="fullName">Ad Soyad</label>
-              <input type="text" id="fullName" placeholder="Adın Soyadın" autocomplete="name" />
+              <input type="text" id="fullName" placeholder="Adın Soyadın" autocomplete="name" maxlength="80" />
             </div>
 
             <div class="form-group">
               <label for="email">E-posta adresi</label>
-              <input type="email" id="email" placeholder="ornek@eposta.com" autocomplete="email" required />
+              <input type="email" id="email" placeholder="ornek@eposta.com" autocomplete="email" maxlength="254" required />
             </div>
 
             <div class="form-group">
               <div class="label-row">
                 <label for="password">Şifre</label>
               </div>
-              <input type="password" id="password" placeholder="Şifreni gir" autocomplete="current-password" required />
+              <input type="password" id="password" placeholder="Şifreni gir" autocomplete="current-password" maxlength="128" required />
             </div>
 
             <button type="submit" class="btn primary full auth-submit" id="submit-btn">
@@ -101,7 +101,7 @@
 
           <div class="auth-assurance">
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5 4 5v4.4c0 3.8 2.6 6.7 6 8.1 3.4-1.4 6-4.3 6-8.1V5l-6-2.5Z"/><path d="m7.5 9.8 1.7 1.7 3.4-3.7"/></svg>
-            <span>Hesabın ve sohbetlerin güvende</span>
+            <span>Hesap bilgilerin güvenli biçimde saklanır</span>
           </div>
         </div>
 
@@ -154,7 +154,7 @@
             <img src="./assets/img/logo.svg" alt="" class="brand-mark" />
             <span class="brand-name">HaKING<span class="brand-period">.</span></span>
           </div>
-          <div class="model-label"><span class="model-status"></span> Yazılım Asistanı <span class="model-chevron">⌄</span></div>
+          <div class="model-label"><span id="backend-status" class="model-status" data-state="offline" title="Asistan sunucusu henüz kontrol edilmedi."></span> Yazılım Asistanı <span class="model-chevron">⌄</span></div>
           <div class="topbar-right"><span class="topbar-caption">HAKING AI</span></div>
         </header>
 

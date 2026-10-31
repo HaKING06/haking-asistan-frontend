@@ -1,3 +1,5 @@
 README.md
 wrangler.jsonc
 assets/docs/
+.env
+.dev.vars

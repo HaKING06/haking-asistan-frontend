@@ -7,8 +7,15 @@ const userEmailDisplayEl = document.getElementById("user-email-display");
 const profileNameEl = document.getElementById("profile-name");
 const userAvatarEl = document.getElementById("user-avatar");
 const typingIndicatorEl = document.getElementById("typing-indicator");
+const backendStatusEl = document.getElementById("backend-status");
 const welcomeTemplate = document.getElementById("welcome-state");
 const assistantStreamContent = new WeakMap();
+
+function uiSetBackendStatus(state, message) {
+  if (!backendStatusEl) return;
+  backendStatusEl.dataset.state = state;
+  backendStatusEl.title = message;
+}
 
 function uiShowLogin() {
   loginCardEl.classList.remove("hidden");

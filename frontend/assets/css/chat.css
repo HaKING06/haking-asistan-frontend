@@ -260,6 +260,21 @@
   flex-basis: 6px;
 }
 
+.model-status[data-state="offline"] {
+  background: #858795;
+  box-shadow: none;
+}
+
+.model-status[data-state="checking"] {
+  background: #f2b84b;
+  box-shadow: 0 0 10px rgba(242, 184, 75, 0.42);
+}
+
+.model-status[data-state="error"] {
+  background: #e16d73;
+  box-shadow: 0 0 10px rgba(225, 109, 115, 0.38);
+}
+
 .model-chevron {
   margin-left: 1px;
   color: #858795;
