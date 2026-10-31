@@ -2,4 +2,9 @@ README.md
 wrangler.jsonc
 assets/docs/
 .env
+.env.*
 .dev.vars
+**/node_modules
+**/.wrangler
+**/.git
+**/.DS_Store
