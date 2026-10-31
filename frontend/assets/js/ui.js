@@ -26,6 +26,7 @@ function uiShowChat(email) {
 }
 
 function uiStartNewChat() {
+  AppState.history = [];
   chatWindowEl.replaceChildren(welcomeTemplate.cloneNode(true));
   chatWindowEl.scrollTop = 0;
 }

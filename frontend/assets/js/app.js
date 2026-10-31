@@ -68,12 +68,15 @@ async function sendMessageFromUI() {
 
   let assistantBubble = null;
   let hasReceivedChunk = false;
+  let assistantReply = "";
   try {
     const result = await apiChat(
       message,
       AppState.email,
       AppState.token,
+      AppState.history.slice(-10),
       (chunk) => {
+        assistantReply += chunk;
         if (!hasReceivedChunk) {
           hasReceivedChunk = true;
           uiShowTyping(false);
@@ -87,11 +90,18 @@ async function sendMessageFromUI() {
       uiAddAssistantMessage(result.message || "Mesaj gönderilemedi. Lütfen tekrar deneyin.");
     } else if (!hasReceivedChunk) {
       uiAddAssistantMessage("Asistan boş bir yanıt verdi. Lütfen tekrar deneyin.");
+    } else {
+      AppState.history.push(
+        { role: "user", content: message },
+        { role: "assistant", content: assistantReply }
+      );
     }
   } catch (err) {
     console.error(err);
     uiAddAssistantMessage(
-      "Canlı asistana bağlanırken bir sorun oluştu. Biraz sonra tekrar deneyin."
+      err.message?.startsWith("Yanıt bekleme süresi")
+        ? err.message
+        : "Asistana bağlanırken bir sorun oldu. Lütfen tekrar deneyin."
     );
   } finally {
     if (assistantBubble) uiFinishAssistantStream(assistantBubble);

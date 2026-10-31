@@ -3,6 +3,7 @@
 const AppState = {
   token: null,
   email: null,
+  history: [],
 };
 
 function loadSession() {

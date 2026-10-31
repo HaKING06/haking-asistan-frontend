@@ -34,7 +34,7 @@ async function apiRegister(email, password, name) {
   return { ok: res.ok, ...data };
 }
 
-const CHAT_TIMEOUT_MS = 90000;
+const CHAT_TIMEOUT_MS = 150000;
 
 async function readChatStream(response, onChunk) {
   if (!response.body) {
@@ -85,14 +85,14 @@ async function readChatStream(response, onChunk) {
       if (streamError) break;
     }
   } finally {
-    if (streamError) await reader.cancel();
+    if (streamError) await reader.cancel().catch(() => {});
     reader.releaseLock();
   }
 
   return streamError ? { ok: false, message: streamError } : { ok: true };
 }
 
-async function apiChat(message, userId, token, onChunk) {
+async function apiChat(message, userId, token, history, onChunk) {
   const headers = {
     "Content-Type": "application/json",
   };
@@ -107,7 +107,7 @@ async function apiChat(message, userId, token, onChunk) {
     const res = await fetch(`${API_URL}/chat`, {
       method: "POST",
       headers,
-      body: JSON.stringify({ message, userId }),
+      body: JSON.stringify({ message, userId, history }),
       signal: controller.signal,
     });
 
@@ -125,6 +125,11 @@ async function apiChat(message, userId, token, onChunk) {
     }
 
     return await readChatStream(res, onChunk);
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Yanıt bekleme süresi doldu. Lütfen tekrar deneyin.");
+    }
+    throw error;
   } finally {
     window.clearTimeout(timeoutId);
   }
