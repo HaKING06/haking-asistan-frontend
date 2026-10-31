@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="HaKING gizlilik, tarayıcı depolama ve yapay zekâ veri işleme bilgileri." />
+  <meta name="theme-color" content="#0b0d12" />
+  <title>Gizlilik ve veri kullanımı · HaKING</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg" />
+  <link rel="stylesheet" href="./assets/css/main.css" />
+  <link rel="stylesheet" href="./assets/css/privacy.css" />
+</head>
+<body>
+  <main class="privacy-page">
+    <div class="privacy-wrap">
+      <nav class="privacy-nav" aria-label="Sayfa gezinme">
+        <a class="brand-lockup" href="./index.html" aria-label="HaKING ana sayfa">
+          <img src="./assets/img/logo.svg" alt="" class="brand-mark" />
+          <span class="brand-name">HaKING<span class="brand-period">.</span></span>
+        </a>
+        <div class="privacy-nav-actions">
+          <a href="./index.html">Uygulamaya dön</a>
+          <button class="privacy-action" type="button" data-open-privacy-settings>Tercihleri yönet</button>
+        </div>
+      </nav>
+
+      <header class="privacy-hero">
+        <span class="privacy-eyebrow">ŞEFFAFLIK VE GÜVENLİK</span>
+        <h1>Gizlilik ve veri kullanımı</h1>
+        <p>HaKING; yazılım öğrenme, kod inceleme ve teknik sorulara yardımcı olmak için geliştirilmiş bir AI sohbet uygulamasıdır. Bu metin, uygulamanın şu anki teknik davranışını açıklar.</p>
+        <p><strong>Son güncelleme:</strong> 31 Ekim 2026</p>
+      </header>
+
+      <aside class="privacy-draft"><strong>Yayın öncesi tamamlanması gereken bilgi:</strong> Veri sorumlusunun tam yasal adı/unvanı, uygulanacak hukuki sebepler, yurt dışına veri aktarım mekanizması ve işletmecinin 5651 kapsamındaki rolü hukuk uzmanıyla doğrulanmalıdır. Aşağıdaki metin tek başına hukuki uygunluk garantisi değildir.</aside>
+
+      <section class="privacy-section" id="privacy">
+        <h2>1. Veri sorumlusu ve iletişim</h2>
+        <p><strong>Veri sorumlusu:</strong> [VERİ SORUMLUSUNUN TAM ADI SOYADI / VARSA TİCARİ UNVANI]</p>
+        <p><strong>Gizlilik başvuruları:</strong> <a href="mailto:halit@haking.tr">halit@haking.tr</a></p>
+        <p>Bu adres, veri sahiplerinin erişim, düzeltme, silme ve diğer gizlilik talepleri için iletişim adresidir. Başvuru süreci ve kimlik doğrulama gereklilikleri veri sorumlusu tarafından yönetilir.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>2. Hangi veriler, hangi amaçlarla işleniyor?</h2>
+        <div class="privacy-table-wrap"><table class="privacy-table">
+          <thead><tr><th>Veri</th><th>Amaç ve mevcut saklama şekli</th></tr></thead>
+          <tbody>
+            <tr><td>Ad, e-posta ve hesap kaydı</td><td>Hesap oluşturma ve oturum açma için Neon Postgres veritabanında tutulur. Hesap silme talebi için iletişim adresine yazılabilir.</td></tr>
+            <tr><td>Şifre ve oturum</td><td>Şifrenin kendisi saklanmaz; scrypt özeti tutulur. Veritabanında oturum belirtecinin özeti yer alır; belirteç 30 gün sonra sona erer. Tarayıcıdaki oturum belirteci oturum açıldığında localStorage'da tutulur.</td></tr>
+            <tr><td>Mesaj, kod ve sohbet bağlamı</td><td>Yanıt üretmek için backend'e ve Google Gemini API'ye gönderilir. HaKING uygulamasının mevcut kodu sohbet metnini kendi veritabanına kaydetmez; yakın sohbet bağlamı tarayıcı belleğinde tutulur ve sekme yenilenince kaybolur.</td></tr>
+            <tr><td>Operasyonel güvenlik kayıtları</td><td>İstek kimliği, rota şablonu, HTTP yöntemi/durum kodu, süre, sonuç, hata sınıfı, mesaj/yanıt karakter sayısı ve yapılandırılmışsa anahtarlı takma kullanıcı referansı. Mesaj, yanıt, e-posta, parola, token ve IP bu uygulama loglarına yazılmaz.</td></tr>
+            <tr><td>Tercih ve oturum tarayıcı verisi</td><td>Oturum anahtarı ve gizlilik tercihi localStorage alanında tutulur. Bu alan HTTP çerezi değildir. E-posta eski sürümden kalmışsa yeni sürüm onu tarayıcıdan kaldırır.</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="privacy-section">
+        <h2>3. AI mesajları ve dış hizmetler</h2>
+        <p>Yazdığın soru, yapıştırdığın kod ve yanıt için gereken yakın sohbet bağlamı, AI yanıtını üretmek üzere Google Gemini API'ye iletilir. Gemini'nin veri kullanımı Google AI Studio/Cloud projesinin ücretsiz veya ücretli kullanım koşullarına bağlıdır. Google'ın <a href="https://ai.google.dev/gemini-api/docs/usage-policies" target="_blank" rel="noopener noreferrer">Gemini API kullanım politikalarına</a> göre ücretsiz API katmanında içerik ürünleri geliştirmek için kullanılabilir ve kötüye kullanım izlemesi kapsamında istek/yanıtlar 55 güne kadar saklanabilir; yetkili inceleme de söz konusu olabilir. Ücretli katmanda bu şartlar farklıdır. API anahtarının hangi faturalama katmanında olduğunu Render/Google projesinden kontrol et. Gizli anahtar, parola, kişisel bilgi veya paylaşma yetkin olmayan kodu sohbete koyma.</p>
+        <p>AI sağlayıcısına gönderim, çerez tercihiyle aynı şey değildir. Çerezleri kabul etmek mesajların AI sağlayıcısına gönderilmesine açık rıza verdiğin anlamına gelmez. Veri sorumlusu, hizmetin hukuki sebebini ve yurt dışına aktarım şartlarını ayrıca belirlemelidir.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>4. Çerezler ve tarayıcı depolama tercihleri</h2>
+        <p>Şu anda analiz, reklam veya çapraz site izleme çerezi kullanılmıyor. Giriş oturumunu ve bu tercih kaydını sürdürmek için localStorage kullanılıyor; bu, tarayıcının cihazındaki web depolama alanıdır ve HTTP çerezi değildir. Bu depolama oturum açmanın çalışması için gereklidir. “Kabul et ve devam et” seçildiğinde kaydedilen tercih: zorunlu depolama açık, analiz kapalı, reklam/kişiselleştirme kapalı. Tercihi bu sayfanın altındaki düğmeden değiştirebilir veya tarayıcı verilerini temizleyebilirsin.</p>
+        <p>Arayüz yazı tipleri şu an Google Fonts'tan yüklenebilir. Bu font isteği çerez kategorisi değildir; ancak tarayıcı Google'a bağlantı verisi (ör. IP adresi) iletebilir. Sunucu/CDN isteklerinde altyapı sağlayıcıları da bağlantı ve güvenlik verilerini kendi politikalarına göre işleyebilir.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>5. Hizmet sağlayıcılar ve olası yurt dışı aktarım</h2>
+        <ul>
+          <li><strong>Cloudflare:</strong> frontend dağıtımı ve CDN.</li>
+          <li><strong>Render:</strong> backend barındırma ve uygulama logları.</li>
+          <li><strong>Neon:</strong> hesap ve oturum veritabanı (proje Frankfurt bölgesinde yapılandırılmıştır).</li>
+          <li><strong>Google:</strong> Gemini AI yanıtı ve Google Fonts isteği.</li>
+        </ul>
+        <p>Bu sağlayıcıların bazıları verileri Türkiye dışında işleyebilir. Yurt dışına aktarım için 6698 sayılı Kanun'un güncel 9. maddesine uygun mekanizma (örneğin uygun güvence/standart sözleşme gerektiğinde) veri sorumlusunca doğrulanmalı ve uygulanmalıdır. Sağlayıcı listesini, veri konumlarını, sözleşmeleri ve alt işleyenleri yayına çıkmadan önce kontrol et.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>6. Loglar, erişim ve saklama süresi</h2>
+        <p>Backend operasyon logları Render'ın uygulama loglarına gönderilir. Render'ın <a href="https://render.com/docs/logging" target="_blank" rel="noopener noreferrer">Hobby/ücretsiz log saklama süresi</a> şu an 7 gündür; plan ve sağlayıcı koşulları değişebilir. Bu kayıtlar hukuki arşiv sistemi değildir ve Render'daki bu süre, uygulanabilir bir yasal saklama yükümlülüğünü karşılıyor kabul edilmemelidir.</p>
+        <p>Uygulama loglarında ham sohbet içeriği, yanıt, parola, e-posta, IP adresi veya oturum token'ı tutulmaz. Kullanıcı korelasyonu etkinleştirilirse `LOG_PSEUDONYM_KEY` ile üretilen takma referans kullanılır. 5651 kapsamındaki yükümlülükler site işletmecisinin rolüne göre değişebileceğinden, sınıflandırma ve gerekiyorsa ayrı trafik kayıt sistemi hukuk danışmanıyla değerlendirilmelidir.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>7. Güvenlik ve veri sahibi hakları</h2>
+        <p>Uygulama parolaları düz metin saklamaz, oturum belirteçlerini veritabanında özetler ve loglara sohbet içeriği eklemez. Altyapı sağlayıcılarının erişim/iz kayıtları uygulamanın kontrolü dışında ayrıca oluşabilir. Uygulama güvenliği mutlak garanti edilemez; erişim anahtarlarını sohbete koyma ve hesap şifreni başkalarıyla paylaşma.</p>
+        <p>KVKK kapsamında kişisel verilerin işlenip işlenmediğini öğrenme, bilgi isteme, düzeltme, silme/yok etme ve kanuni şartlarla itiraz/zarar giderimi taleplerini <a href="mailto:halit@haking.tr">halit@haking.tr</a> adresine iletebilirsin. Talep, kimlik doğrulaması ve kanuni süreler gözetilerek yanıtlanır. Başvuruların yöntem ve süreleri KVKK'nın ilgili hükümlerine tabidir.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>8. Bu metin ve yürürlük</h2>
+        <p>Bu açıklama mevcut uygulama kodunu ve bilinen sağlayıcıları özetler; servis yapılandırması değişirse güncellenmelidir. Veri sorumlusu kimliği, hukuki sebepler, yurt dışı aktarım mekanizması ve varsa 5651 kapsamındaki rol doğrulanıp metin tamamlanmadan “yasal uyum sağlandı” sonucu çıkarılmamalıdır. Haklar ve çerezler için <a href="https://www.kvkk.gov.tr/Icerik/7353/Cerez-Uygulamalari-Hakkinda-Rehber" target="_blank" rel="noopener noreferrer">KVKK Çerez Rehberi</a>, <a href="https://www.kvkk.gov.tr/Icerik/2062/Basvuru-Hakki" target="_blank" rel="noopener noreferrer">KVKK başvuru hakkı</a> ve <a href="https://www.kvkk.gov.tr/Icerik/2053/Yurtdisina-Aktarim" target="_blank" rel="noopener noreferrer">yurt dışına aktarım açıklaması</a> incelenebilir.</p>
+        <button class="privacy-action" type="button" data-reset-privacy-choice>Tercihimi sıfırla</button>
+      </section>
+
+      <footer>HaKING · Bu sayfa gizlilik bilgilendirmesi taslağıdır. Gerçek veri akışları ve kullanılan Render/Google hesap planlarıyla yayından önce karşılaştırılmalıdır.</footer>
+    </div>
+  </main>
+  <script src="./assets/js/privacy.js"></script>
+</body>
+</html>

@@ -573,6 +573,17 @@
   text-align: center;
 }
 
+.disclaimer a,
+.disclaimer button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
 .typing {
   display: flex;
   height: 25px;

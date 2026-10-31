@@ -213,7 +213,31 @@
 }
 
 .auth-heading {
+  position: relative;
   margin-bottom: 32px;
+}
+
+.auth-privacy-info {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  color: var(--text-soft);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.auth-privacy-info:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--text);
 }
 
 .auth-eyebrow {
@@ -404,13 +428,36 @@
 }
 
 .auth-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 9px 14px;
   margin-top: 45px;
   color: #70727f;
   font-size: 10px;
   text-align: center;
 }
 
-.auth-footer span {
+.auth-footer a,
+.privacy-settings-link {
+  color: var(--text-soft);
+  text-decoration: none;
+}
+
+.auth-footer a:hover,
+.privacy-settings-link:hover {
+  color: var(--text);
+}
+
+.privacy-settings-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.auth-footer .footer-separator {
   padding: 0 4px;
   color: #4f5260;
 }

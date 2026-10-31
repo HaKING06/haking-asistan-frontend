@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="./assets/css/main.css" />
   <link rel="stylesheet" href="./assets/css/auth.css" />
   <link rel="stylesheet" href="./assets/css/chat.css" />
+  <link rel="stylesheet" href="./assets/css/privacy.css" />
 </head>
 <body>
   <main class="app-shell">
@@ -57,6 +58,9 @@
 
         <div class="auth-form-wrap">
           <header class="auth-heading">
+            <a class="auth-privacy-info" href="./privacy.html" aria-label="Gizlilik ve veri kullanımı bilgisi" title="Gizlilik ve veri kullanımı">
+              <span aria-hidden="true">i</span>
+            </a>
             <span class="eyebrow auth-eyebrow">KİŞİSEL GELİŞTİRME ALANIN</span>
             <h2 id="auth-title">Tekrar hoş geldin</h2>
             <p id="auth-subtitle">Hesabına giriş yap ve kaldığın yerden devam et.</p>
@@ -105,7 +109,11 @@
           </div>
         </div>
 
-        <footer class="auth-footer">© 2026 HaKING <span>·</span> Kodla, öğren, geliştir.</footer>
+        <footer class="auth-footer">
+          <span>© 2026 HaKING <span class="footer-separator">·</span> Kodla, öğren, geliştir.</span>
+          <a href="./privacy.html">Gizlilik ve veri kullanımı</a>
+          <button type="button" class="privacy-settings-link" data-open-privacy-settings>Tercihler</button>
+        </footer>
       </div>
     </section>
 
@@ -201,7 +209,7 @@
               </button>
             </div>
           </div>
-          <p class="disclaimer">HaKING yanıtları yapay zeka tarafından oluşturulur. Önemli bilgileri doğrulamayı unutma.</p>
+          <p class="disclaimer">HaKING yanıtları yapay zeka tarafından oluşturulur. Önemli bilgileri doğrulamayı unutma. <a href="./privacy.html">Gizlilik</a> · <button type="button" data-open-privacy-settings>Tercihler</button></p>
         </footer>
       </div>
     </section>
@@ -212,5 +220,6 @@
   <script src="./assets/js/ui.js"></script>
   <script src="./assets/js/auth.js"></script>
   <script src="./assets/js/app.js"></script>
+  <script src="./assets/js/privacy.js"></script>
 </body>
 </html>

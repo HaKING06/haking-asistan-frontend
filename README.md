@@ -21,3 +21,26 @@ returns to the tab. Render still controls its free service's idle sleep policy.
 
 For local preview, run `npm run dev`. The build command uses Wrangler's dry-run
 mode and does not publish the site.
+
+## Privacy and browser storage
+
+- `privacy.html` describes the current data flows, providers, AI processing,
+  browser storage, and operational logs. The login screen links to it.
+- The preference banner explains that the app uses required `localStorage` for
+  the session and preference record. The app currently has no analytics,
+  advertising, or cross-site tracking cookies. After saving a choice, the UI
+  shows the exact saved categories. This is not consent to send AI prompts to a
+  model provider; that processing is described separately.
+- The session token is kept in `localStorage`; the account email is no longer
+  persisted there and is loaded from the authenticated API session. Chat text
+  stays in tab memory and is sent to the backend/Google Gemini API to generate
+  answers; the backend does not store chat transcripts in Neon.
+- No analytics or advertising SDK is installed. Google Fonts is currently a
+  third-party font request and is disclosed in the privacy page; it may receive
+  connection data such as an IP address.
+
+The privacy notice intentionally has a visible placeholder for the data
+controller's full legal name. Complete it and verify the lawful bases,
+international transfer arrangements, provider plans, and any 5651 duties with
+a qualified adviser before treating the notice as final. Do not describe this
+repository as legally compliant solely because the page exists.

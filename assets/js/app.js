@@ -7,7 +7,7 @@ const newChatBtnEl = document.getElementById("new-chat-btn");
 document.addEventListener("DOMContentLoaded", async () => {
   loadSession();
 
-  if (!AppState.email || !AppState.token) {
+  if (!AppState.token) {
     clearSession();
     uiShowLogin();
     loginErrorEl.textContent = "Sohbeti kullanmak için önce hesabına giriş yapmalısın.";
