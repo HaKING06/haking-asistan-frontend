@@ -40,6 +40,13 @@ mode and does not publish the site.
   persisted there and is loaded from the authenticated API session. Chat text
   stays in tab memory and is sent to the backend/Google Gemini API to generate
   answers; the backend does not store chat transcripts in Neon.
+- The chat can read one UTF-8 source/text file at a time (64 KiB maximum) in the
+  browser. It accepts a short allowlist of code/text extensions, rejects binary
+  text and some recognizable secret formats, and sends the contents only when
+  the user submits the message. The app never saves or executes uploaded files;
+  the contents are still sent to Google Gemini for analysis, so users should
+  remove credentials and private data before attaching a file. Secret detection
+  is best-effort and cannot guarantee that every credential is found.
 - No analytics or advertising SDK is installed. Google Fonts is currently a
   third-party font request and is disclosed in the privacy page; it may receive
   connection data such as an IP address.

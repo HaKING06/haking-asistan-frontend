@@ -9,6 +9,15 @@ function apiErrorMessage(data, fallback) {
     const field = issue?.loc?.at(-1);
     const type = issue?.type;
 
+    if (field === "attachment_content" && type === "string_too_long") {
+      return "Dosya metni 64 KiB sınırını aşıyor. Daha küçük bir dosya seç.";
+    }
+    if (field === "attachment_name" && type === "string_too_long") {
+      return "Dosya adı çok uzun.";
+    }
+    if ((field === "attachment_name" || field === "attachment_content") && type === "value_error") {
+      return String(issue?.msg || "Dosya doğrulanamadı.").replace(/^Value error,\s*/i, "");
+    }
     if (field === "password" && type === "string_too_short") {
       return "Şifre en az 8 karakter olmalıdır.";
     }
@@ -235,7 +244,7 @@ async function readChatStream(response, onChunk) {
   return streamError ? { ok: false, message: streamError } : { ok: true };
 }
 
-async function apiChat(message, userId, token, history, onChunk) {
+async function apiChat(message, userId, token, history, onChunk, attachment = null) {
   const headers = {
     "Content-Type": "application/json",
   };
@@ -250,7 +259,14 @@ async function apiChat(message, userId, token, history, onChunk) {
     const res = await fetch(`${API_URL}/chat`, {
       method: "POST",
       headers,
-      body: JSON.stringify({ message, userId, history }),
+      body: JSON.stringify({
+        message,
+        userId,
+        history,
+        ...(attachment
+          ? { attachment_name: attachment.name, attachment_content: attachment.content }
+          : {}),
+      }),
       signal: controller.signal,
     });
 
