@@ -13,9 +13,12 @@ Cloudflare Workers asset root and contains `index.html`, `assets/`, and
 
 The frontend calls `https://haking-asistan-backend.onrender.com` for login,
 registration, health checks, and streamed chat responses. Keep
-`GEMINI_API_KEY`, `DATABASE_URL`, and `DATABASE_URL_UNPOOLED` only in the
-private Render backend service. Do not add backend secrets to this public
-repository.
+`GEMINI_API_KEY`, `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `RESEND_API_KEY`,
+and `EMAIL_VERIFICATION_SECRET` only in the private Render backend service.
+Do not add backend secrets to this public repository. Registration/login are
+Gmail-only; a new account is created only after the user enters a 6-digit code
+sent through Resend. The sender domain must be verified in Resend and the
+provider's DNS records added before production email delivery works.
 
 The signed-in interface checks backend health when it opens and when the user
 returns to the tab. While a signed-in tab is visible, it also sends a tiny API

@@ -9,6 +9,10 @@ function apiErrorMessage(data, fallback) {
     const field = issue?.loc?.at(-1);
     const type = issue?.type;
 
+    if (field === "code" && type === "string_pattern_mismatch") {
+      return "E-postadaki 6 haneli doğrulama kodunu gir.";
+    }
+
     if (field === "attachment_content" && type === "string_too_long") {
       return "Dosya metni 64 KiB sınırını aşıyor. Daha küçük bir dosya seç.";
     }
@@ -31,7 +35,7 @@ function apiErrorMessage(data, fallback) {
       return "Ad soyad en fazla 80 karakter olabilir.";
     }
     if (field === "email" && type === "value_error") {
-      return "Geçerli bir e-posta adresi gir.";
+      return String(issue?.msg || "Geçerli bir e-posta adresi gir.").replace(/^Value error,\s*/i, "");
     }
     if (field === "name" && type === "missing") {
       return "Kayıt için ad soyad girmen gerekiyor.";
@@ -73,6 +77,36 @@ async function apiRegister(email, password, name) {
   }
 
   return { ok: res.ok, ...data, message: apiErrorMessage(data, "Kayıt yapılamadı.") };
+}
+
+async function apiVerifyRegistration(email, code) {
+  const response = await fetch(`${API_URL}/register/verify`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, code }),
+  });
+  let data = {};
+  try {
+    data = await response.json();
+  } catch (error) {
+    console.error("Doğrulama yanıtı JSON olarak okunamadı:", error);
+  }
+  return { ok: response.ok, ...data, message: apiErrorMessage(data, "E-posta doğrulanamadı.") };
+}
+
+async function apiResendRegistrationCode(email) {
+  const response = await fetch(`${API_URL}/register/resend`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+  let data = {};
+  try {
+    data = await response.json();
+  } catch (error) {
+    console.error("Kod yenileme yanıtı JSON olarak okunamadı:", error);
+  }
+  return { ok: response.ok, ...data, message: apiErrorMessage(data, "Yeni kod gönderilemedi.") };
 }
 
 async function apiValidateSession(token) {

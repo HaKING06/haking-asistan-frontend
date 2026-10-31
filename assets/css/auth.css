@@ -319,6 +319,39 @@
   box-shadow: 0 0 0 3px rgba(155, 140, 255, 0.12);
 }
 
+.verification-code-input {
+  font-family: Consolas, "SFMono-Regular", monospace;
+  font-size: 20px !important;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-align: center;
+}
+
+.verification-help {
+  margin: 0;
+  color: #858896;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.verification-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.verification-actions .link-btn {
+  margin: 0;
+  padding: 3px 0;
+  text-align: left;
+}
+
+.verification-actions .link-btn:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

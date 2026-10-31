@@ -97,7 +97,7 @@
             <span class="eyebrow auth-eyebrow">HAKING AI · TÜRKÇE KODLAMA ASİSTANI</span>
             <h2 id="auth-title">Tekrar hoş geldin</h2>
             <p id="auth-subtitle">Hesabına giriş yap ve kaldığın yerden devam et.</p>
-            <p class="auth-seo-intro">Python, JavaScript, C# ve web geliştirmede kod öğren; hata ayıkla ve çözümleri anlayarak ilerle.</p>
+            <p class="auth-seo-intro">Python, JavaScript, C# ve web geliştirmede kod öğren; hata ayıkla ve çözümleri anlayarak ilerle. Giriş ve kayıt için doğrulanmış Gmail gerekir.</p>
           </header>
 
           <form id="login-form" class="form" novalidate>
@@ -106,16 +106,26 @@
               <input type="text" id="fullName" placeholder="Adın Soyadın" autocomplete="name" maxlength="80" />
             </div>
 
-            <div class="form-group">
-              <label for="email">E-posta adresi</label>
-              <input type="email" id="email" placeholder="ornek@eposta.com" autocomplete="email" maxlength="254" required />
+            <div class="form-group" id="email-group">
+              <label for="email">Gmail adresi</label>
+              <input type="email" id="email" placeholder="ornek@gmail.com" autocomplete="email" maxlength="254" required />
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="password-group">
               <div class="label-row">
                 <label for="password">Şifre</label>
               </div>
               <input type="password" id="password" placeholder="Şifreni gir" autocomplete="current-password" maxlength="128" required />
+            </div>
+
+            <div class="form-group hidden" id="verification-group">
+              <label for="verification-code">6 haneli e-posta kodu</label>
+              <input class="verification-code-input" type="text" id="verification-code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" />
+              <p class="verification-help">Kod 10 dakika geçerlidir. Gelen kutunu ve spam klasörünü kontrol et.</p>
+              <div class="verification-actions">
+                <button type="button" id="resend-code-btn" class="link-btn">Kodu yeniden gönder</button>
+                <button type="button" id="edit-registration-btn" class="link-btn">Geri dön</button>
+              </div>
             </div>
 
             <button type="submit" class="btn primary full auth-submit" id="submit-btn">
