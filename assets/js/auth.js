@@ -189,13 +189,13 @@ loginFormEl.addEventListener("submit", async (e) => {
     return;
   }
 
-  if (password.length > 128) {
+  if (!verificationMode && password.length > 128) {
     showAuthError("Şifre en fazla 128 karakter olabilir.");
     passwordInputEl.focus();
     return;
   }
 
-  if (authMode === "register" && password.length < 8) {
+  if (authMode === "register" && !verificationMode && password.length < 8) {
     showAuthError("Şifre en az 8 karakter olmalıdır.");
     passwordInputEl.focus();
     return;
