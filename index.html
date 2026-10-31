@@ -3,13 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="HaKING ile yazılım öğren, kodunu geliştir ve teknik sorularına yanıt bul." />
+  <meta name="description" content="HaKING AI; Python, JavaScript, C#, HTML ve web geliştirme için Türkçe yapay zekâ chatbotu ve kodlama asistanıdır. Kod öğren, hataları bul, yazılım sorularına yanıt al." />
   <meta name="author" content="Halit Güneş (HaKING)" />
+  <meta name="application-name" content="HaKING AI" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="theme-color" content="#0b0d12" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="HaKING — Yazılım ve Kodlama Asistanı" />
-  <meta property="og:description" content="Kodlama öğrenirken, projelerini geliştirirken ve hataları çözerken HaKING'den destek al." />
-  <title>HaKING — Yazılım Asistanı</title>
+  <meta property="og:site_name" content="HaKING AI" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:url" content="https://ai.haking.tr/" />
+  <meta property="og:title" content="HaKING AI | Türkçe Yapay Zekâ Kodlama Chatbotu" />
+  <meta property="og:description" content="Python, JavaScript, C#, HTML ve web geliştirme sorularına Türkçe yanıt al; kod öğren, hataları analiz et ve çözümleri birlikte geliştir." />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="HaKING AI | Türkçe Kodlama Chatbotu" />
+  <meta name="twitter:description" content="Kod öğrenmek, hata ayıklamak ve yazılım sorularına Türkçe yanıt bulmak için HaKING AI." />
+  <link rel="canonical" href="https://ai.haking.tr/" />
+  <title>HaKING AI | Türkçe Yapay Zekâ Kodlama Chatbotu</title>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "HaKING AI",
+          "alternateName": "HaKING",
+          "url": "https://ai.haking.tr/",
+          "inLanguage": "tr-TR",
+          "description": "Türkçe yapay zekâ kodlama chatbotu ve yazılım öğrenme asistanı."
+        },
+        {
+          "@type": "WebApplication",
+          "name": "HaKING AI",
+          "url": "https://ai.haking.tr/",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "Any",
+          "inLanguage": "tr-TR",
+          "description": "Python, JavaScript, C#, HTML ve web geliştirme için Türkçe yapay zekâ kodlama chatbotu; kod öğrenme, hata ayıklama ve yazılım sorularına yanıt desteği."
+        }
+      ]
+    }
+  </script>
   <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,9 +62,9 @@
         </a>
 
         <div class="showcase-copy">
-          <span class="eyebrow"><span class="status-dot"></span> YAZILIM GELİŞTİRME ASİSTANI</span>
-          <h1>Fikirlerini<br />koda dönüştür<span class="accent-text">.</span></h1>
-          <p>Kodlama yolculuğunda takıldığın yerde yanında. Öğren, üret ve projelerini güvenle ileri taşı.</p>
+          <span class="eyebrow"><span class="status-dot"></span> HAKING AI · TÜRKÇE KODLAMA ASİSTANI</span>
+          <h1>Yapay zekâ ile<br />koda dönüştür<span class="accent-text">.</span></h1>
+          <p>Python, JavaScript, C#, HTML ve web geliştirmeyi öğren. Kodundaki hataları incele, çözümleri anlayarak ilerle.</p>
 
           <div class="showcase-code" aria-label="Kod örneği">
             <div class="code-topbar"><span></span><span></span><span></span><small>hello-world.js</small></div>
@@ -61,9 +94,10 @@
             <a class="auth-privacy-info" href="./privacy.html" aria-label="Gizlilik ve veri kullanımı bilgisi" title="Gizlilik ve veri kullanımı">
               <span aria-hidden="true">i</span>
             </a>
-            <span class="eyebrow auth-eyebrow">KİŞİSEL GELİŞTİRME ALANIN</span>
+            <span class="eyebrow auth-eyebrow">HAKING AI · TÜRKÇE KODLAMA ASİSTANI</span>
             <h2 id="auth-title">Tekrar hoş geldin</h2>
             <p id="auth-subtitle">Hesabına giriş yap ve kaldığın yerden devam et.</p>
+            <p class="auth-seo-intro">Python, JavaScript, C# ve web geliştirmede kod öğren; hata ayıkla ve çözümleri anlayarak ilerle.</p>
           </header>
 
           <form id="login-form" class="form" novalidate>
@@ -162,8 +196,14 @@
             <img src="./assets/img/logo.svg" alt="" class="brand-mark" />
             <span class="brand-name">HaKING<span class="brand-period">.</span></span>
           </div>
-          <div class="model-label"><span id="backend-status" class="model-status" data-state="offline" title="Asistan sunucusu henüz kontrol edilmedi."></span> Yazılım Asistanı <span class="model-chevron">⌄</span></div>
-          <div class="topbar-right"><span class="topbar-caption">HAKING AI</span></div>
+          <a class="topbar-brand" href="./index.html" aria-label="HaKING AI ana sayfa">
+            <span class="topbar-brand-icon" aria-hidden="true">&lt;/&gt;</span>
+            <span class="topbar-brand-copy"><strong>HaKING AI</strong><small>Türkçe kodlama asistanı</small></span>
+          </a>
+          <div class="backend-status-pill" role="status" aria-live="polite" aria-atomic="true">
+            <span id="backend-status" class="model-status" data-state="offline" title="Asistan sunucusu henüz kontrol edilmedi."></span>
+            <span id="backend-status-label">Hazır olduğunda bağlanır</span>
+          </div>
         </header>
 
         <div id="chat-window" class="chat-window" aria-live="polite">

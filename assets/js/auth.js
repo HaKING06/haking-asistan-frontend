@@ -33,7 +33,7 @@ function switchToLogin() {
   toRegisterRowEl.classList.remove("hidden");
   toLoginRowEl.classList.add("hidden");
   authTitleEl.textContent = "Tekrar hoş geldin";
-  authSubtitleEl.textContent = "Hesabına giriş yap ve kaldığın yerden devam et.";
+  authSubtitleEl.textContent = "Türkçe yapay zekâ kodlama asistanına giriş yap; yazılım sorularını çözmeye devam et.";
   submitBtnEl.querySelector("span").textContent = "Giriş yap";
   showAuthError("");
 }
@@ -47,7 +47,7 @@ function switchToRegister() {
   toRegisterRowEl.classList.add("hidden");
   toLoginRowEl.classList.remove("hidden");
   authTitleEl.textContent = "Hesabını oluştur";
-  authSubtitleEl.textContent = "Ücretsiz hesabını oluştur. Şifren en az 8 karakter olmalı.";
+  authSubtitleEl.textContent = "Kod öğrenmek, hataları incelemek ve yazılım sorularına yanıt bulmak için hesabını oluştur. Şifren en az 8 karakter olmalı.";
   submitBtnEl.querySelector("span").textContent = "Hesap oluştur";
   showAuthError("");
 }

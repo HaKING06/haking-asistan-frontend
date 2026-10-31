@@ -9,6 +9,7 @@ Cloudflare Workers asset root and contains `index.html`, `assets/`, and
 - Root directory: `/`
 - Build command: `npm run build` (optional dry-run validation)
 - Deploy command: `npx wrangler deploy`
+- Search files: `robots.txt` and `sitemap.xml` are served from the site root.
 
 The frontend calls `https://haking-asistan-backend.onrender.com` for login,
 registration, health checks, and streamed chat responses. Keep
@@ -39,8 +40,16 @@ mode and does not publish the site.
   third-party font request and is disclosed in the privacy page; it may receive
   connection data such as an IP address.
 
-The privacy notice intentionally has a visible placeholder for the data
-controller's full legal name. Complete it and verify the lawful bases,
-international transfer arrangements, provider plans, and any 5651 duties with
-a qualified adviser before treating the notice as final. Do not describe this
-repository as legally compliant solely because the page exists.
+The privacy notice identifies the individual student project operator and
+contact email supplied for HaKING. Verify lawful bases, international transfer
+arrangements, provider plans, and any 5651 duties against the actual service
+setup. A privacy page alone does not certify legal compliance.
+
+## Search appearance
+
+The landing page uses Turkish title/description metadata, a canonical URL,
+Open Graph and social preview fields, and `WebSite`/`WebApplication` JSON-LD.
+Keep the visible page copy consistent with those claims. Google does not use
+the `meta keywords` tag for ranking, so this project does not add one or stuff
+search phrases into hidden text. Google chooses the displayed title/snippet
+and may take time to recrawl a deployment; metadata cannot guarantee a ranking.

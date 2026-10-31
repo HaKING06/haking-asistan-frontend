@@ -260,6 +260,13 @@
   line-height: 1.6;
 }
 
+.auth-heading .auth-seo-intro {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.65;
+}
+
 .form {
   display: flex;
   flex-direction: column;

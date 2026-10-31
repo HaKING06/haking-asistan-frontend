@@ -8,6 +8,7 @@ const profileNameEl = document.getElementById("profile-name");
 const userAvatarEl = document.getElementById("user-avatar");
 const typingIndicatorEl = document.getElementById("typing-indicator");
 const backendStatusEl = document.getElementById("backend-status");
+const backendStatusLabelEl = document.getElementById("backend-status-label");
 const welcomeTemplate = document.getElementById("welcome-state");
 const assistantStreamContent = new WeakMap();
 
@@ -15,6 +16,15 @@ function uiSetBackendStatus(state, message) {
   if (!backendStatusEl) return;
   backendStatusEl.dataset.state = state;
   backendStatusEl.title = message;
+  if (backendStatusLabelEl) {
+    const labels = {
+      offline: "Hazır olduğunda bağlanır",
+      checking: "Sunucu hazırlanıyor",
+      ready: "Asistan hazır",
+      error: "Bağlantı kurulamadı",
+    };
+    backendStatusLabelEl.textContent = labels[state] || "Durum kontrol ediliyor";
+  }
 }
 
 function uiShowLogin() {
