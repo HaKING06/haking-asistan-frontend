@@ -9,7 +9,6 @@ const fullNameInputEl = document.getElementById("fullName");
 const nameGroupEl = document.getElementById("name-group");
 const verificationGroupEl = document.getElementById("verification-group");
 const verificationCodeInputEl = document.getElementById("verification-code");
-const copyVerificationCodeBtnEl = document.getElementById("copy-verification-code-btn");
 const resendCodeBtnEl = document.getElementById("resend-code-btn");
 const editRegistrationBtnEl = document.getElementById("edit-registration-btn");
 
@@ -33,7 +32,6 @@ let pendingEmailLinkToken = "";
 let resendCooldownTimer = null;
 let verificationPollTimer = null;
 let verificationPollInFlight = false;
-let copyCodeResetTimer = null;
 
 function showAuthError(message) {
   loginErrorEl.removeAttribute("data-state");
@@ -113,7 +111,6 @@ function clearVerificationMode(clearStoredToken = true) {
   pendingEmailLinkToken = "";
   if (clearStoredToken) localStorage.removeItem(PENDING_VERIFICATION_KEY);
   verificationCodeInputEl.value = "";
-  copyVerificationCodeBtnEl.textContent = "Kodu kopyala";
   verificationGroupEl.classList.add("hidden");
   emailGroupEl.classList.remove("hidden");
   passwordGroupEl.classList.remove("hidden");
@@ -144,36 +141,6 @@ function startResendCooldown(seconds = 60) {
   updateLabel();
   resendCooldownTimer = window.setInterval(updateLabel, 1000);
 }
-
-copyVerificationCodeBtnEl.addEventListener("click", async () => {
-  const code = verificationCodeInputEl.value.trim();
-  if (!/^\d{6}$/.test(code)) {
-    showAuthError("Önce e-postadaki 6 haneli kodu gir veya e-postadaki doğrulama düğmesini aç.");
-    verificationCodeInputEl.focus();
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(code);
-  } catch (error) {
-    verificationCodeInputEl.focus();
-    verificationCodeInputEl.select();
-    const copied = document.execCommand("copy");
-    verificationCodeInputEl.setSelectionRange(code.length, code.length);
-    if (!copied) {
-      showAuthError("Kod otomatik kopyalanamadı. Seçili kodu Ctrl+C ile kopyala.");
-      return;
-    }
-  }
-
-  showAuthError("");
-  copyVerificationCodeBtnEl.textContent = "Kopyalandı";
-  if (copyCodeResetTimer !== null) window.clearTimeout(copyCodeResetTimer);
-  copyCodeResetTimer = window.setTimeout(() => {
-    copyVerificationCodeBtnEl.textContent = "Kodu kopyala";
-    copyCodeResetTimer = null;
-  }, 1800);
-});
 
 function enterVerificationMode(email, message, credentials = {}) {
   verificationMode = true;
