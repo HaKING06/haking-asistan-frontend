@@ -3,6 +3,36 @@
 const chatInputEl = document.getElementById("chat-input");
 const sendBtnEl = document.getElementById("send-btn");
 const newChatBtnEl = document.getElementById("new-chat-btn");
+const BACKEND_KEEPALIVE_INTERVAL_MS = 10 * 60 * 1000;
+let backendKeepaliveTimer = null;
+
+function stopBackendKeepAlive() {
+  if (backendKeepaliveTimer !== null) {
+    window.clearInterval(backendKeepaliveTimer);
+    backendKeepaliveTimer = null;
+  }
+}
+
+function startBackendKeepAlive() {
+  stopBackendKeepAlive();
+  if (!AppState.token || !AppState.email || document.visibilityState !== "visible") return;
+
+  backendKeepaliveTimer = window.setInterval(() => {
+    if (
+      !AppState.token ||
+      !AppState.email ||
+      document.visibilityState !== "visible" ||
+      !navigator.onLine ||
+      sendBtnEl.disabled
+    ) {
+      return;
+    }
+
+    void apiKeepAlive().catch((error) => {
+      console.info("Hafif sunucu kontrolü başarısız; sonraki kontrolde tekrar denenecek.", error.message);
+    });
+  }, BACKEND_KEEPALIVE_INTERVAL_MS);
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
   loadSession();
@@ -31,6 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loginErrorEl.removeAttribute("data-state");
     loginErrorEl.textContent = "";
     uiShowChat(session.email);
+    startBackendKeepAlive();
     void apiWarmup().catch((error) => {
       console.info("Backend hazırlanıyor:", error.message);
     });
@@ -43,11 +74,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && AppState.email && AppState.token) {
-    void apiWarmup().catch((error) => {
-      console.info("Backend hazırlanıyor:", error.message);
-    });
+  if (document.hidden) {
+    stopBackendKeepAlive();
+    return;
   }
+
+  if (AppState.email && AppState.token) {
+    void apiWarmup()
+      .then(startBackendKeepAlive)
+      .catch((error) => console.info("Backend hazırlanıyor:", error.message));
+  }
+});
+
+window.addEventListener("online", () => {
+  if (!AppState.email || !AppState.token || document.visibilityState !== "visible") return;
+  void apiWarmup()
+    .then(startBackendKeepAlive)
+    .catch((error) => console.info("Backend bağlantısı yeniden deneniyor:", error.message));
 });
 
 sendBtnEl.addEventListener("click", sendMessageFromUI);
@@ -125,6 +168,7 @@ async function sendMessageFromUI() {
 
     if (!result.ok) {
       if (result.unauthorized) {
+        stopBackendKeepAlive();
         clearSession();
         uiShowLogin();
         loginErrorEl.textContent = result.message || "Oturumun sona erdi. Lütfen tekrar giriş yap.";

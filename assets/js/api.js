@@ -109,21 +109,72 @@ async function apiLogout(token) {
   if (!response.ok) throw new Error("Oturum sunucuda kapatılamadı.");
 }
 
-async function apiWarmup() {
+let backendWarmupPromise = null;
+
+function apiWarmup() {
+  if (backendWarmupPromise) return backendWarmupPromise;
+
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => controller.abort(), 90000);
   uiSetBackendStatus("checking", "Asistan sunucusu hazırlanıyor...");
-  try {
-    const response = await fetch(`${API_URL}/health`, { signal: controller.signal });
-    if (!response.ok) throw new Error("Backend henüz hazır değil.");
-    uiSetBackendStatus("ready", "Asistan sunucusu hazır.");
-    return await response.json();
-  } catch (error) {
-    uiSetBackendStatus("error", "Asistan sunucusuna şu anda ulaşılamıyor.");
-    throw error;
-  } finally {
-    window.clearTimeout(timeoutId);
+  backendWarmupPromise = (async () => {
+    try {
+      const response = await fetch(`${API_URL}/health`, {
+        cache: "no-store",
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error("Backend henüz hazır değil.");
+      uiSetBackendStatus("ready", "Asistan sunucusu hazır.");
+      return await response.json();
+    } catch (error) {
+      uiSetBackendStatus("error", "Asistan sunucusuna şu anda ulaşılamıyor.");
+      throw error;
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  })().finally(() => {
+    backendWarmupPromise = null;
+  });
+
+  return backendWarmupPromise;
+}
+
+let backendKeepAlivePromise = null;
+
+function apiKeepAlive() {
+  if (
+    !AppState.token ||
+    !AppState.email ||
+    document.visibilityState !== "visible" ||
+    backendWarmupPromise
+  ) {
+    return Promise.resolve();
   }
+  if (backendKeepAlivePromise) return backendKeepAlivePromise;
+
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), 90000);
+  backendKeepAlivePromise = (async () => {
+    try {
+      // A tiny API-root request wakes and keeps Render active without querying Neon or Gemini.
+      const response = await fetch(`${API_URL}/`, {
+        method: "GET",
+        cache: "no-store",
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`Backend ping returned HTTP ${response.status}.`);
+      uiSetBackendStatus("ready", "Asistan sunucusu aktif.");
+    } catch (error) {
+      uiSetBackendStatus("error", "Asistan sunucusuna ulaşılamadı; tekrar kontrol edilecek.");
+      throw error;
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  })().finally(() => {
+    backendKeepAlivePromise = null;
+  });
+
+  return backendKeepAlivePromise;
 }
 
 const CHAT_TIMEOUT_MS = 480000;

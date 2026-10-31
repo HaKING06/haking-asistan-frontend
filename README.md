@@ -18,7 +18,11 @@ private Render backend service. Do not add backend secrets to this public
 repository.
 
 The signed-in interface checks backend health when it opens and when the user
-returns to the tab. Render still controls its free service's idle sleep policy.
+returns to the tab. While a signed-in tab is visible, it also sends a tiny API
+root request about every 10 minutes to reduce Render's idle spin-down. The
+heartbeat stops when the tab is hidden or the user logs out; it does not call
+Gemini or query Neon. It cannot prevent Render platform restarts or monthly
+free-instance-hour limits, and the free plan can still have cold starts.
 
 For local preview, run `npm run dev`. The build command uses Wrangler's dry-run
 mode and does not publish the site.

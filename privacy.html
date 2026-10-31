@@ -87,6 +87,7 @@
         <h2>6. Loglar, erişim ve saklama süresi</h2>
         <p>Backend operasyon logları Render'ın uygulama loglarına gönderilir. Render'ın <a href="https://render.com/docs/logging" target="_blank" rel="noopener noreferrer">Hobby/ücretsiz log saklama süresi</a> şu an 7 gündür; plan ve sağlayıcı koşulları değişebilir. Bu kayıtlar hukuki arşiv sistemi değildir ve Render'daki bu süre, uygulanabilir bir yasal saklama yükümlülüğünü karşılıyor kabul edilmemelidir.</p>
         <p>Uygulama loglarında ham sohbet içeriği, yanıt, parola, e-posta, IP adresi veya oturum token'ı tutulmaz. Kullanıcı korelasyonu etkinleştirilirse `LOG_PSEUDONYM_KEY` ile üretilen takma referans kullanılır. 5651 kapsamındaki yükümlülükler site işletmecisinin rolüne göre değişebileceğinden, sınıflandırma ve gerekiyorsa ayrı trafik kayıt sistemi hukuk danışmanıyla değerlendirilmelidir.</p>
+        <p>Oturum açıkken ve HaKING sekmesi görünür durumdayken, Render'ın boşta uykuya geçmesini azaltmak için yaklaşık 10 dakikada bir küçük bir API isteği gönderilir. Bu istek Gemini'yi çağırmaz, Neon veritabanını sorgulamaz ve mesaj ya da oturum token'ı içermez. Sekme gizlenince veya oturum kapatılınca durur; teknik istek kaydı Render loglarında görünebilir.</p>
       </section>
 
       <section class="privacy-section">
