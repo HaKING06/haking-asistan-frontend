@@ -15,6 +15,7 @@ const verificationGroupEl = document.getElementById("verification-group");
 const verificationCodeInputEl = document.getElementById("verification-code");
 const resendCodeBtnEl = document.getElementById("resend-code-btn");
 const editRegistrationBtnEl = document.getElementById("edit-registration-btn");
+const adultConfirmedInputEl = document.getElementById("adult-confirmed");
 
 const loginErrorEl = document.getElementById("login-error");
 const logoutBtnEl = document.getElementById("logout-btn");
@@ -290,7 +291,7 @@ switchToLogin(false);
 showRegisterBtnEl.addEventListener("click", switchToRegister);
 showLoginBtnEl.addEventListener("click", switchToLogin);
 
-for (const input of [emailInputEl, passwordInputEl, passwordConfirmInputEl, fullNameInputEl, verificationCodeInputEl]) {
+for (const input of [emailInputEl, passwordInputEl, passwordConfirmInputEl, fullNameInputEl, verificationCodeInputEl, adultConfirmedInputEl]) {
   input.addEventListener("input", () => {
     if (loginErrorEl.textContent) showAuthError("");
   });
@@ -331,6 +332,12 @@ loginFormEl.addEventListener("submit", async (e) => {
   const password = passwordInputEl.value;
   const passwordConfirmation = passwordConfirmInputEl.value;
   const fullName = fullNameInputEl.value.trim();
+
+  if (!adultConfirmedInputEl.checked) {
+    showAuthError("Bu hizmet yalnızca 18 yaşını doldurmuş kullanıcılar içindir. Devam etmek için yaş onayını işaretle.");
+    adultConfirmedInputEl.focus();
+    return;
+  }
 
   if (!email || (!verificationMode && !password)) {
     showAuthError("Lütfen e-posta adresini ve şifreni gir.");
@@ -390,6 +397,7 @@ loginFormEl.addEventListener("submit", async (e) => {
         code,
         pendingVerificationToken || null,
         pendingEmailLinkToken || null,
+        adultConfirmedInputEl.checked,
       );
       if (!result.ok || !result.success || !result.token) {
         showAuthError(result.message || "Kod doğrulanamadı.");
@@ -399,7 +407,7 @@ loginFormEl.addEventListener("submit", async (e) => {
       finishAuthentication(result.token, result.email || email, result.name);
     } else if (authMode === "login") {
       // GİRİŞ
-      const result = await apiLogin(email, password);
+      const result = await apiLogin(email, password, adultConfirmedInputEl.checked);
       if (!result.ok || !result.success || !result.token) {
         loginErrorEl.textContent =
           result.message || "Giriş başarısız. Gmail adresini ve şifreni kontrol et.";
@@ -422,7 +430,8 @@ loginFormEl.addEventListener("submit", async (e) => {
       const result = await apiRegister(
         email,
         password,
-        fullName
+        fullName,
+        adultConfirmedInputEl.checked,
       );
       if (!result.ok || !result.success) {
         showAuthError(result.message || "Kayıt başarısız. Daha sonra tekrar dene.");

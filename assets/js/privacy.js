@@ -56,7 +56,7 @@
         <div class="privacy-category"><div><strong>Zorunlu oturum ve tercih depolaması</strong><small>Oturum anahtarı ve bu tercih kaydı tarayıcının localStorage alanında tutulur. HTTP çerezi değildir; oturum için gereklidir.</small></div><span class="privacy-category-status">Açık (gerekli)</span></div>
         <div class="privacy-category"><div><strong>Analiz / performans çerezleri</strong><small>Site analiz aracı kullanmıyor. Bu kategoriye izin verilmedi.</small></div><span class="privacy-category-status off">${status(choice?.analytics === true)}</span></div>
         <div class="privacy-category"><div><strong>Reklam / kişiselleştirme çerezleri</strong><small>Reklam ve çapraz site takip araçları kullanılmıyor.</small></div><span class="privacy-category-status off">${status(choice?.marketing === true)}</span></div>
-        <p class="privacy-modal-footnote">AI sohbet içeriğinin Google Gemini API'ye gönderilmesi bu tarayıcı tercihinden ayrı bir işlemdir; ayrıntılar gizlilik metninde açıklanmıştır.</p>
+        <p class="privacy-modal-footnote">AI sohbet içeriğinin otomatik seçilen Groq veya Google Gemini API'sine gönderilmesi bu tarayıcı tercihinden ayrı bir işlemdir; ayrıntılar gizlilik metninde açıklanmıştır.</p>
         ${wasSaved ? `<p class="privacy-modal-footnote">Kaydedilme zamanı: ${dateText}</p>` : ""}
         ${storeNotice}${actions}
       </section>

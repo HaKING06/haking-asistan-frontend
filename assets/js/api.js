@@ -43,16 +43,20 @@ function apiErrorMessage(data, fallback) {
     if (field === "name" && type === "missing") {
       return "Kayıt için ad soyad girmen gerekiyor.";
     }
+    if (field === "adult_confirmed" && ["missing", "value_error"].includes(type)) {
+      return String(issue?.msg || "Bu hizmet yalnızca 18 yaşını doldurmuş kullanıcılar içindir.")
+        .replace(/^Value error,\s*/i, "");
+    }
     return "Gönderdiğin bilgileri kontrol edip tekrar dene.";
   }
   return fallback;
 }
 
-async function apiLogin(email, password) {
+async function apiLogin(email, password, adultConfirmed) {
   const res = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, adult_confirmed: adultConfirmed }),
   });
 
   let data = {};
@@ -65,11 +69,11 @@ async function apiLogin(email, password) {
   return { ok: res.ok, ...data, message: apiErrorMessage(data, "Giriş yapılamadı.") };
 }
 
-async function apiRegister(email, password, name) {
+async function apiRegister(email, password, name, adultConfirmed) {
   const res = await fetch(`${API_URL}/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password, name }),
+    body: JSON.stringify({ email, password, name, adult_confirmed: adultConfirmed }),
   });
 
   let data = {};
@@ -82,11 +86,11 @@ async function apiRegister(email, password, name) {
   return { ok: res.ok, ...data, message: apiErrorMessage(data, "Kayıt yapılamadı.") };
 }
 
-async function apiVerifyRegistration(email, code, verificationToken = null, emailLinkToken = null) {
+async function apiVerifyRegistration(email, code, verificationToken = null, emailLinkToken = null, adultConfirmed = false) {
   const response = await fetch(`${API_URL}/register/verify`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, code, verification_token: verificationToken, email_link_token: emailLinkToken }),
+    body: JSON.stringify({ email, code, verification_token: verificationToken, email_link_token: emailLinkToken, adult_confirmed: adultConfirmed }),
   });
   let data = {};
   try {

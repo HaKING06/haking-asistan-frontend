@@ -439,6 +439,28 @@
   font-size: 13px;
 }
 
+.age-confirmation {
+  margin: 1px 0 13px;
+}
+
+.age-confirmation label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--text-soft);
+  font-size: 11px;
+  line-height: 1.55;
+  cursor: pointer;
+}
+
+.age-confirmation input {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  margin: 1px 0 0;
+  accent-color: var(--accent-strong);
+}
+
 .auth-submit svg {
   width: 18px;
   height: 18px;

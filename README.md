@@ -13,12 +13,15 @@ Cloudflare Workers asset root and contains `index.html`, `assets/`, and
 
 The frontend calls `https://haking-asistan-backend.onrender.com` for login,
 registration, health checks, and streamed chat responses. Keep
-`GEMINI_API_KEY`, `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `RESEND_API_KEY`,
+`GROQ_API_KEY`, `GEMINI_API_KEY`, `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `RESEND_API_KEY`,
 and `EMAIL_VERIFICATION_SECRET` only in the private Render backend service.
 Do not add backend secrets to this public repository. Registration/login are
 Gmail-only; a new account is created only after the user enters a 6-digit code
 sent through Resend. The sender domain must be verified in Resend and the
 provider's DNS records added before production email delivery works.
+HaKING is for adults aged 18 or older. The login, registration, and verification
+screens ask users to attest that they meet this requirement; no birth date or
+identity document is collected. This is self-attestation, not age verification.
 
 The signed-in interface checks backend health when it opens and when the user
 returns to the tab. While a signed-in tab is visible, it also sends a tiny API
@@ -38,16 +41,19 @@ mode and does not publish the site.
   the session and preference record. The app currently has no analytics,
   advertising, or cross-site tracking cookies. After saving a choice, the UI
   shows the exact saved categories. This is not consent to send AI prompts to a
-  model provider; that processing is described separately.
+  model providers; that processing is described separately.
 - The session token is kept in `localStorage`; the account email is no longer
   persisted there and is loaded from the authenticated API session. Chat text
-  stays in tab memory and is sent to the backend/Google Gemini API to generate
-  answers; the backend does not store chat transcripts in Neon.
+  stays in tab memory and is sent to the backend and automatically selected
+  Groq or Google Gemini API to generate answers; during provider failover, the
+  same request may reach both providers. The backend does not store chat
+  transcripts in Neon.
 - The chat can read one UTF-8 source/text file at a time (64 KiB maximum) in the
   browser. It accepts a short allowlist of code/text extensions, rejects binary
   text and some recognizable secret formats, and sends the contents only when
   the user submits the message. The app never saves or executes uploaded files;
-  the contents are still sent to Google Gemini for analysis, so users should
+  the contents are sent to the selected AI provider for analysis (and may reach
+  the fallback provider), so users should
   remove credentials and private data before attaching a file. Secret detection
   is best-effort and cannot guarantee that every credential is found.
 - No analytics or advertising SDK is installed. Google Fonts is currently a

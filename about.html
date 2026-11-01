@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="HaKING AI'nin yazılım öğrenme, kod üretme ve hata ayıklama özelliklerini; Groq ve Google Gemini model sağlayıcılarını keşfet." />
+  <meta name="theme-color" content="#0b0d12" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://ai.haking.tr/about.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="HaKING AI" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:url" content="https://ai.haking.tr/about.html" />
+  <meta property="og:title" content="HaKING AI Nasıl Çalışır? | Modeller ve Özellikler" />
+  <meta property="og:description" content="Türkçe yazılım asistanının kod üretme, hata ayıklama ve otomatik AI model yönlendirme özelliklerini incele." />
+  <title>HaKING AI Hakkında | Modeller ve Özellikler</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/main.css" />
+  <link rel="stylesheet" href="./assets/css/privacy.css" />
+  <style>
+    .about-model-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:18px; }
+    .about-model-card { min-width:0; padding:18px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.025); }
+    .about-model-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .about-model-head h3 { margin:0; font-size:16px; }
+    .about-model-state { color:var(--text-muted); font-size:11px; white-space:nowrap; }
+    .about-model-state.ready { color:var(--green); }
+    .about-model-card > p { margin:10px 0; color:var(--text-muted); font-size:13px; }
+    .about-model-list { display:grid; gap:9px; margin:14px 0 0; padding:0; list-style:none; }
+    .about-model-list li { display:grid; gap:3px; padding-top:9px; border-top:1px solid var(--border); }
+    .about-model-list code { color:#c4baff; overflow-wrap:anywhere; }
+    .about-model-list span { font-size:12px; }
+    .about-callout { padding:14px 16px; border-left:3px solid var(--accent); border-radius:0 10px 10px 0; background:var(--accent-soft); color:var(--text-soft); line-height:1.7; }
+    .about-feature-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:15px; }
+    .about-feature { padding:14px; border:1px solid var(--border); border-radius:12px; }
+    .about-feature strong { display:block; margin-bottom:5px; }
+    .about-feature span { color:var(--text-muted); line-height:1.6; }
+    .about-links { display:flex; flex-wrap:wrap; gap:12px; margin-top:15px; }
+    @media(max-width:680px) { .about-model-grid,.about-feature-grid { grid-template-columns:1fr; } .about-model-head { align-items:flex-start; flex-direction:column; gap:4px; } }
+  </style>
+</head>
+<body>
+  <main class="privacy-page">
+    <div class="privacy-wrap">
+      <nav class="privacy-nav" aria-label="Sayfa gezinme">
+        <a class="brand-lockup" href="./index.html" aria-label="HaKING ana sayfa">
+          <img src="./assets/img/logo.svg" alt="" class="brand-mark" />
+          <span class="brand-name">HaKING<span class="brand-period">.</span></span>
+        </a>
+        <div class="privacy-nav-actions">
+          <a href="./index.html">Uygulamaya dön</a>
+          <a href="./privacy.html">Gizlilik</a>
+        </div>
+      </nav>
+
+      <header class="privacy-hero">
+        <span class="privacy-eyebrow">HAKING AI · TÜRKÇE YAZILIM ASİSTANI</span>
+        <h1>Kodunu birlikte geliştirelim.</h1>
+        <p>HaKING AI, yalnızca 18 yaşını doldurmuş kullanıcılar için yazılım öğrenme, kod üretme, mevcut kodu anlama ve hata ayıklama desteği sunan Türkçe bir sohbet asistanıdır. İsteğin türüne göre farklı AI modellerini otomatik seçer; sağlayıcı geçici olarak yanıt veremezse yedek sağlayıcıyı deneyebilir.</p>
+        <div class="about-links"><a class="privacy-action" href="./index.html">Sohbete geç →</a><a class="privacy-action" href="./privacy.html">Veri kullanımını incele</a></div>
+      </header>
+
+      <section class="privacy-section">
+        <h2>Neler yapabilirsin?</h2>
+        <div class="about-feature-grid">
+          <div class="about-feature"><strong>Kod öğren ve örnek üret</strong><span>Python, JavaScript, C#, HTML/CSS ve diğer yazılım konularında açıklama, örnek ve proje adımları iste.</span></div>
+          <div class="about-feature"><strong>Hata ayıkla</strong><span>Hata mesajını ve ilgili kodu paylaş; olası nedeni, düzeltmeyi ve kontrol etmen gereken noktaları öğren.</span></div>
+          <div class="about-feature"><strong>Kod ve dosya incele</strong><span>Metin/kod dosyasını ekleyip inceleme iste. İzin verilen dosyalar tarayıcıda metin olarak okunur; sunucuda çalıştırılmaz veya uygulama veritabanına kaydedilmez.</span></div>
+          <div class="about-feature"><strong>Test ve alıştırma</strong><span>Kodlama test sorularını açıklamalı çözmesini, birim test taslağı hazırlamasını veya öğrendiklerini sınamasını iste.</span></div>
+        </div>
+      </section>
+
+      <section class="privacy-section">
+        <h2>AI modelleri ve otomatik yönlendirme</h2>
+        <p>Model anahtarları yalnızca özel backend sunucusunda tutulur. Backend, kısa sorular için hızlı modeli; kod üretme, hata ayıklama ve uzun yazılım istekleri için daha kapsamlı modeli seçer. Sağlayıcı erişim, kota ya da geçici sunucu hatası verirse yapılandırılmış yedekleri dener. Kısmi yanıt oluşmuşsa yedek modelden kaldığı yerden devam etmesi istenir. Yedekleme erişilebilirliği artırır; iki modeli birlikte çalıştırıp her yanıtı doğrulamaz.</p>
+        <p id="provider-route-status" class="about-callout" role="status" aria-live="polite">Sunucudaki sağlayıcı ayarları kontrol ediliyor…</p>
+        <div id="provider-models" class="about-model-grid" aria-live="polite"></div>
+        <p>Ücretsiz planlarda istek ve token kotaları bulunur; sınırlar model, hesap ve sağlayıcı koşullarına göre değişebilir. İki sağlayıcı kullanılması hatasızlık garantisi vermez. AI çıktısını çalıştırmadan önce gözden geçir; test et ve gizli anahtarlarını sohbete ekleme.</p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>Kimler kullanabilir?</h2>
+        <p>HaKING AI yalnızca 18 yaşını doldurmuş kullanıcılar içindir. Kayıt, e-posta doğrulama ve giriş sırasında yaş onayı gerekir. Bu onay öz beyana dayanır; doğum tarihi toplanmaz ve yaş kimlik belgesiyle doğrulanmaz.</p>
+        <div class="about-links"><a href="https://console.groq.com/docs/legal/services-agreement" target="_blank" rel="noopener noreferrer">Groq hizmet şartları ↗</a><a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer">Gemini API ek şartları ↗</a></div>
+      </section>
+
+      <section class="privacy-section">
+        <h2>Yanıt kalitesi ve sınırlar</h2>
+        <ul>
+          <li>AI; yanlış, eksik veya eski bilgi üretebilir. Üretilen kodu kendi ortamında test et.</li>
+          <li>Modelin gördüğü güncel tarih, canlı internet erişimi anlamına gelmez. Güncel kütüphane sürümü veya ürün davranışını resmî belgelerden doğrula.</li>
+          <li>Uzun yanıtlar modelin çıktı ve ücretsiz kota sınırlarına takılabilir; dosya bazında istemek daha güvenilir sonuç verir.</li>
+          <li>Yüklenen dosyalar yürütülmez; ancak içerik yanıt için seçilen AI sağlayıcısına iletilebilir. Parola, API anahtarı ve özel verileri silerek paylaş.</li>
+        </ul>
+        <div class="about-links"><a href="https://console.groq.com/docs/models" target="_blank" rel="noopener noreferrer">Groq model belgeleri ↗</a><a href="https://ai.google.dev/gemini-api/docs/models" target="_blank" rel="noopener noreferrer">Gemini model belgeleri ↗</a></div>
+      </section>
+
+      <footer>HaKING AI · Model yapılandırması canlı backend'den okunur. Gizlilik ve veri akışı için <a href="./privacy.html">gizlilik metnini</a> incele.</footer>
+    </div>
+  </main>
+  <script src="./assets/js/about.js"></script>
+  <script src="./assets/js/privacy.js"></script>
+</body>
+</html>
