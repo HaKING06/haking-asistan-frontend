@@ -66,7 +66,13 @@ async function apiLogin(email, password, adultConfirmed) {
     console.error("Login JSON parse hatası:", e);
   }
 
-  return { ok: res.ok, ...data, message: apiErrorMessage(data, "Giriş yapılamadı.") };
+  return {
+    ok: res.ok,
+    status: res.status,
+    requestId: res.headers.get("X-Request-ID"),
+    ...data,
+    message: apiErrorMessage(data, "Giriş yapılamadı."),
+  };
 }
 
 async function apiRegister(email, password, name, adultConfirmed) {
@@ -83,7 +89,13 @@ async function apiRegister(email, password, name, adultConfirmed) {
     console.error("Register JSON parse hatası:", e);
   }
 
-  return { ok: res.ok, ...data, message: apiErrorMessage(data, "Kayıt yapılamadı.") };
+  return {
+    ok: res.ok,
+    status: res.status,
+    requestId: res.headers.get("X-Request-ID"),
+    ...data,
+    message: apiErrorMessage(data, "Kayıt yapılamadı."),
+  };
 }
 
 async function apiVerifyRegistration(email, code, verificationToken = null, emailLinkToken = null, adultConfirmed = false) {
@@ -98,7 +110,13 @@ async function apiVerifyRegistration(email, code, verificationToken = null, emai
   } catch (error) {
     console.error("Doğrulama yanıtı JSON olarak okunamadı:", error);
   }
-  return { ok: response.ok, ...data, message: apiErrorMessage(data, "E-posta doğrulanamadı.") };
+  return {
+    ok: response.ok,
+    status: response.status,
+    requestId: response.headers.get("X-Request-ID"),
+    ...data,
+    message: apiErrorMessage(data, "E-posta doğrulanamadı."),
+  };
 }
 
 async function apiResendRegistrationCode(email, verificationToken = null, emailLinkToken = null) {

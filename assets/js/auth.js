@@ -96,6 +96,14 @@ function showAuthError(message) {
   loginErrorEl.textContent = message;
 }
 
+function authFailureMessage(result, fallback) {
+  const message = result?.message || fallback;
+  if (result?.status >= 500 && result.requestId) {
+    return `${message} (Destek kodu: ${result.requestId.slice(0, 12)})`;
+  }
+  return message;
+}
+
 function readStoredVerification() {
   try {
     const saved = JSON.parse(localStorage.getItem(PENDING_VERIFICATION_KEY) || "null");
@@ -234,6 +242,7 @@ function switchToLogin(clearStoredToken = true) {
   clearVerificationMode(clearStoredToken);
   authMode = "login";
   nameGroupEl.classList.add("hidden");
+  passwordConfirmGroupEl.classList.add("hidden");
   fullNameInputEl.required = false;
   passwordConfirmInputEl.required = false;
   passwordConfirmInputEl.value = "";
@@ -400,7 +409,7 @@ loginFormEl.addEventListener("submit", async (e) => {
         adultConfirmedInputEl.checked,
       );
       if (!result.ok || !result.success || !result.token) {
-        showAuthError(result.message || "Kod doğrulanamadı.");
+        showAuthError(authFailureMessage(result, "Kod doğrulanamadı."));
         return;
       }
 
@@ -409,8 +418,10 @@ loginFormEl.addEventListener("submit", async (e) => {
       // GİRİŞ
       const result = await apiLogin(email, password, adultConfirmedInputEl.checked);
       if (!result.ok || !result.success || !result.token) {
-        loginErrorEl.textContent =
-          result.message || "Giriş başarısız. Gmail adresini ve şifreni kontrol et.";
+        loginErrorEl.textContent = authFailureMessage(
+          result,
+          "Giriş başarısız. Gmail adresini ve şifreni kontrol et.",
+        );
         return;
       }
 
@@ -434,7 +445,7 @@ loginFormEl.addEventListener("submit", async (e) => {
         adultConfirmedInputEl.checked,
       );
       if (!result.ok || !result.success) {
-        showAuthError(result.message || "Kayıt başarısız. Daha sonra tekrar dene.");
+        showAuthError(authFailureMessage(result, "Kayıt başarısız. Daha sonra tekrar dene."));
         return;
       }
 

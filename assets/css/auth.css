@@ -440,6 +440,10 @@
 }
 
 .age-confirmation {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
   margin: 1px 0 13px;
 }
 
@@ -451,6 +455,28 @@
   font-size: 11px;
   line-height: 1.55;
   cursor: pointer;
+}
+
+.age-confirmation-info {
+  display: inline-flex;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.age-confirmation-info:hover,
+.age-confirmation-info:focus-visible {
+  border-color: var(--accent-strong);
+  color: var(--accent-strong);
 }
 
 .age-confirmation input {
