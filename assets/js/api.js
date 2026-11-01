@@ -408,6 +408,8 @@ async function readChatStream(response, onChunk, onStage = () => {}) {
   const decoder = new TextDecoder();
   let buffer = "";
   let streamError = "";
+  let receivedDone = false;
+  let requiresDoneEvent = false;
 
   const processEvent = (eventText) => {
     let eventType = "message";
@@ -424,6 +426,10 @@ async function readChatStream(response, onChunk, onStage = () => {}) {
     const text = data.join("\n");
     if (eventType === "error") {
       streamError = text || "Asistan yanıt üretirken bir hata oluştu.";
+    } else if (eventType === "protocol") {
+      requiresDoneEvent = text === "done-v1";
+    } else if (eventType === "done") {
+      receivedDone = true;
     } else if (eventType === "stage") {
       const labels = {
         starting: "İsteğin inceleniyor",
@@ -462,6 +468,9 @@ async function readChatStream(response, onChunk, onStage = () => {}) {
     reader.releaseLock();
   }
 
+  if (!streamError && requiresDoneEvent && !receivedDone) {
+    streamError = "Yanıt akışı tamamlanmadan bağlantı kesildi. Kaldığın yerden devam edebilirsin.";
+  }
   return streamError ? { ok: false, message: streamError } : { ok: true };
 }
 
