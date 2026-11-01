@@ -427,6 +427,7 @@ async function readChatStream(response, onChunk, onStage = () => {}) {
     } else if (eventType === "stage") {
       const labels = {
         starting: "İsteğin inceleniyor",
+        direct: "Hızlı yanıt yolu seçildi",
         briefing: "Teknik brief hazırlanıyor",
         handoff: "Brief üretim modeline aktarılıyor",
         model_wait: "Yanıt modeli çalışıyor · ilk çıktı bekleniyor",

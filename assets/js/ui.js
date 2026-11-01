@@ -356,6 +356,7 @@ function uiShowTyping(show, mode = "normal") {
 function uiSetTypingStage(stage) {
   const labels = {
     starting: ["İstek sıraya alındı", 1],
+    direct: ["Hızlı yanıt yolu seçildi", 2],
     briefing: ["Teknik brief hazırlanıyor", 2],
     handoff: ["Brief üretim modeline aktarılıyor", 2],
     model_wait: ["Yanıt modeli çalışıyor · ilk çıktı bekleniyor", 3],
