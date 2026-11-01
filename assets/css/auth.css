@@ -1,10 +1,10 @@
 .auth-screen {
   display: grid;
   width: min(1180px, calc(100% - 48px));
-  min-height: min(760px, calc(100vh - 64px));
+  min-height: min(760px, calc(100svh - 40px));
   grid-template-columns: 1.05fr 0.95fr;
   overflow: hidden;
-  margin: 32px auto;
+  margin: 20px auto;
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   background: rgba(17, 20, 28, 0.9);
@@ -14,7 +14,7 @@
 .auth-showcase {
   position: relative;
   display: flex;
-  min-height: 700px;
+  min-height: 0;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;

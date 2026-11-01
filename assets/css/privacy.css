@@ -1,6 +1,6 @@
 .privacy-page {
   min-height: 100vh;
-  padding: 34px 20px 80px;
+  padding: 0 20px 80px;
 }
 
 .privacy-wrap {
@@ -321,11 +321,11 @@
 
 @media (max-width: 720px) {
   .privacy-page {
-    padding: 20px 14px 50px;
+    padding: 0 14px 50px;
   }
 
   .privacy-nav {
-    margin-bottom: 38px;
+    margin-bottom: 26px;
   }
 
   .privacy-nav-actions {
@@ -393,11 +393,18 @@
   position: sticky;
   z-index: 30;
   top: 0;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
   margin-bottom: 34px;
-  padding: 12px 0;
+  padding: 14px max(20px, calc((100vw - 900px) / 2));
   border-bottom: 1px solid rgba(255, 255, 255, .055);
-  background: rgba(11, 13, 18, .83);
+  background: rgba(15, 17, 25, .9);
   backdrop-filter: blur(18px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .12);
+}
+
+@media (max-width: 720px) {
+  .privacy-nav { padding: 12px 14px; }
 }
 
 .privacy-hero {

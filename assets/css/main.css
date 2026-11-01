@@ -72,7 +72,11 @@ textarea:focus-visible {
 }
 
 .app-shell {
+  position: relative;
   min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(123, 103, 227, 0.08), transparent 46%),
+    radial-gradient(ellipse at 100% 90%, rgba(44, 120, 98, 0.035), transparent 32%);
 }
 
 .brand-lockup {
@@ -98,7 +102,6 @@ textarea:focus-visible {
   letter-spacing: -1.1px;
 }
 
-.brand-period,
 .accent-text {
   color: var(--accent);
 }
