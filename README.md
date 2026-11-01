@@ -30,6 +30,14 @@ heartbeat stops when the tab is hidden or the user logs out; it does not call
 Gemini or query Neon. It cannot prevent Render platform restarts or monthly
 free-instance-hour limits, and the free plan can still have cold starts.
 
+The signed-in sidebar includes Settings with the account profile, live
+AI-provider/model status, privacy/About links, and account security actions.
+Users can request a password reset by email or start account deletion. Reset
+links are single-use and expire after 30 minutes. Account deletion also
+requires the current password after opening its email confirmation link.
+`reset-password.html` and `delete-account.html` are static recovery pages; they
+remove one-time tokens from the address bar before making API requests.
+
 For local preview, run `npm run dev`. The build command uses Wrangler's dry-run
 mode and does not publish the site.
 

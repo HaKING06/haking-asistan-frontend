@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#0b0d12" />
+  <title>Hesap silme onayı | HaKING AI</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg" />
+  <link rel="stylesheet" href="./assets/css/main.css" />
+  <link rel="stylesheet" href="./assets/css/recovery.css" />
+</head>
+<body>
+  <main class="recovery-page">
+    <section class="recovery-card recovery-danger-card" aria-labelledby="delete-account-title">
+      <a class="recovery-brand" href="./index.html"><img src="./assets/img/logo.svg" alt="" /><span>HaKING <b>AI</b></span></a>
+      <span class="recovery-eyebrow recovery-danger-eyebrow">HESAP GÜVENLİĞİ</span>
+      <h1 id="delete-account-title">Hesap silme onayı</h1>
+      <p id="deletion-account-label" class="recovery-intro">Onay bağlantısı kontrol ediliyor…</p>
+      <form id="delete-account-form" class="recovery-form hidden" novalidate>
+        <label for="current-password">Mevcut şifren</label>
+        <input id="current-password" type="password" autocomplete="current-password" maxlength="128" required placeholder="Hesap şifreni gir" />
+        <p class="recovery-warning">Onaylarsan hesabın, profil bilgin ve tüm oturumların silinir. Bu işlem geri alınamaz.</p>
+        <button id="delete-account-submit" class="recovery-primary recovery-danger-primary" type="submit">Hesabımı kalıcı olarak sil</button>
+      </form>
+      <p id="deletion-status" class="recovery-status" role="status" aria-live="polite"></p>
+      <a id="deletion-back-link" class="recovery-back" href="./index.html">Vazgeç ve giriş ekranına dön</a>
+    </section>
+  </main>
+  <script src="./assets/js/state.js"></script>
+  <script src="./assets/js/api.js"></script>
+  <script src="./assets/js/delete-account.js"></script>
+</body>
+</html>

@@ -379,3 +379,39 @@
     padding: 9px 7px;
   }
 }
+
+/* Subtle page polish shared by the About and privacy pages. */
+.privacy-page {
+  position: relative;
+  isolation: isolate;
+  background: radial-gradient(ellipse at 12% 5%, rgba(123, 103, 227, .075), transparent 32%);
+}
+
+.privacy-wrap { position: relative; }
+
+.privacy-nav {
+  position: sticky;
+  z-index: 30;
+  top: 0;
+  margin-bottom: 34px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .055);
+  background: rgba(11, 13, 18, .83);
+  backdrop-filter: blur(18px);
+}
+
+.privacy-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(24px, 5vw, 44px);
+  border: 1px solid rgba(169, 153, 255, .14);
+  border-radius: 22px;
+  background: radial-gradient(ellipse at 100% 0%, rgba(127, 105, 230, .16), transparent 40%), rgba(17, 20, 28, .78);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .16);
+}
+
+.privacy-hero > p:last-child { margin-bottom: 0; }
+.privacy-section { scroll-margin-top: 82px; transition: border-color 160ms ease, background 160ms ease; }
+.privacy-section:hover { border-color: rgba(173,160,255,.18); background: rgba(19,22,31,.86); }
+.privacy-page :focus-visible { outline: 2px solid rgba(173,160,255,.8); outline-offset: 3px; }
+.privacy-page footer { padding-top: 18px; border-top: 1px solid var(--border); }

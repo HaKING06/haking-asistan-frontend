@@ -208,6 +208,67 @@ async function apiLogout(token) {
   if (!response.ok) throw new Error("Oturum sunucuda kapatılamadı.");
 }
 
+async function apiRequestPasswordReset(email) {
+  const response = await fetch(`${API_URL}/password/forgot`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, status: response.status, requestId: response.headers.get("X-Request-ID"), ...data, message: apiErrorMessage(data, "İstek tamamlanamadı.") };
+}
+
+async function apiResetPassword(token, password) {
+  const response = await fetch(`${API_URL}/password/reset`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, password }),
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, status: response.status, ...data, message: apiErrorMessage(data, "Şifre güncellenemedi.") };
+}
+
+async function apiRequestAccountDeletion(token) {
+  const response = await fetch(`${API_URL}/account/deletion/request`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, status: response.status, ...data, message: apiErrorMessage(data, "Hesap silme e-postası gönderilemedi.") };
+}
+
+async function apiAccountDeletionStatus(token) {
+  const response = await fetch(`${API_URL}/account/deletion/status`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token }),
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, status: response.status, ...data, message: apiErrorMessage(data, "Onay bağlantısı doğrulanamadı.") };
+}
+
+async function apiConfirmAccountDeletion(token, password) {
+  const response = await fetch(`${API_URL}/account/deletion/confirm`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, password }),
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, status: response.status, ...data, message: apiErrorMessage(data, "Hesap silinemedi.") };
+}
+
+async function apiGetProviderCatalog() {
+  const response = await fetch(`${API_URL}/ai/providers`, { cache: "no-store" });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, ...data };
+}
+
 let backendWarmupPromise = null;
 
 function apiWarmup() {

@@ -1113,3 +1113,125 @@
     padding-left: 10px;
   }
 }
+
+.sidebar-settings-btn {
+  display: flex;
+  width: 100%;
+  height: 39px;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #a9aab7;
+  cursor: pointer;
+  font-size: 11px;
+  text-align: left;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.sidebar-settings-btn:hover,
+.sidebar-settings-btn:focus-visible {
+  outline: none;
+  background: rgba(155, 140, 255, 0.09);
+  color: #ddd6ff;
+}
+
+.sidebar-settings-btn svg,
+.settings-profile-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.35;
+}
+
+.settings-profile-btn { display: none; }
+
+.settings-backdrop {
+  position: fixed;
+  z-index: 1200;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(3, 4, 9, .72);
+  backdrop-filter: blur(12px);
+}
+
+body.settings-open { overflow: hidden; }
+
+.settings-dialog {
+  width: min(680px, 100%);
+  max-height: min(88dvh, 900px);
+  overflow: auto;
+  padding: clamp(20px, 4vw, 32px);
+  border: 1px solid rgba(175, 163, 255, .18);
+  border-radius: 22px;
+  background: radial-gradient(ellipse at 90% 0%, rgba(128, 105, 236, .12), transparent 34%), #12151e;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, .46);
+}
+
+.settings-header,
+.settings-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.settings-header h2 { margin: 6px 0 0; font-family: "Manrope", sans-serif; font-size: 28px; letter-spacing: -.04em; }
+.settings-close { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid var(--border); border-radius: 11px; background: rgba(255,255,255,.035); color: var(--text-soft); cursor: pointer; font-size: 22px; }
+.settings-close:hover { color: var(--text); border-color: var(--border-strong); }
+.settings-section { margin-top: 22px; padding: 18px; border: 1px solid var(--border); border-radius: 15px; background: rgba(255,255,255,.025); }
+.settings-section h3 { margin: 0 0 12px; color: #f0eef8; font-size: 14px; }
+.settings-section p { margin: 7px 0 12px; color: var(--text-muted); font-size: 12px; line-height: 1.65; }
+.settings-account-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin: 0; }
+.settings-account-grid > div { min-width: 0; padding: 12px; border: 1px solid rgba(255,255,255,.06); border-radius: 11px; background: rgba(5,7,12,.25); }
+.settings-account-grid dt { color: var(--text-muted); font-size: 10px; }
+.settings-account-grid dd { margin: 6px 0 0; color: var(--text); font-size: 12px; overflow-wrap: anywhere; }
+.settings-section-heading h3 { margin-bottom: 4px; }
+.settings-section-heading p { margin-top: 0; }
+.settings-live-status { color: var(--text-muted); font-size: 10px; white-space: nowrap; }
+.settings-live-status[data-state="ready"] { color: #71d2a1; }
+.settings-live-status[data-state="error"] { color: #f29191; }
+.settings-provider-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin: 14px 0; }
+.settings-provider-card { min-width: 0; padding: 12px; border: 1px solid rgba(255,255,255,.07); border-radius: 12px; background: rgba(7,9,15,.32); }
+.settings-provider-head { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+.settings-provider-head strong { color: var(--text); font-size: 12px; }
+.settings-provider-head span { color: var(--text-muted); font-size: 9px; }
+.settings-provider-head span[data-ready="true"] { color: #71d2a1; }
+.settings-provider-card ul { display: grid; gap: 8px; margin: 11px 0 0; padding: 0; list-style: none; }
+.settings-provider-card li { display: grid; gap: 3px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.055); }
+.settings-provider-card code { color: #c6bbff; font-size: 10px; overflow-wrap: anywhere; }
+.settings-provider-card small { color: var(--text-muted); font-size: 10px; line-height: 1.45; }
+.settings-text-link,.settings-links a,.settings-links button { color: #b7aaff; font-size: 11px; text-underline-offset: 3px; }
+.settings-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
+.settings-links button { padding: 0; border: 0; background: transparent; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.settings-secondary-btn,.settings-danger-btn { min-height: 37px; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 11px; font-weight: 650; }
+.settings-secondary-btn { border: 1px solid var(--border-strong); background: rgba(255,255,255,.035); color: var(--text-soft); }
+.settings-secondary-btn:hover { color: var(--text); border-color: rgba(181,169,255,.45); }
+.settings-danger-section { border-color: rgba(222,111,117,.18); background: linear-gradient(135deg,rgba(128,41,57,.075),rgba(255,255,255,.018)); }
+.settings-danger-kicker { display: block; margin-bottom: 8px; color: #ee9a9d; font-size: 9px; font-weight: 700; letter-spacing: .13em; }
+.settings-danger-btn { border: 1px solid rgba(232,116,124,.3); background: rgba(161,56,66,.14); color: #ffc0c3; }
+.settings-danger-btn:hover { border-color: rgba(232,116,124,.58); background: rgba(161,56,66,.22); }
+.settings-delete-confirm { margin-top: 14px; padding: 14px; border: 1px solid rgba(232,116,124,.16); border-radius: 12px; background: rgba(8,8,12,.34); }
+.settings-delete-confirm p { color: var(--text-soft); }
+.settings-delete-confirm > div { display: flex; flex-wrap: wrap; gap: 9px; }
+.settings-inline-status { min-height: 0; margin: 8px 0 0 !important; color: #75d6a6 !important; }
+.settings-inline-status:empty { display: none; }
+.settings-inline-status[data-state="error"] { color: #f29191 !important; }
+
+@media (max-width: 650px) {
+  .sidebar-section .sidebar-settings-btn { display: none; }
+  .settings-profile-btn { display: grid; }
+  .settings-backdrop { padding: 10px; }
+  .settings-dialog { max-height: 94dvh; padding: 18px 15px; border-radius: 18px; }
+  .settings-section { padding: 14px; }
+  .settings-provider-list,.settings-account-grid { grid-template-columns: 1fr; }
+  .settings-live-status { white-space: normal; text-align: right; }
+}

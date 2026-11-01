@@ -16,6 +16,8 @@ const verificationCodeInputEl = document.getElementById("verification-code");
 const resendCodeBtnEl = document.getElementById("resend-code-btn");
 const editRegistrationBtnEl = document.getElementById("edit-registration-btn");
 const adultConfirmedInputEl = document.getElementById("adult-confirmed");
+const forgotPasswordRowEl = document.getElementById("forgot-password-row");
+const forgotPasswordBtnEl = document.getElementById("forgot-password-btn");
 
 const loginErrorEl = document.getElementById("login-error");
 const logoutBtnEl = document.getElementById("logout-btn");
@@ -93,6 +95,11 @@ bindPasswordVisibility(passwordConfirmInputEl, togglePasswordConfirmBtnEl);
 
 function showAuthError(message) {
   loginErrorEl.removeAttribute("data-state");
+  loginErrorEl.textContent = message;
+}
+
+function showAuthMessage(message) {
+  loginErrorEl.dataset.state = "success";
   loginErrorEl.textContent = message;
 }
 
@@ -223,6 +230,7 @@ function enterVerificationMode(email, message, credentials = {}) {
   passwordConfirmGroupEl.classList.add("hidden");
   nameGroupEl.classList.add("hidden");
   verificationGroupEl.classList.remove("hidden");
+  forgotPasswordRowEl.classList.add("hidden");
   verificationCodeInputEl.value = credentials.code || "";
   toRegisterRowEl.classList.add("hidden");
   toLoginRowEl.classList.add("hidden");
@@ -250,6 +258,7 @@ function switchToLogin(clearStoredToken = true) {
   resetPasswordVisibility(passwordConfirmInputEl, togglePasswordConfirmBtnEl);
   passwordInputEl.autocomplete = "current-password";
   passwordInputEl.minLength = 1;
+  forgotPasswordRowEl.classList.remove("hidden");
   toRegisterRowEl.classList.remove("hidden");
   toLoginRowEl.classList.add("hidden");
   authTitleEl.textContent = "Tekrar hoş geldin";
@@ -273,6 +282,7 @@ function switchToRegister() {
   passwordInputEl.minLength = 8;
   toRegisterRowEl.classList.add("hidden");
   toLoginRowEl.classList.remove("hidden");
+  forgotPasswordRowEl.classList.add("hidden");
   authTitleEl.textContent = "Hesabını oluştur";
   authSubtitleEl.textContent = "Kayıt için Gmail adresini doğrula. Şifren en az 8 karakter olmalı.";
   submitBtnEl.querySelector("span").textContent = "Hesap oluştur";
@@ -299,6 +309,33 @@ switchToLogin(false);
 
 showRegisterBtnEl.addEventListener("click", switchToRegister);
 showLoginBtnEl.addEventListener("click", switchToLogin);
+
+forgotPasswordBtnEl.addEventListener("click", async () => {
+  const email = emailInputEl.value.trim();
+  if (!/^[^\s@]+@gmail\.com$/i.test(email)) {
+    showAuthError("Şifre sıfırlamak için kayıtlı @gmail.com adresini gir.");
+    emailInputEl.focus();
+    return;
+  }
+
+  forgotPasswordBtnEl.disabled = true;
+  forgotPasswordBtnEl.textContent = "E-posta kontrol ediliyor…";
+  showAuthError("");
+  try {
+    const result = await apiRequestPasswordReset(email);
+    if (!result.ok) {
+      showAuthError(authFailureMessage(result, "Şifre sıfırlama isteği gönderilemedi."));
+      return;
+    }
+    showAuthMessage(result.message || "Bu e-posta için bir hesap varsa, şifre sıfırlama bağlantısı gönderildi.");
+  } catch (error) {
+    console.error("Şifre sıfırlama isteği gönderilemedi:", error);
+    showAuthError("Sunucuya ulaşılamadı. Biraz sonra tekrar dene.");
+  } finally {
+    forgotPasswordBtnEl.disabled = false;
+    forgotPasswordBtnEl.textContent = "Şifremi unuttum?";
+  }
+});
 
 for (const input of [emailInputEl, passwordInputEl, passwordConfirmInputEl, fullNameInputEl, verificationCodeInputEl, adultConfirmedInputEl]) {
   input.addEventListener("input", () => {

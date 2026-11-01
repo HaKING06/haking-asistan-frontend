@@ -509,6 +509,10 @@
   color: var(--text-soft);
 }
 
+.error-text[data-state="success"] {
+  color: #78d6a8;
+}
+
 .error-text:empty {
   display: none;
 }

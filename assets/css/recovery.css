@@ -1,0 +1,45 @@
+.recovery-page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 28px 16px;
+  background: radial-gradient(ellipse at 50% 4%, rgba(130, 109, 239, .16), transparent 36%), #0b0d12;
+}
+
+.recovery-card {
+  width: min(480px, 100%);
+  padding: clamp(24px, 6vw, 42px);
+  border: 1px solid rgba(171, 155, 255, .16);
+  border-radius: 22px;
+  background: linear-gradient(150deg, rgba(22,25,35,.98), rgba(15,17,24,.98));
+  box-shadow: 0 28px 90px rgba(0,0,0,.36);
+}
+
+.recovery-brand { display: inline-flex; align-items: center; gap: 9px; margin-bottom: 34px; color: var(--text); font-family: "Manrope", sans-serif; font-size: 18px; font-weight: 750; text-decoration: none; }
+.recovery-brand img { width: 34px; height: 34px; border-radius: 10px; }
+.recovery-brand b { color: #aa9dff; }
+.recovery-eyebrow { display: block; color: #a89bff; font-size: 10px; font-weight: 700; letter-spacing: .15em; }
+.recovery-card h1 { margin: 10px 0; font-family: "Manrope", sans-serif; font-size: clamp(27px,6vw,36px); letter-spacing: -.045em; }
+.recovery-intro { margin: 0 0 24px; color: var(--text-muted); font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; }
+.recovery-form { display: grid; gap: 10px; }
+.recovery-form label { margin-top: 8px; color: var(--text-soft); font-size: 12px; font-weight: 600; }
+.recovery-form input { width: 100%; height: 48px; padding: 0 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 11px; outline: 0; background: #171a23; color: var(--text); font-size: 13px; }
+.recovery-form input:focus { border-color: rgba(155,140,255,.72); box-shadow: 0 0 0 3px rgba(155,140,255,.12); }
+.recovery-form input::placeholder { color: #727583; }
+.recovery-primary { min-height: 48px; margin-top: 8px; border: 0; border-radius: 11px; background: linear-gradient(110deg,#7563e5,#967fff); color: #fff; cursor: pointer; font-size: 13px; font-weight: 700; }
+.recovery-primary:hover { filter: brightness(1.07); }
+.recovery-primary:disabled { cursor: wait; opacity: .65; }
+.recovery-status { min-height: 0; margin: 4px 0 0; color: #ef9297; font-size: 12px; line-height: 1.6; }
+.recovery-status:empty { display: none; }
+.recovery-status[data-state="success"] { color: #78d6a8; }
+.recovery-back { display: block; width: fit-content; margin-top: 22px; color: #b7aaff; font-size: 12px; text-underline-offset: 3px; }
+.recovery-warning { margin: 8px 0 2px; padding: 12px; border: 1px solid rgba(233,119,126,.17); border-radius: 11px; background: rgba(144,47,58,.09); color: #e4aaad; font-size: 11px; line-height: 1.65; }
+.recovery-danger-eyebrow { color: #ee9a9d; }
+.recovery-danger-primary { background: linear-gradient(110deg,#a84452,#d1646c); }
+.recovery-danger-card { border-color: rgba(220,111,120,.19); }
+
+@media (max-width: 480px) {
+  .recovery-page { align-items: start; padding: 20px 12px; }
+  .recovery-card { padding: 24px 20px; border-radius: 18px; }
+  .recovery-brand { margin-bottom: 28px; }
+}
