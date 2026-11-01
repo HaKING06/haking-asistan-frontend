@@ -269,6 +269,21 @@ async function apiGetProviderCatalog() {
   return { ok: response.ok, ...data };
 }
 
+async function apiGetAiCredits(token) {
+  const response = await fetch(`${API_URL}/ai/credits`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return {
+    ok: response.ok,
+    status: response.status,
+    ...data,
+    message: apiErrorMessage(data, "Kredi bakiyesi alınamadı."),
+  };
+}
+
 let backendWarmupPromise = null;
 
 function apiWarmup() {
@@ -395,7 +410,7 @@ async function readChatStream(response, onChunk) {
   return streamError ? { ok: false, message: streamError } : { ok: true };
 }
 
-async function apiChat(message, userId, token, history, onChunk, attachment = null) {
+async function apiChat(message, userId, token, history, onChunk, attachment = null, mode = "normal") {
   const headers = {
     "Content-Type": "application/json",
   };
@@ -414,6 +429,7 @@ async function apiChat(message, userId, token, history, onChunk, attachment = nu
         message,
         userId,
         history,
+        mode,
         ...(attachment
           ? { attachment_name: attachment.name, attachment_content: attachment.content }
           : {}),
@@ -422,7 +438,11 @@ async function apiChat(message, userId, token, history, onChunk, attachment = nu
     });
 
     if (!res.ok) {
-      uiSetBackendStatus("error", `Asistan isteği başarısız oldu (HTTP ${res.status}).`);
+      if (res.status === 402) {
+        uiSetBackendStatus("ready", "Kredi bakiyesi güncel; Çılgın Mod için yeterli kredi gereklidir.");
+      } else {
+        uiSetBackendStatus("error", `Asistan isteği başarısız oldu (HTTP ${res.status}).`);
+      }
       let data = {};
       try {
         data = await res.json();
@@ -431,6 +451,7 @@ async function apiChat(message, userId, token, history, onChunk, attachment = nu
       }
       return {
         ok: false,
+        status: res.status,
         unauthorized: res.status === 401,
         message: apiErrorMessage(data, "Mesaj gönderilemedi. Lütfen tekrar deneyin."),
       };

@@ -294,6 +294,15 @@
               <button id="remove-file-btn" class="remove-file-btn" type="button" aria-label="Eklenen dosyayı kaldır">Kaldır</button>
             </div>
             <textarea id="chat-input" rows="1" placeholder="Bir kod yapıştırın veya C#, Python, HTML hakkında bir soru sorun..." aria-label="Mesajını yaz"></textarea>
+            <div class="composer-mode-row">
+              <label class="composer-mode-label" for="ai-mode">Yanıt modu</label>
+              <select id="ai-mode" aria-describedby="ai-mode-note ai-credits-status">
+                <option value="normal">Normal · kredi harcamaz</option>
+                <option value="crazy">Çılgın Mod · 10 kredi</option>
+              </select>
+              <span id="ai-credits-status" class="ai-credits-status" role="status" aria-live="polite">Kredi bakiyesi girişten sonra yüklenir</span>
+            </div>
+            <p id="ai-mode-note" class="composer-mode-note">Çılgın Mod önce isteğini ayrıntılı bir brief'e dönüştürür, ardından yanıtı üretir.</p>
             <div class="composer-bottom">
               <div class="composer-tools">
                 <input id="file-input" class="hidden" type="file" accept=".html,.htm,.css,.js,.mjs,.cjs,.ts,.tsx,.jsx,.py,.java,.cs,.c,.h,.cpp,.hpp,.go,.rs,.php,.rb,.json,.md,.txt,.xml,.yaml,.yml,.sql,.sh,.vue,.svelte,.toml,.ini" />

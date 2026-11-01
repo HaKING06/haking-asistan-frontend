@@ -40,6 +40,7 @@ function uiShowChat(email, displayName = "") {
   const profileName = String(displayName || "").trim() || email.split("@")[0] || "Geliştirici";
   profileNameEl.textContent = profileName;
   userAvatarEl.textContent = profileName.trim().charAt(0) || "H";
+  if (typeof refreshAiCreditBalance === "function") void refreshAiCreditBalance();
 }
 
 function uiStartNewChat() {

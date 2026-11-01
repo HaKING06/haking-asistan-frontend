@@ -8,6 +8,8 @@ const attachFileBtnEl = document.getElementById("attach-file-btn");
 const removeFileBtnEl = document.getElementById("remove-file-btn");
 const fileSelectionEl = document.getElementById("file-selection");
 const fileSelectionNameEl = document.getElementById("file-selection-name");
+const aiModeSelectEl = document.getElementById("ai-mode");
+const aiCreditsStatusEl = document.getElementById("ai-credits-status");
 const BACKEND_KEEPALIVE_INTERVAL_MS = 10 * 60 * 1000;
 const MAX_SOURCE_FILE_BYTES = 64 * 1024;
 const ALLOWED_SOURCE_FILE_EXTENSIONS = new Set([
@@ -19,6 +21,27 @@ const EMBEDDED_SECRET_PATTERN = /-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE K
 let backendKeepaliveTimer = null;
 let selectedSourceFile = null;
 let isReadingSourceFile = false;
+
+async function refreshAiCreditBalance() {
+  if (!AppState.token || !aiCreditsStatusEl) return;
+  aiCreditsStatusEl.textContent = "Kredi bakiyesi yükleniyor…";
+  aiCreditsStatusEl.removeAttribute("title");
+  try {
+    const balance = await apiGetAiCredits(AppState.token);
+    if (!balance.ok) throw new Error(balance.message);
+    const renewsAt = new Date(`${balance.period_renews_at}T00:00:00`);
+    const renewsLabel = Number.isNaN(renewsAt.getTime())
+      ? ""
+      : ` · ${new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long" }).format(renewsAt)} yenilenir`;
+    aiCreditsStatusEl.textContent = `${balance.total_credits} kredi kaldı · ${balance.monthly_credits} aylık + ${balance.purchased_credits} ek${renewsLabel}`;
+    aiCreditsStatusEl.title = `${balance.monthly_credits}/${balance.monthly_allowance} aylık kredi + ${balance.purchased_credits} ek kredi. Her Çılgın Mod isteği ${balance.crazy_mode_cost} kredi kullanır.`;
+    const crazyOption = aiModeSelectEl?.querySelector('option[value="crazy"]');
+    if (crazyOption) crazyOption.textContent = `Çılgın Mod · ${balance.crazy_mode_cost} kredi`;
+  } catch (error) {
+    aiCreditsStatusEl.textContent = "Kredi bakiyesi şu an alınamadı";
+    aiCreditsStatusEl.title = error.message;
+  }
+}
 
 function setFileSelectionMessage(message, isError = false) {
   fileSelectionNameEl.textContent = message;
@@ -222,6 +245,8 @@ async function sendMessageFromUI() {
   const message = chatInputEl.value.trim() || (attachment ? "Yüklediğim dosyayı incele ve varsa hataları açıkla; gerekirse düzeltilmiş kodu öner." : "");
   if ((!message && !attachment) || sendBtnEl.disabled || isReadingSourceFile) return;
 
+  const mode = aiModeSelectEl?.value === "crazy" ? "crazy" : "normal";
+
   if (!AppState.email || !AppState.token) {
     uiShowLogin();
     loginErrorEl.textContent = "Sohbeti kullanmak için hesabına giriş yapmalısın.";
@@ -258,7 +283,8 @@ async function sendMessageFromUI() {
         }
         uiAppendAssistantStream(assistantBubble, chunk);
       },
-      attachment
+      attachment,
+      mode
     );
 
     if (!result.ok) {
@@ -294,5 +320,6 @@ async function sendMessageFromUI() {
     newChatBtnEl.disabled = false;
     attachFileBtnEl.disabled = false;
     removeFileBtnEl.disabled = false;
+    if (mode === "crazy") void refreshAiCreditBalance();
   }
 }
