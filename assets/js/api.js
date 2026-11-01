@@ -34,6 +34,9 @@ function apiErrorMessage(data, fallback) {
     if (field === "name" && type === "string_too_long") {
       return "Ad soyad en fazla 80 karakter olabilir.";
     }
+    if (field === "name" && type === "value_error") {
+      return String(issue?.msg || "Ad soyad geçerli değil.").replace(/^Value error,\s*/i, "");
+    }
     if (field === "email" && type === "value_error") {
       return String(issue?.msg || "Geçerli bir e-posta adresi gir.").replace(/^Value error,\s*/i, "");
     }
@@ -160,6 +163,7 @@ async function apiValidateSession(token) {
         ok: response.ok && data.success === true && typeof data.email === "string",
         unauthorized: response.status === 401,
         email: data.email,
+        name: data.name,
         message: apiErrorMessage(data, "Oturum doğrulanamadı. Lütfen yeniden giriş yap."),
       };
     } finally {

@@ -32,12 +32,12 @@ function uiShowLogin() {
   chatCardEl.classList.add("hidden");
 }
 
-function uiShowChat(email) {
+function uiShowChat(email, displayName = "") {
   loginCardEl.classList.add("hidden");
   chatCardEl.classList.remove("hidden");
   if (!chatWindowEl.firstElementChild) uiStartNewChat();
   userEmailDisplayEl.textContent = email;
-  const profileName = email.split("@")[0] || "Geliştirici";
+  const profileName = String(displayName || "").trim() || email.split("@")[0] || "Geliştirici";
   profileNameEl.textContent = profileName;
   userAvatarEl.textContent = profileName.trim().charAt(0) || "H";
 }

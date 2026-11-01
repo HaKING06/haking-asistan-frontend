@@ -55,9 +55,10 @@ mode and does not publish the site.
   connection data such as an IP address.
 
 The privacy notice identifies the individual student project operator and
-contact email supplied for HaKING. Verify lawful bases, international transfer
-arrangements, provider plans, and any 5651 duties against the actual service
-setup. A privacy page alone does not certify legal compliance.
+contact email supplied for HaKING. It describes the current technical data
+flows; it is not a legal opinion or a guarantee that every deployment has the
+same legal obligations. Applicable requirements depend on the service setup
+and the operator's role.
 
 ## Search appearance
 

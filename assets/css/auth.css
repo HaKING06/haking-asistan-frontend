@@ -292,6 +292,52 @@
   justify-content: space-between;
 }
 
+.password-visibility {
+  display: grid;
+  width: 30px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.password-visibility:hover,
+.password-visibility:focus-visible {
+  background: var(--accent-soft);
+  color: var(--text);
+  outline: none;
+}
+
+.password-visibility svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.password-visibility .eye-hidden,
+.password-visibility[aria-pressed="true"] .eye-visible {
+  display: none;
+}
+
+.password-visibility[aria-pressed="true"] .eye-hidden {
+  display: block;
+}
+
+.field-help {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .form-group input {
   width: 100%;
   height: 49px;

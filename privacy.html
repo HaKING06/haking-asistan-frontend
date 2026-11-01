@@ -30,7 +30,7 @@
         <span class="privacy-eyebrow">ŞEFFAFLIK VE GÜVENLİK</span>
         <h1>Gizlilik ve veri kullanımı</h1>
         <p>HaKING; yazılım öğrenme, kod inceleme ve teknik sorulara yardımcı olmak için geliştirilmiş bir AI sohbet uygulamasıdır. Bu metin, uygulamanın şu anki teknik davranışını açıklar.</p>
-        <p><strong>Son güncelleme:</strong> 31 Ekim 2026</p>
+        <p><strong>Son güncelleme:</strong> 1 Kasım 2026</p>
       </header>
 
       <section class="privacy-section" id="privacy">
@@ -51,7 +51,7 @@
         <div class="privacy-table-wrap"><table class="privacy-table">
           <thead><tr><th>Veri</th><th>Amaç ve mevcut saklama şekli</th></tr></thead>
           <tbody>
-            <tr><td>Ad, e-posta ve hesap kaydı</td><td>Yalnızca @gmail.com adresleriyle kayıt/giriş yapılabilir. Hesap, e-posta kodu doğrulandıktan sonra Neon Postgres'e eklenir. Onay bekleyen kayıtta e-posta, ad ve parola özeti tutulur; kod 10 dakika geçerlidir ve kodun kendisi yerine anahtarlı özeti saklanır. Süresi dolan bekleyen kayıt, sonraki kimlik doğrulama isteğinde temizlenir. Hesap silme talebi için iletişim adresine yazılabilir.</td></tr>
+            <tr><td>Ad, e-posta ve hesap kaydı</td><td>Kayıtta e-posta ve ad soyad istenir; ad alanı temel biçim ve uygunsuz dil kontrollerinden geçirilir ve sohbet kenar çubuğunda gösterilir. Yalnızca @gmail.com adresleriyle kayıt/giriş yapılabilir. Hesap, e-posta kodu doğrulandıktan sonra Neon Postgres'e eklenir. Onay bekleyen kayıtta e-posta, ad ve parola özeti tutulur; kod 10 dakika geçerlidir ve kodun kendisi yerine anahtarlı özeti saklanır. Süresi dolan bekleyen kayıt, sonraki kimlik doğrulama isteğinde temizlenir. Hesap silme talebi için iletişim adresine yazılabilir.</td></tr>
             <tr><td>Şifre ve oturum</td><td>Şifrenin kendisi saklanmaz; scrypt özeti tutulur. Veritabanında oturum belirtecinin özeti yer alır; belirteç 30 gün sonra sona erer. Tarayıcıdaki oturum belirteci oturum açıldığında localStorage'da tutulur.</td></tr>
             <tr><td>Mesaj, kod ve sohbet bağlamı</td><td>Yanıt üretmek için backend'e ve Google Gemini API'ye gönderilir. HaKING uygulamasının mevcut kodu sohbet metnini kendi veritabanına kaydetmez; yakın sohbet bağlamı tarayıcı belleğinde tutulur ve sekme yenilenince kaybolur.</td></tr>
             <tr><td>İsteğe bağlı kod/metin dosyası</td><td>Seçildiğinde tarayıcıda UTF-8 metni olarak okunur; gönder düğmesine basıldığında mesajla birlikte yanıt üretimi için backend'e/Google Gemini API'ye iletilir. Uygulama dosyayı diske veya veritabanına kaydetmez ve içeriği çalıştırmaz. Yalnızca izin verilen kaynak/metin uzantıları ve en fazla 64 KiB kabul edilir; belirgin bazı gizli anahtar kalıpları engellenir, ancak bu tarama tüm sırları bulmayı garanti etmez.</td></tr>
@@ -63,9 +63,9 @@
 
       <section class="privacy-section">
         <h2>3. AI mesajları ve dış hizmetler</h2>
-        <p>Yazdığın soru, yapıştırdığın kod, isteğe bağlı yüklediğin kaynak/metin dosyası ve yanıt için gereken yakın sohbet bağlamı, AI yanıtını üretmek üzere Google Gemini API'ye iletilir. Gemini'nin veri kullanımı Google AI Studio/Cloud projesinin ücretsiz veya ücretli kullanım koşullarına bağlıdır. Google'ın <a href="https://ai.google.dev/gemini-api/docs/usage-policies" target="_blank" rel="noopener noreferrer">Gemini API kullanım politikalarına</a> göre ücretsiz API katmanında içerik ürünleri geliştirmek için kullanılabilir ve kötüye kullanım izlemesi kapsamında istek/yanıtlar 55 güne kadar saklanabilir; yetkili inceleme de söz konusu olabilir. Ücretli katmanda bu şartlar farklıdır. API anahtarının hangi faturalama katmanında olduğunu Render/Google projesinden kontrol et. Gizli anahtar, parola, kişisel bilgi veya paylaşma yetkin olmayan kodu sohbete koyma. Yüklenen dosyalar uygulama sunucusunda çalıştırılmaz; dosya türü/boyutu ve bilinen bazı anahtar kalıpları kontrol edilir, ancak otomatik kontrol her gizli bilgiyi bulamayabilir.</p>
+        <p>Yazdığın soru, yapıştırdığın kod, isteğe bağlı yüklediğin kaynak/metin dosyası ve yanıt için gereken yakın sohbet bağlamı, AI yanıtını üretmek üzere Google Gemini API'ye iletilir. Gemini'nin veri kullanımı Google AI Studio/Cloud projesinin ücretsiz veya ücretli kullanım koşullarına bağlıdır. Google'ın <a href="https://ai.google.dev/gemini-api/docs/usage-policies" target="_blank" rel="noopener noreferrer">Gemini API kullanım politikalarına</a> göre ücretsiz API katmanında içerik ürünleri geliştirmek için kullanılabilir ve kötüye kullanım izlemesi kapsamında istek/yanıtlar 55 güne kadar saklanabilir; yetkili inceleme de söz konusu olabilir. Ücretli katmanda bu şartlar farklıdır. Gizli anahtar, parola, kişisel bilgi veya paylaşma yetkin olmayan kodu sohbete koyma. Yüklenen dosyalar uygulama sunucusunda çalıştırılmaz; dosya türü/boyutu ve bilinen bazı anahtar kalıpları kontrol edilir, ancak otomatik kontrol tüm gizli bilgileri bulmayı garanti etmez.</p>
         <p>Kayıt sırasında e-posta adresine tek kullanımlık 6 haneli doğrulama kodu göndermek için Resend kullanılır. Alıcı e-posta adresi ve doğrulama mesajı teslimat amacıyla bu sağlayıcıya iletilir. Onaylanmamış kayıt, kod doğrulanana veya süresi dolduktan sonra backend'in sonraki kimlik doğrulama isteğinde temizlenene kadar geçici olarak tutulur. E-postadaki doğrulama bağlantısı kod alanını açıp doldurur; bağlantı parçası tarayıcıdan backend'e gönderilmez ve uygulama adres çubuğundan hemen kaldırır. İlk kayıt tarayıcısında en çok 10 dakika kullanılan bir bekleme belirteci, veritabanında yalnızca özetiyle tutulur; doğrulamadan sonra diğer cihazlarda oturum açılışını tamamlayabilmek için doğrulanmış kayıt satırı en fazla 5 dakika daha saklanır. Bu aşamada parola özeti temizlenir; kodun kendisi yerine yalnızca HMAC özeti bulunur.</p>
-        <p>AI sağlayıcısına gönderim, çerez tercihiyle aynı şey değildir. Çerezleri kabul etmek mesajların AI sağlayıcısına gönderilmesine açık rıza verdiğin anlamına gelmez. Veri sorumlusu, hizmetin hukuki sebebini ve yurt dışına aktarım şartlarını ayrıca belirlemelidir.</p>
+        <p>AI sağlayıcısına veri iletimi, zorunlu oturum depolamasından ayrı bir veri işleme faaliyetidir. Mesajların Google Gemini API'ye aktarılması, uygulamanın AI yanıtı üretebilmesi için gerçekleşir. Çerez veya tarayıcı depolama tercihi, AI mesajlarının bu hizmet sağlayıcıya iletilmesine ilişkin bir ayar değildir.</p>
       </section>
 
       <section class="privacy-section">
@@ -83,13 +83,13 @@
           <li><strong>Google:</strong> Gemini AI yanıtı ve Google Fonts isteği.</li>
           <li><strong>Resend:</strong> Kayıt e-posta doğrulama kodunun gönderimi.</li>
         </ul>
-        <p>Bu sağlayıcıların bazıları verileri Türkiye dışında işleyebilir. Yurt dışına aktarım için 6698 sayılı Kanun'un güncel 9. maddesine uygun mekanizma (örneğin uygun güvence/standart sözleşme gerektiğinde) veri sorumlusunca doğrulanmalı ve uygulanmalıdır. Sağlayıcı listesini, veri konumlarını, sözleşmeleri ve alt işleyenleri yayına çıkmadan önce kontrol et.</p>
+        <p>Bu sağlayıcıların bazıları verileri Türkiye dışında işleyebilir. Her sağlayıcının veri konumu ve alt işleyenleri farklı olabilir; hizmetlerin güncel veri işleme bilgileri kendi koşullarına tabidir. Çerez tercihi, bu hizmetlerin veri işlemesini yönetmez.</p>
       </section>
 
       <section class="privacy-section">
         <h2>6. Loglar, erişim ve saklama süresi</h2>
         <p>Backend operasyon logları Render'ın uygulama loglarına gönderilir. Render'ın <a href="https://render.com/docs/logging" target="_blank" rel="noopener noreferrer">Hobby/ücretsiz log saklama süresi</a> şu an 7 gündür; plan ve sağlayıcı koşulları değişebilir. Bu kayıtlar hukuki arşiv sistemi değildir ve Render'daki bu süre, uygulanabilir bir yasal saklama yükümlülüğünü karşılıyor kabul edilmemelidir.</p>
-        <p>Uygulama loglarında ham sohbet içeriği, yanıt, parola, e-posta, IP adresi veya oturum token'ı tutulmaz. Kullanıcı korelasyonu etkinleştirilirse `LOG_PSEUDONYM_KEY` ile üretilen takma referans kullanılır. 5651 kapsamındaki yükümlülükler site işletmecisinin rolüne göre değişebileceğinden, sınıflandırma ve gerekiyorsa ayrı trafik kayıt sistemi hukuk danışmanıyla değerlendirilmelidir.</p>
+        <p>Uygulama loglarında ham sohbet içeriği, yanıt, parola, e-posta, IP adresi veya oturum token'ı tutulmaz. Kullanıcı korelasyonu etkinleştirilirse `LOG_PSEUDONYM_KEY` ile üretilen takma referans kullanılır. Trafik ve erişim kayıtlarına ilişkin yasal yükümlülükler, yürürlükteki mevzuata ve hizmet işletmecisinin rolüne göre değişebilir; uygulama tanılama logları yasal trafik kaydı arşivi olarak tasarlanmamıştır.</p>
         <p>Oturum açıkken ve HaKING sekmesi görünür durumdayken, Render'ın boşta uykuya geçmesini azaltmak için yaklaşık 10 dakikada bir küçük bir API isteği gönderilir. Bu istek Gemini'yi çağırmaz, Neon veritabanını sorgulamaz ve mesaj ya da oturum token'ı içermez. Sekme gizlenince veya oturum kapatılınca durur; teknik istek kaydı Render loglarında görünebilir.</p>
       </section>
 

@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     saveSession(AppState.token, session.email);
     loginErrorEl.removeAttribute("data-state");
     loginErrorEl.textContent = "";
-    uiShowChat(session.email);
+    uiShowChat(session.email, session.name);
     startBackendKeepAlive();
     void apiWarmup().catch((error) => {
       console.info("Backend hazırlanıyor:", error.message);

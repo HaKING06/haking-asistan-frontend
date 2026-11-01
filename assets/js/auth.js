@@ -5,6 +5,10 @@ const emailInputEl = document.getElementById("email");
 const emailGroupEl = document.getElementById("email-group");
 const passwordInputEl = document.getElementById("password");
 const passwordGroupEl = document.getElementById("password-group");
+const passwordConfirmInputEl = document.getElementById("password-confirm");
+const passwordConfirmGroupEl = document.getElementById("password-confirm-group");
+const togglePasswordBtnEl = document.getElementById("toggle-password");
+const togglePasswordConfirmBtnEl = document.getElementById("toggle-password-confirm");
 const fullNameInputEl = document.getElementById("fullName");
 const nameGroupEl = document.getElementById("name-group");
 const verificationGroupEl = document.getElementById("verification-group");
@@ -32,6 +36,59 @@ let pendingEmailLinkToken = "";
 let resendCooldownTimer = null;
 let verificationPollTimer = null;
 let verificationPollInFlight = false;
+const NAME_FILTER_WORDS = new Set([
+  "amcik", "amina", "amk", "aq", "asshole", "bastard", "bitch", "bok", "cunt",
+  "dick", "fuck", "fucker", "gerizekali", "got", "ibne", "kahpe", "nigger", "orospu",
+  "pezevenk", "pich", "pic", "pusht", "pust", "pussy", "retard", "salak", "serefsiz",
+  "sik", "sikerim", "sikik", "siktir", "slut", "shit", "yarrak", "whore",
+]);
+const NAME_FILTER_STEMS = [
+  "amcik", "fuck", "got", "ibne", "kahpe", "orospu", "pezevenk", "pich",
+  "pusht", "serefsiz", "shite", "sik", "siktir", "yarrak",
+];
+
+function validateDisplayName(value) {
+  const name = value.trim();
+  if (name.length < 2) return "Ad soyad en az 2 karakter olmalıdır.";
+  if (name.length > 80) return "Ad soyad en fazla 80 karakter olabilir.";
+  if (!/^[\p{L}\p{M} '\u2019.-]+$/u.test(name)) {
+    return "Ad soyad yalnızca harf, boşluk, kısa çizgi ve kesme işareti içerebilir.";
+  }
+
+  const folded = name.toLocaleLowerCase("tr-TR")
+    .replace(/ş/g, "sh").replace(/ç/g, "ch").replace(/ğ/g, "g")
+    .replace(/ö/g, "o").replace(/ü/g, "u").replace(/ı/g, "i")
+    .normalize("NFKD").replace(/\p{M}/gu, "");
+  const words = folded.match(/[a-z]+/g) || [];
+  const compactParts = folded.split(/\s+/).map((part) => part.replace(/[^a-z0-9]/g, ""));
+  const letters = [...name].filter((char) => /[\p{L}\p{M}]/u.test(char));
+  if (letters.length < 2 || (new Set(letters.map((char) => char.toLocaleLowerCase("tr-TR"))).size === 1 && letters.length >= 5)) {
+    return "Lütfen geçerli bir ad soyad gir.";
+  }
+  if (words.some((word) => NAME_FILTER_WORDS.has(word)) || compactParts.some((part) =>
+    NAME_FILTER_WORDS.has(part) || NAME_FILTER_STEMS.some((stem) => part.startsWith(stem)))) {
+    return "Ad soyad argo veya hakaret içermemelidir.";
+  }
+  return "";
+}
+
+function bindPasswordVisibility(input, button) {
+  button.addEventListener("click", () => {
+    const visible = input.type === "password";
+    input.type = visible ? "text" : "password";
+    button.setAttribute("aria-pressed", String(visible));
+    button.setAttribute("aria-label", visible ? "Şifreyi gizle" : "Şifreyi göster");
+  });
+}
+
+function resetPasswordVisibility(input, button) {
+  input.type = "password";
+  button.setAttribute("aria-pressed", "false");
+  button.setAttribute("aria-label", "Şifreyi göster");
+}
+
+bindPasswordVisibility(passwordInputEl, togglePasswordBtnEl);
+bindPasswordVisibility(passwordConfirmInputEl, togglePasswordConfirmBtnEl);
 
 function showAuthError(message) {
   loginErrorEl.removeAttribute("data-state");
@@ -67,11 +124,11 @@ function stopVerificationStatusPolling() {
   verificationPollInFlight = false;
 }
 
-function finishAuthentication(token, email) {
+function finishAuthentication(token, email, name = "") {
   if (!token || !email) return;
   clearVerificationMode();
   saveSession(token, email);
-  uiShowChat(email);
+  uiShowChat(email, name);
   startBackendKeepAlive();
   void apiWarmup().catch((error) => console.info("Backend hazırlanıyor:", error.message));
 }
@@ -86,7 +143,7 @@ function startVerificationStatusPolling(verificationToken) {
     try {
       const result = await apiRegistrationStatus(verificationToken);
       if (result.status === "verified" && result.token && result.email) {
-        finishAuthentication(result.token, result.email);
+        finishAuthentication(result.token, result.email, result.name);
       } else if (result.status === "expired") {
         stopVerificationStatusPolling();
         localStorage.removeItem(PENDING_VERIFICATION_KEY);
@@ -154,6 +211,7 @@ function enterVerificationMode(email, message, credentials = {}) {
   emailInputEl.readOnly = true;
   emailGroupEl.classList.toggle("hidden", !pendingVerificationEmail);
   passwordGroupEl.classList.add("hidden");
+  passwordConfirmGroupEl.classList.add("hidden");
   nameGroupEl.classList.add("hidden");
   verificationGroupEl.classList.remove("hidden");
   verificationCodeInputEl.value = credentials.code || "";
@@ -176,6 +234,10 @@ function switchToLogin(clearStoredToken = true) {
   authMode = "login";
   nameGroupEl.classList.add("hidden");
   fullNameInputEl.required = false;
+  passwordConfirmInputEl.required = false;
+  passwordConfirmInputEl.value = "";
+  resetPasswordVisibility(passwordInputEl, togglePasswordBtnEl);
+  resetPasswordVisibility(passwordConfirmInputEl, togglePasswordConfirmBtnEl);
   passwordInputEl.autocomplete = "current-password";
   passwordInputEl.minLength = 1;
   toRegisterRowEl.classList.remove("hidden");
@@ -190,7 +252,13 @@ function switchToRegister() {
   clearVerificationMode();
   authMode = "register";
   nameGroupEl.classList.remove("hidden");
+  passwordConfirmGroupEl.classList.remove("hidden");
   fullNameInputEl.required = true;
+  passwordConfirmInputEl.required = true;
+  passwordConfirmInputEl.autocomplete = "new-password";
+  passwordConfirmInputEl.value = "";
+  resetPasswordVisibility(passwordInputEl, togglePasswordBtnEl);
+  resetPasswordVisibility(passwordConfirmInputEl, togglePasswordConfirmBtnEl);
   passwordInputEl.autocomplete = "new-password";
   passwordInputEl.minLength = 8;
   toRegisterRowEl.classList.add("hidden");
@@ -222,7 +290,7 @@ switchToLogin(false);
 showRegisterBtnEl.addEventListener("click", switchToRegister);
 showLoginBtnEl.addEventListener("click", switchToLogin);
 
-for (const input of [emailInputEl, passwordInputEl, fullNameInputEl, verificationCodeInputEl]) {
+for (const input of [emailInputEl, passwordInputEl, passwordConfirmInputEl, fullNameInputEl, verificationCodeInputEl]) {
   input.addEventListener("input", () => {
     if (loginErrorEl.textContent) showAuthError("");
   });
@@ -261,6 +329,7 @@ loginFormEl.addEventListener("submit", async (e) => {
 
   const email = verificationMode ? pendingVerificationEmail : emailInputEl.value.trim();
   const password = passwordInputEl.value;
+  const passwordConfirmation = passwordConfirmInputEl.value;
   const fullName = fullNameInputEl.value.trim();
 
   if (!email || (!verificationMode && !password)) {
@@ -292,6 +361,20 @@ loginFormEl.addEventListener("submit", async (e) => {
     return;
   }
 
+  if (authMode === "register" && !verificationMode) {
+    const nameError = validateDisplayName(fullName);
+    if (nameError) {
+      showAuthError(nameError);
+      fullNameInputEl.focus();
+      return;
+    }
+    if (password !== passwordConfirmation) {
+      showAuthError("Girdiğin şifreler birbiriyle eşleşmiyor.");
+      passwordConfirmInputEl.focus();
+      return;
+    }
+  }
+
   setAuthLoading(true);
   try {
     if (verificationMode) {
@@ -313,7 +396,7 @@ loginFormEl.addEventListener("submit", async (e) => {
         return;
       }
 
-      finishAuthentication(result.token, result.email || email);
+      finishAuthentication(result.token, result.email || email, result.name);
     } else if (authMode === "login") {
       // GİRİŞ
       const result = await apiLogin(email, password);
@@ -325,7 +408,7 @@ loginFormEl.addEventListener("submit", async (e) => {
 
       const accountEmail = result.email || email;
       saveSession(result.token, accountEmail);
-      uiShowChat(accountEmail);
+      uiShowChat(accountEmail, result.name);
       startBackendKeepAlive();
       void apiWarmup().catch((error) => console.info("Backend hazırlanıyor:", error.message));
     } else {
@@ -347,6 +430,7 @@ loginFormEl.addEventListener("submit", async (e) => {
       }
 
       passwordInputEl.value = "";
+      passwordConfirmInputEl.value = "";
       fullNameInputEl.value = "";
       enterVerificationMode(result.email || email, result.message, {
         verificationToken: result.verification_token,
@@ -406,7 +490,7 @@ async function openRegistrationEmailLink() {
       if (stored?.verificationToken) {
         const status = await apiRegistrationStatus(stored.verificationToken);
         if (status.status === "verified" && status.token && status.email) {
-          finishAuthentication(status.token, status.email);
+          finishAuthentication(status.token, status.email, status.name);
           return;
         }
       }
