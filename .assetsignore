@@ -5,6 +5,7 @@ package-lock.json
 .gitignore
 .assetsignore
 assets/docs/
+assets/brand/*.md
 .env
 .env.*
 .dev.vars

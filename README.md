@@ -90,3 +90,14 @@ Keep the visible page copy consistent with those claims. Google does not use
 the `meta keywords` tag for ranking, so this project does not add one or stuff
 search phrases into hidden text. Google chooses the displayed title/snippet
 and may take time to recrawl a deployment; metadata cannot guarantee a ranking.
+
+## Brand kit
+
+The current identity uses the high-detail crowned purple turtle artwork across
+the site mark, app icons, social graphics, and ItemSatış package ads. The supplied crowned-head artwork is used unchanged in composition for small
+UI/app marks; the full-body version anchors larger promotional designs. SVG artboards embed the supplied mascot so
+they render when opened directly, and matching PNGs are ready for upload. The
+artwork shows the configured 1,000-credit, 59.90 TL package and its 30-day
+validity; update the graphics if those terms change. See
+`assets/brand/BRAND-GUIDE.md` and `assets/brand/IMAGEGEN-PROMPTS.md` for usage
+notes and copy-ready prompts.
