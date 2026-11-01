@@ -42,7 +42,7 @@ remove one-time tokens from the address bar before making API requests.
 ## Crazy Mode, credits, and order handling
 
 - `crazy.html` explains the two-stage response flow and the credit rules. One request costs 10 credits; the monthly free balance resets to 100 at the start of each Europe/Istanbul month, and unused monthly credits do not roll over.
-- A fixed ItemSatış package is presented as 100 HaKING credits for 59.90 TRY. Each purchased lot is separate and expires 30 days after it is applied. The UI explains that ItemSatış checkout is external and credit application is manual after the operator verifies the paid order.
+- A fixed ItemSatış package is presented as 1,000 HaKING credits for 59.90 TRY. Each purchased lot is separate and expires 30 days after it is applied. The UI explains that ItemSatış checkout is external and credit application is manual after the operator verifies the paid order.
 - Settings displays the live balance and purchased-lot expiry dates. At 30 or fewer active credits, the chat shows a link to the package page.
 - `founder-credits.html` is `noindex` and is only an operator interface. Its UI check is not an access-control boundary; the backend independently requires a valid session belonging to `gunshalit@gmail.com`, a registered buyer Gmail address, a unique order reference, and an explicit payment-verification flag. Never grant from a browser claim without checking ItemSatış.
 - Do not send ItemSatış credentials, customer passwords, or login/verification codes through the seller workflow. The buyer only needs to provide their registered Gmail and order reference through the marketplace's order messages.

@@ -10,7 +10,6 @@
   const accountEmail = document.getElementById("settings-account-email");
   const settingsCreditTotal = document.getElementById("settings-credit-total");
   const settingsCreditDetails = document.getElementById("settings-credit-details");
-  const founderCreditLink = document.getElementById("founder-credit-link");
   const providerStatus = document.getElementById("settings-provider-status");
   const providerList = document.getElementById("settings-provider-list");
   const resetButton = document.getElementById("settings-password-reset-btn");
@@ -123,9 +122,6 @@
     returnFocusTarget = event?.currentTarget || null;
     accountName.textContent = document.getElementById("profile-name")?.textContent?.trim() || "—";
     accountEmail.textContent = AppState.email;
-    if (founderCreditLink) {
-      founderCreditLink.classList.toggle("hidden", AppState.email.trim().toLowerCase() !== "gunshalit@gmail.com");
-    }
     clearStatus(resetStatus);
     clearStatus(deleteStatus);
     deleteConfirm.classList.add("hidden");

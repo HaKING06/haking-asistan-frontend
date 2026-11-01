@@ -6,6 +6,8 @@ const chatWindowEl = document.getElementById("chat-window");
 const userEmailDisplayEl = document.getElementById("user-email-display");
 const profileNameEl = document.getElementById("profile-name");
 const userAvatarEl = document.getElementById("user-avatar");
+const founderCreditSidebarEl = document.getElementById("founder-credit-sidebar");
+const founderCreditSettingsEl = document.getElementById("founder-credit-settings");
 const typingIndicatorEl = document.getElementById("typing-indicator");
 const backendStatusEl = document.getElementById("backend-status");
 const backendStatusLabelEl = document.getElementById("backend-status-label");
@@ -35,6 +37,9 @@ function uiShowLogin() {
 function uiShowChat(email, displayName = "") {
   loginCardEl.classList.add("hidden");
   chatCardEl.classList.remove("hidden");
+  const isFounder = String(email || "").trim().toLowerCase() === "gunshalit@gmail.com";
+  founderCreditSidebarEl?.classList.toggle("hidden", !isFounder);
+  founderCreditSettingsEl?.classList.toggle("hidden", !isFounder);
   if (!chatWindowEl.firstElementChild) uiStartNewChat();
   userEmailDisplayEl.textContent = email;
   const profileName = String(displayName || "").trim() || email.split("@")[0] || "Geliştirici";

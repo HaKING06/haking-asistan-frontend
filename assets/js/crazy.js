@@ -14,12 +14,13 @@
       setText("crazy-monthly-credits", String(data.monthly_free_credits));
       setText("crazy-request-cost", String(data.crazy_mode_cost));
       setText("crazy-package-validity", `${data.valid_days} gün`);
-      setText("crazy-package-title", `${data.credits} ek HaKING kredisi`);
+      const creditCount = new Intl.NumberFormat("tr-TR").format(data.credits);
+      setText("crazy-package-title", creditCount + " ek HaKING kredisi");
       setText("crazy-package-price", new Intl.NumberFormat("tr-TR", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(data.price_try));
-      setText("crazy-package-summary", `${data.credits} kredi · ${Math.floor(data.credits / data.crazy_mode_cost)} Çılgın Mod isteği`);
+      setText("crazy-package-summary", creditCount + " kredi · " + Math.floor(data.credits / data.crazy_mode_cost) + " Çılgın Mod isteği");
     })
     .catch(() => {
       // The static package details remain visible if the Render API is sleeping.

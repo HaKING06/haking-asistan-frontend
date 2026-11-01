@@ -9,6 +9,10 @@ const removeFileBtnEl = document.getElementById("remove-file-btn");
 const fileSelectionEl = document.getElementById("file-selection");
 const fileSelectionNameEl = document.getElementById("file-selection-name");
 const aiModeSelectEl = document.getElementById("ai-mode");
+const modePickerTriggerEl = document.getElementById("mode-picker-trigger");
+const modePickerMenuEl = document.getElementById("mode-picker-menu");
+const modePickerLabelEl = document.getElementById("mode-picker-label");
+const crazyModePickerTitleEl = document.getElementById("mode-option-crazy-title");
 const aiCreditsStatusEl = document.getElementById("ai-credits-status");
 const lowCreditAlertEl = document.getElementById("low-credit-alert");
 const BACKEND_KEEPALIVE_INTERVAL_MS = 10 * 60 * 1000;
@@ -22,6 +26,83 @@ const EMBEDDED_SECRET_PATTERN = /-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE K
 let backendKeepaliveTimer = null;
 let selectedSourceFile = null;
 let isReadingSourceFile = false;
+
+function syncModePickerSelection() {
+  if (!aiModeSelectEl || !modePickerMenuEl || !modePickerLabelEl) return;
+  const selectedMode = aiModeSelectEl.value === "crazy" ? "crazy" : "normal";
+  for (const option of modePickerMenuEl.querySelectorAll("[data-mode]")) {
+    option.setAttribute("aria-selected", String(option.dataset.mode === selectedMode));
+  }
+  const selectedNativeOption = aiModeSelectEl.querySelector(
+    selectedMode === "crazy" ? 'option[value="crazy"]' : 'option[value="normal"]'
+  );
+  modePickerLabelEl.textContent = selectedMode === "crazy"
+    ? (crazyModePickerTitleEl?.textContent || selectedNativeOption?.textContent || "Çılgın Mod")
+    : "Normal · kredi harcamaz";
+}
+
+function closeModePicker(restoreFocus = false) {
+  if (!modePickerMenuEl || !modePickerTriggerEl) return;
+  modePickerMenuEl.hidden = true;
+  modePickerTriggerEl.setAttribute("aria-expanded", "false");
+  if (restoreFocus) modePickerTriggerEl.focus();
+}
+
+function openModePicker() {
+  if (!modePickerMenuEl || !modePickerTriggerEl) return;
+  modePickerMenuEl.hidden = false;
+  modePickerTriggerEl.setAttribute("aria-expanded", "true");
+  const selected = modePickerMenuEl.querySelector('[aria-selected="true"]');
+  (selected || modePickerMenuEl.querySelector("[data-mode]"))?.focus();
+}
+
+modePickerTriggerEl?.addEventListener("click", () => {
+  if (modePickerMenuEl?.hidden) openModePicker();
+  else closeModePicker();
+});
+
+modePickerTriggerEl?.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+    event.preventDefault();
+    openModePicker();
+  } else if (event.key === "Escape") {
+    closeModePicker();
+  }
+});
+
+modePickerMenuEl?.addEventListener("click", (event) => {
+  const option = event.target.closest("[data-mode]");
+  if (!option || !aiModeSelectEl) return;
+  aiModeSelectEl.value = option.dataset.mode === "crazy" ? "crazy" : "normal";
+  aiModeSelectEl.dispatchEvent(new Event("change", { bubbles: true }));
+  syncModePickerSelection();
+  closeModePicker(true);
+});
+
+modePickerMenuEl?.addEventListener("keydown", (event) => {
+  const options = [...modePickerMenuEl.querySelectorAll("[data-mode]")];
+  const currentIndex = options.indexOf(document.activeElement);
+  let nextIndex = currentIndex;
+  if (event.key === "ArrowDown") nextIndex = (currentIndex + 1) % options.length;
+  else if (event.key === "ArrowUp") nextIndex = (currentIndex - 1 + options.length) % options.length;
+  else if (event.key === "Home") nextIndex = 0;
+  else if (event.key === "End") nextIndex = options.length - 1;
+  else if (event.key === "Escape") {
+    event.preventDefault();
+    closeModePicker(true);
+    return;
+  } else {
+    return;
+  }
+  event.preventDefault();
+  options[nextIndex]?.focus();
+});
+
+document.addEventListener("pointerdown", (event) => {
+  if (!event.target.closest("#mode-picker")) closeModePicker();
+});
+
+syncModePickerSelection();
 
 async function refreshAiCreditBalance() {
   if (!AppState.token || !aiCreditsStatusEl) return;
@@ -47,7 +128,9 @@ async function refreshAiCreditBalance() {
     }
     AppState.credits = balance;
     const crazyOption = aiModeSelectEl?.querySelector('option[value="crazy"]');
-    if (crazyOption) crazyOption.textContent = `Çılgın Mod · ${balance.crazy_mode_cost} kredi`;
+    if (crazyOption) crazyOption.textContent = "Çılgın Mod · " + balance.crazy_mode_cost + " kredi";
+    if (crazyModePickerTitleEl) crazyModePickerTitleEl.textContent = "Çılgın Mod · " + balance.crazy_mode_cost + " kredi";
+    syncModePickerSelection();
   } catch (error) {
     aiCreditsStatusEl.textContent = "Kredi bakiyesi şu an alınamadı";
     aiCreditsStatusEl.title = error.message;

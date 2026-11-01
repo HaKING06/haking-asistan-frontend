@@ -120,8 +120,9 @@
     }
     const packageResult = await apiAdminGetCreditPackage(token);
     if (!packageResult.ok) throw new Error(packageResult.message || "Paket bilgisi alınamadı.");
-    packageHeading.textContent = `${packageResult.credits} HaKING kredisi`;
-    packageMeta.textContent = `${packageResult.price_try.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL · ${packageResult.crazy_mode_cost} kredi/istek · ${packageResult.valid_days} gün geçerli`;
+    packageHeading.textContent = new Intl.NumberFormat("tr-TR").format(packageResult.credits) + " HaKING kredisi";
+    const includedRequests = Math.floor(packageResult.credits / packageResult.crazy_mode_cost);
+    packageMeta.textContent = packageResult.price_try.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TL · " + includedRequests + " Çılgın Mod isteği · " + packageResult.valid_days + " gün geçerli";
   }
 
   lookupForm.addEventListener("submit", async (event) => {
