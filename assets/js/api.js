@@ -428,8 +428,9 @@ async function readChatStream(response, onChunk, onStage = () => {}) {
       const labels = {
         starting: "İsteğin inceleniyor",
         briefing: "Teknik brief hazırlanıyor",
-        handoff: "Brief yanıt modeline aktarılıyor",
-        answering: "Yanıt hazırlanıyor",
+        handoff: "Brief üretim modeline aktarılıyor",
+        model_wait: "Yanıt modeli çalışıyor · ilk çıktı bekleniyor",
+        writing: "Yanıt yazılıyor",
       };
       if (labels[text]) onStage(text);
     } else if (eventType === "message") {

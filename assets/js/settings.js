@@ -10,6 +10,8 @@
   const accountEmail = document.getElementById("settings-account-email");
   const settingsCreditTotal = document.getElementById("settings-credit-total");
   const settingsCreditDetails = document.getElementById("settings-credit-details");
+  const settingsCreditSection = document.getElementById("settings-credit-section");
+  const creditShortcut = document.getElementById("ai-credits-status");
   const providerStatus = document.getElementById("settings-provider-status");
   const providerList = document.getElementById("settings-provider-list");
   const resetButton = document.getElementById("settings-password-reset-btn");
@@ -100,11 +102,13 @@
       if (!balance.ok) throw new Error(balance.message || "Kredi bakiyesi alınamadı.");
       settingsCreditTotal.textContent = `${balance.total_credits} aktif`;
       const lines = [
-        `Ücretsiz: ${balance.monthly_credits}/${balance.monthly_allowance} kredi · ${formatDate(`${balance.period_renews_at}T12:00:00+03:00`, { day: "numeric", month: "long" })} yenilenir.`,
+        `Aylık ücretsiz kredi: ${balance.monthly_credits}/${balance.monthly_allowance} · yenilenme tarihi: ${formatDate(`${balance.period_renews_at}T12:00:00+03:00`)}.`,
       ];
       const lots = (balance.purchased_lots || []).filter((lot) => lot.credits_remaining > 0);
       if (lots.length) {
-        lines.push(`Ek paketler: ${lots.map((lot) => `${lot.credits_remaining} kredi (${formatDate(lot.expires_at)} son gün)`).join(" · ")}.`);
+        lots.forEach((lot, index) => {
+          lines.push(`Ek paket ${index + 1}: ${lot.credits_remaining} kredi kaldı · bitiş tarihi: ${formatDate(lot.expires_at)}.`);
+        });
       } else {
         lines.push("Ek paket kredisi bulunmuyor.");
       }
@@ -141,6 +145,14 @@
   }
 
   openButtons.forEach((button) => button.addEventListener("click", openSettings));
+  creditShortcut?.addEventListener("click", (event) => {
+    openSettings(event);
+    if (!AppState.token || !AppState.email) return;
+    window.requestAnimationFrame(() => {
+      settingsCreditSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      settingsCreditSection?.focus({ preventScroll: true });
+    });
+  });
   closeButton?.addEventListener("click", closeSettings);
   backdrop.addEventListener("click", (event) => {
     if (event.target === backdrop) closeSettings();

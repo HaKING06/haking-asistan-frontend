@@ -298,6 +298,7 @@
             <span class="typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
             <span id="typing-stage-text">HaKING yanıt hazırlıyor…</span>
             <span id="typing-stage-count" class="typing-stage-count">1/4</span>
+            <span id="typing-stage-elapsed" class="typing-stage-elapsed" aria-hidden="true">00:00</span>
             <span class="typing-progress" aria-hidden="true"><i id="typing-stage-progress"></i></span>
           </div>
           <div class="composer">
@@ -331,7 +332,7 @@
                     <option value="crazy">Çılgın Mod · 10 kredi</option>
                   </select>
                 </div>
-                <span id="ai-credits-status" class="ai-credits-status" role="status" aria-live="polite">Kredi bakiyesi yükleniyor…</span>
+                <button id="ai-credits-status" class="ai-credits-status" type="button" aria-label="Kredi bakiyesi yükleniyor">Kredi bakiyesi yükleniyor…</button>
                 <a class="composer-mode-info" href="./crazy.html" aria-label="Çılgın Mod ve krediler hakkında bilgi">i</a>
                 <input id="file-input" class="hidden" type="file" accept=".html,.htm,.css,.js,.mjs,.cjs,.ts,.tsx,.jsx,.py,.java,.cs,.c,.h,.cpp,.hpp,.go,.rs,.php,.rb,.json,.md,.txt,.xml,.yaml,.yml,.sql,.sh,.vue,.svelte,.toml,.ini" />
                 <button id="attach-file-btn" class="attach-file-btn" type="button" aria-label="Kod dosyası ekle" title="Kod veya metin dosyası ekle">
@@ -367,7 +368,7 @@
             </dl>
           </section>
 
-          <section class="settings-section settings-credit-section">
+          <section id="settings-credit-section" class="settings-section settings-credit-section" tabindex="-1">
             <div class="settings-section-heading"><div><h3>Çılgın Mod kredileri</h3><p>Normal sohbet kredi kullanmaz. Çılgın Mod isteği 10 kredi harcar.</p></div><span id="settings-credit-total" class="settings-credit-total">—</span></div>
             <p id="settings-credit-details" class="settings-credit-details" role="status" aria-live="polite">Bakiye yükleniyor…</p>
             <div class="settings-links settings-credit-actions"><a class="settings-buy-credits" href="./crazy.html#paket">Kredi al <span aria-hidden="true">↗</span></a><a href="./crazy.html">Kredi sistemi ve paket ayrıntıları</a></div>

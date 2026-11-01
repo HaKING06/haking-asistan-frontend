@@ -109,21 +109,15 @@ syncModePickerSelection();
 async function refreshAiCreditBalance() {
   if (!AppState.token || !aiCreditsStatusEl) return;
   aiCreditsStatusEl.textContent = "Kredi bakiyesi yükleniyor…";
+  aiCreditsStatusEl.setAttribute("aria-label", "Kredi bakiyesi yükleniyor");
   aiCreditsStatusEl.removeAttribute("title");
   try {
     const balance = await apiGetAiCredits(AppState.token);
     if (!balance.ok) throw new Error(balance.message);
-    const renewsAt = new Date(`${balance.period_renews_at}T12:00:00+03:00`);
-    const renewsLabel = Number.isNaN(renewsAt.getTime())
-      ? ""
-      : ` · ${new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long" }).format(renewsAt)} yenilenir`;
-    aiCreditsStatusEl.textContent = `${balance.total_credits} aktif kredi${renewsLabel}`;
+    aiCreditsStatusEl.textContent = `${balance.total_credits} aktif kredi · Ayrıntılar`;
+    aiCreditsStatusEl.setAttribute("aria-label", `${balance.total_credits} aktif kredi. Kredi yenilenme ve bitiş tarihlerini ayarlarda görüntüle.`);
     aiCreditsStatusEl.dataset.low = String(balance.total_credits <= 30);
-    const nextExpiry = (balance.purchased_lots || []).find((lot) => lot.credits_remaining > 0);
-    const expiryLabel = nextExpiry
-      ? new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long" }).format(new Date(nextExpiry.expires_at))
-      : "henüz ek kredi yok";
-    aiCreditsStatusEl.title = `${balance.monthly_credits}/${balance.monthly_allowance} aylık kredi · ${balance.purchased_credits} ek kredi · Ek kredilerin en yakını: ${expiryLabel} · Her Çılgın Mod isteği ${balance.crazy_mode_cost} kredi.`;
+    aiCreditsStatusEl.title = "Aylık yenilenme ve satın alınan kredi paketlerinin bitiş tarihlerini ayarlarda gör.";
     if (lowCreditAlertEl) {
       lowCreditAlertEl.classList.toggle("hidden", balance.total_credits > 30);
       lowCreditAlertEl.setAttribute("aria-hidden", String(balance.total_credits > 30));
@@ -439,7 +433,8 @@ async function sendMessageFromUI() {
         persistStreamingDraft();
         if (!hasReceivedChunk) {
           hasReceivedChunk = true;
-          uiShowTyping(false);
+          if (mode === "crazy") uiSetTypingStage("writing");
+          else uiShowTyping(false);
           assistantBubble = uiCreateAssistantStreamMessage();
         }
         uiAppendAssistantStream(assistantBubble, chunk);

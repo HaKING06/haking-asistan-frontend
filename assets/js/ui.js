@@ -13,6 +13,8 @@ const backendStatusEl = document.getElementById("backend-status");
 const backendStatusLabelEl = document.getElementById("backend-status-label");
 const welcomeTemplate = document.getElementById("welcome-state");
 const assistantStreamContent = new WeakMap();
+let typingStageStartedAt = 0;
+let typingStageTimer = null;
 
 function uiSetBackendStatus(state, message) {
   if (!backendStatusEl) return;
@@ -324,24 +326,47 @@ function uiShowTyping(show, mode = "normal") {
   if (show) {
     typingIndicatorEl.classList.remove("hidden");
     typingIndicatorEl.classList.toggle("is-staged", mode === "crazy");
-    uiSetTypingStage("starting");
+    typingStageStartedAt = performance.now();
+    if (typingStageTimer !== null) {
+      window.clearInterval(typingStageTimer);
+      typingStageTimer = null;
+    }
+    const elapsed = document.getElementById("typing-stage-elapsed");
+    if (elapsed) elapsed.textContent = "00:00";
+    if (mode === "crazy") {
+      uiSetTypingStage("starting");
+      typingStageTimer = window.setInterval(() => {
+        if (!elapsed) return;
+        const totalSeconds = Math.floor((performance.now() - typingStageStartedAt) / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = String(totalSeconds % 60).padStart(2, "0");
+        elapsed.textContent = `${String(minutes).padStart(2, "0")}:${seconds}`;
+      }, 1000);
+    }
   } else {
     typingIndicatorEl.classList.add("hidden");
-    typingIndicatorEl.classList.remove("is-staged");
+    typingIndicatorEl.classList.remove("is-staged", "is-waiting", "is-writing");
+    if (typingStageTimer !== null) {
+      window.clearInterval(typingStageTimer);
+      typingStageTimer = null;
+    }
   }
 }
 
 function uiSetTypingStage(stage) {
   const labels = {
-    starting: ["İsteğin inceleniyor", 1],
+    starting: ["İstek sıraya alındı", 1],
     briefing: ["Teknik brief hazırlanıyor", 2],
-    handoff: ["Brief yanıt modeline aktarılıyor", 3],
-    answering: ["Yanıt hazırlanıyor", 4],
+    handoff: ["Brief üretim modeline aktarılıyor", 2],
+    model_wait: ["Yanıt modeli çalışıyor · ilk çıktı bekleniyor", 3],
+    writing: ["Yanıt yazılıyor", 4],
   };
   const [label, step] = labels[stage] || labels.starting;
   const text = document.getElementById("typing-stage-text");
   const count = document.getElementById("typing-stage-count");
   const progress = document.getElementById("typing-stage-progress");
+  typingIndicatorEl.classList.toggle("is-waiting", stage === "model_wait");
+  typingIndicatorEl.classList.toggle("is-writing", stage === "writing");
   if (text) text.textContent = label;
   if (count) count.textContent = `${step}/4`;
   if (progress) progress.style.setProperty("--stage-progress", `${step * 25}%`);

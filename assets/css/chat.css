@@ -605,15 +605,23 @@
 .mode-option-check { color: #b6a8ff; font-size: 12px; opacity: 0; }
 .mode-picker-option[aria-selected="true"] .mode-option-check { opacity: 1; }
 .ai-credits-status {
+  padding: 0;
+  border: 0;
+  background: transparent;
   min-width: 0;
   max-width: 230px;
   overflow: hidden;
   color: #9295a3;
+  font: inherit;
   font-size: 9px;
+  text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
+  cursor: pointer;
 }
 .ai-credits-status[data-low="true"] { color: #e7bb77; }
+.ai-credits-status:hover { color: #c8beff; text-decoration: underline; text-underline-offset: 3px; }
+.ai-credits-status:focus-visible { outline: 2px solid rgba(161, 143, 255, .75); outline-offset: 3px; border-radius: 3px; }
 .composer-mode-info {
   display: grid;
   width: 24px;
@@ -734,6 +742,7 @@
   font-weight: 700;
 }
 .settings-credit-details { color: var(--text-soft) !important; white-space: pre-line; }
+.settings-credit-section:focus { outline: 2px solid rgba(160, 143, 255, .38); outline-offset: 3px; }
 .settings-credit-section .settings-section-heading { align-items: center; }
 .settings-credit-section .settings-links { margin-bottom: 0; }
 .founder-credit-action {
@@ -862,6 +871,7 @@
   color: #bdb9ce;
   font-size: 10px;
 }
+#typing-stage-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .typing-dots {
   display: inline-flex;
@@ -888,11 +898,18 @@
 }
 
 .typing-stage-count { display: none; }
+.typing-stage-elapsed { display: none; }
 .typing-progress { display: none; }
 .typing.is-staged .typing-stage-count {
   display: inline-block;
   margin-left: auto;
   color: #88899a;
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+}
+.typing.is-staged .typing-stage-elapsed {
+  display: inline-block;
+  color: #777988;
   font-size: 9px;
   font-variant-numeric: tabular-nums;
 }
@@ -911,6 +928,17 @@
   border-radius: inherit;
   background: linear-gradient(90deg, #8a79ee, #65d5aa);
   transition: width 220ms ease;
+}
+.typing.is-waiting .typing-progress i {
+  width: 25%;
+  margin-left: 50%;
+  animation: typing-stage-wait 1.15s ease-in-out infinite alternate;
+}
+.typing.is-writing .typing-stage-count { color: #a99aff; }
+
+@keyframes typing-stage-wait {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
 }
 
 @keyframes typing-pulse {
