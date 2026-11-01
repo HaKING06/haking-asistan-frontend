@@ -15,6 +15,7 @@ const modePickerLabelEl = document.getElementById("mode-picker-label");
 const crazyModePickerTitleEl = document.getElementById("mode-option-crazy-title");
 const aiCreditsStatusEl = document.getElementById("ai-credits-status");
 const lowCreditAlertEl = document.getElementById("low-credit-alert");
+const lowCreditAlertDismissEl = document.getElementById("low-credit-alert-dismiss");
 const BACKEND_KEEPALIVE_INTERVAL_MS = 10 * 60 * 1000;
 const CHAT_CONTEXT_MAX_MESSAGES = 24;
 const CHAT_CONTEXT_MAX_CHARS = 24000;
@@ -28,6 +29,13 @@ const EMBEDDED_SECRET_PATTERN = /-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE K
 let backendKeepaliveTimer = null;
 let selectedSourceFile = null;
 let isReadingSourceFile = false;
+let lowCreditAlertDismissed = false;
+
+lowCreditAlertDismissEl?.addEventListener("click", () => {
+  lowCreditAlertDismissed = true;
+  lowCreditAlertEl?.classList.add("hidden");
+  lowCreditAlertEl?.setAttribute("aria-hidden", "true");
+});
 
 function syncModePickerSelection() {
   if (!aiModeSelectEl || !modePickerMenuEl || !modePickerLabelEl) return;
@@ -119,8 +127,11 @@ async function refreshAiCreditBalance() {
     aiCreditsStatusEl.dataset.low = String(balance.total_credits <= 30);
     aiCreditsStatusEl.title = "Aylık yenilenme ve satın alınan kredi paketlerinin bitiş tarihlerini ayarlarda gör.";
     if (lowCreditAlertEl) {
-      lowCreditAlertEl.classList.toggle("hidden", balance.total_credits > 30);
-      lowCreditAlertEl.setAttribute("aria-hidden", String(balance.total_credits > 30));
+      const isLow = balance.total_credits <= 30;
+      if (!isLow) lowCreditAlertDismissed = false;
+      const hideAlert = !isLow || lowCreditAlertDismissed;
+      lowCreditAlertEl.classList.toggle("hidden", hideAlert);
+      lowCreditAlertEl.setAttribute("aria-hidden", String(hideAlert));
     }
     AppState.credits = balance;
     const crazyOption = aiModeSelectEl?.querySelector('option[value="crazy"]');

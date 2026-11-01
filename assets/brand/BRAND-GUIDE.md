@@ -8,7 +8,7 @@
 - **Mascot:** High-detail purple turtle with a gold crown and hexagonal tech armor.
 - **Personality:** Confident, curious, friendly, and dependable.
 
-The crown carries the KING part of the name. The hexagonal chest emblem and fine circuit details connect the character to software and AI. Use the supplied realistic mascot artwork as the visual source of truth; do not mix it with the earlier flat cartoon turtle.
+The crown carries the KING part of the name. The hexagonal chest emblem and fine circuit details connect the character to software and AI. Use the supplied crowned-head artwork for small marks and the full-body illustration for larger compositions.
 
 ## Palette
 

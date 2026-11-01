@@ -253,18 +253,13 @@
   text-decoration: none;
 }
 
-.topbar-brand-icon {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border: 1px solid rgba(155, 140, 255, .2);
+.topbar-brand-mark {
+  display: block;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  object-fit: cover;
   border-radius: 11px;
-  background: linear-gradient(145deg, rgba(126, 104, 255, .2), rgba(83, 70, 153, .14));
-  color: #b5a7ff;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: -1px;
 }
 
 .topbar-brand-copy {
@@ -514,8 +509,27 @@
   font-size: 10px;
 }
 .credit-low-alert[aria-hidden="true"] { display: none; }
+.credit-low-alert > span:first-child { min-width: 0; flex: 1; }
 .credit-low-alert a { flex: 0 0 auto; color: #d7c5ff; font-weight: 700; text-decoration: none; }
 .credit-low-alert a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.credit-low-alert-dismiss {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(217, 196, 158, .2);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, .035);
+  color: #d9c49e;
+  cursor: pointer;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1;
+}
+.credit-low-alert-dismiss:hover { background: rgba(255, 255, 255, .09); }
+.credit-low-alert-dismiss:focus-visible { outline: 2px solid #b8a4ff; outline-offset: 2px; }
 
 .composer {
   padding: 13px 13px 10px 16px;
