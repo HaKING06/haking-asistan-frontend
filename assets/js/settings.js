@@ -8,6 +8,9 @@
   const closeButton = document.getElementById("settings-close-btn");
   const accountName = document.getElementById("settings-account-name");
   const accountEmail = document.getElementById("settings-account-email");
+  const settingsCreditTotal = document.getElementById("settings-credit-total");
+  const settingsCreditDetails = document.getElementById("settings-credit-details");
+  const founderCreditLink = document.getElementById("founder-credit-link");
   const providerStatus = document.getElementById("settings-provider-status");
   const providerList = document.getElementById("settings-provider-list");
   const resetButton = document.getElementById("settings-password-reset-btn");
@@ -82,11 +85,47 @@
     }
   }
 
+  function formatDate(value, options = { day: "numeric", month: "long", year: "numeric" }) {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime())
+      ? "tarih alınamadı"
+      : new Intl.DateTimeFormat("tr-TR", { ...options, timeZone: "Europe/Istanbul" }).format(date);
+  }
+
+  async function loadCredits() {
+    if (!AppState.token || !settingsCreditTotal || !settingsCreditDetails) return;
+    settingsCreditTotal.textContent = "Yükleniyor…";
+    settingsCreditDetails.textContent = "Kredi bakiyesi alınıyor…";
+    try {
+      const balance = await apiGetAiCredits(AppState.token);
+      if (!balance.ok) throw new Error(balance.message || "Kredi bakiyesi alınamadı.");
+      settingsCreditTotal.textContent = `${balance.total_credits} aktif`;
+      const lines = [
+        `Ücretsiz: ${balance.monthly_credits}/${balance.monthly_allowance} kredi · ${formatDate(`${balance.period_renews_at}T12:00:00+03:00`, { day: "numeric", month: "long" })} yenilenir.`,
+      ];
+      const lots = (balance.purchased_lots || []).filter((lot) => lot.credits_remaining > 0);
+      if (lots.length) {
+        lines.push(`Ek paketler: ${lots.map((lot) => `${lot.credits_remaining} kredi (${formatDate(lot.expires_at)} son gün)`).join(" · ")}.`);
+      } else {
+        lines.push("Ek paket kredisi bulunmuyor.");
+      }
+      lines.push(`Çılgın Mod isteği ${balance.crazy_mode_cost} kredi kullanır. Ek krediler ücretsiz aylık kredilerden ayrı tutulur.`);
+      settingsCreditDetails.textContent = lines.join("\n");
+      AppState.credits = balance;
+    } catch (error) {
+      settingsCreditTotal.textContent = "—";
+      settingsCreditDetails.textContent = error.message || "Kredi bakiyesi şu anda alınamıyor.";
+    }
+  }
+
   function openSettings(event) {
     if (!AppState.token || !AppState.email) return;
     returnFocusTarget = event?.currentTarget || null;
     accountName.textContent = document.getElementById("profile-name")?.textContent?.trim() || "—";
     accountEmail.textContent = AppState.email;
+    if (founderCreditLink) {
+      founderCreditLink.classList.toggle("hidden", AppState.email.trim().toLowerCase() !== "gunshalit@gmail.com");
+    }
     clearStatus(resetStatus);
     clearStatus(deleteStatus);
     deleteConfirm.classList.add("hidden");
@@ -95,6 +134,7 @@
     document.body.classList.add("settings-open");
     dialog.focus();
     void loadProviders();
+    void loadCredits();
   }
 
   function closeSettings() {

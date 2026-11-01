@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#0b0d12" />
+  <title>Kurucu kredi yönetimi | HaKING AI</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/main.css" />
+  <link rel="stylesheet" href="./assets/css/crazy.css" />
+</head>
+<body>
+  <main class="privacy-page founder-page">
+    <nav class="privacy-nav" aria-label="Sayfa gezinme">
+      <a class="brand-lockup" href="./index.html" aria-label="HaKING ana sayfa">
+        <img src="./assets/img/logo.svg" alt="" class="brand-mark" />
+        <span class="brand-name">HaKING</span>
+      </a>
+      <div class="privacy-nav-actions"><a href="./index.html">Sohbete dön</a><button type="button" id="founder-logout" class="founder-nav-button">Çıkış yap</button></div>
+    </nav>
+
+    <div class="privacy-wrap founder-wrap">
+      <header class="founder-heading">
+        <span class="crazy-section-kicker">KURUCUNUN HESAP PANELİ</span>
+        <h1>Ek kredi tanımla</h1>
+        <p>Ödemeyi ItemSatış'ta kontrol ettikten sonra kayıtlı Gmail hesabına tek paket ekle. Sipariş numarası her hesapta yalnızca bir kez kullanılabilir.</p>
+      </header>
+
+      <section class="founder-package-card" aria-labelledby="founder-package-title">
+        <div><span class="founder-label">Sabit ek paket</span><h2 id="founder-package-title">Paket yükleniyor…</h2></div>
+        <p id="founder-package-meta" role="status" aria-live="polite">Paket bilgisi sunucudan alınıyor.</p>
+      </section>
+
+      <section class="privacy-section founder-section">
+        <div class="founder-section-heading"><div><span class="crazy-section-kicker">1 · HESABI BUL</span><h2>Kayıtlı Gmail adresi</h2></div></div>
+        <form id="founder-lookup-form" class="founder-form" novalidate>
+          <label for="founder-email">Alıcının HaKING hesabındaki Gmail</label>
+          <div class="founder-inline-form"><input id="founder-email" type="email" autocomplete="off" inputmode="email" maxlength="254" placeholder="ornek@gmail.com" required /><button class="crazy-button secondary" type="submit">Hesabı bul</button></div>
+        </form>
+        <p id="founder-account-status" class="founder-status" role="status" aria-live="polite"></p>
+        <div id="founder-account-card" class="founder-account-card hidden" aria-live="polite"></div>
+      </section>
+
+      <section class="privacy-section founder-section">
+        <div class="founder-section-heading"><div><span class="crazy-section-kicker">2 · SİPARİŞİ DOĞRULA</span><h2>Krediyi güvenli şekilde ekle</h2></div></div>
+        <form id="founder-grant-form" class="founder-form" novalidate>
+          <label for="founder-order-reference">ItemSatış sipariş numarası</label>
+          <input id="founder-order-reference" type="text" autocomplete="off" maxlength="100" pattern="[A-Za-z0-9][A-Za-z0-9._/#-]{2,99}" placeholder="Ör. 12345678" required />
+          <label class="founder-confirm"><input id="founder-payment-verified" type="checkbox" required /><span>ItemSatış siparişinin ödemesini ve alıcı Gmail adresini kontrol ettim; sabit paketi bu hesaba eklemeyi onaylıyorum.</span></label>
+          <button id="founder-grant-button" class="crazy-button primary" type="submit" disabled>Ödeme onaylandı · krediyi ekle</button>
+        </form>
+        <p id="founder-grant-status" class="founder-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="privacy-section founder-section founder-history-section">
+        <div class="founder-section-heading"><div><span class="crazy-section-kicker">HESAP GEÇMİŞİ</span><h2>Son paket tanımları</h2></div></div>
+        <div id="founder-grant-history" class="founder-history"><p>Önce bir hesap bul.</p></div>
+      </section>
+      <p class="founder-security-note">Bu sayfa arama motorlarında listelenmez; gerçek yetki backend'de oturum ve kurucu Gmail adresiyle ayrıca doğrulanır. Sipariş numarasını yalnızca ödeme onayından sonra kullan. Şifre, oturum anahtarı veya e-posta doğrulama kodu isteme.</p>
+    </div>
+  </main>
+  <script src="./assets/js/api.js"></script>
+  <script src="./assets/js/founder-credits.js"></script>
+</body>
+</html>

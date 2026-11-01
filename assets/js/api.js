@@ -284,6 +284,51 @@ async function apiGetAiCredits(token) {
   };
 }
 
+async function apiAdminGetCreditPackage(token) {
+  const response = await fetch(`${API_URL}/admin/credits/package`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, status: response.status, ...data, message: apiErrorMessage(data, "Paket bilgisi alınamadı.") };
+}
+
+async function apiAdminGetCreditAccount(token, email) {
+  const response = await fetch(API_URL + "/admin/credits/account", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+    cache: "no-store",
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, status: response.status, ...data, message: apiErrorMessage(data, "Hesap bilgisi alınamadı.") };
+}
+
+async function apiAdminGrantCredits(token, email, orderReference) {
+  const response = await fetch(`${API_URL}/admin/credits/grants`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ email, order_reference: orderReference, payment_verified: true }),
+    cache: "no-store",
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, status: response.status, ...data, message: apiErrorMessage(data, "Kredi eklenemedi.") };
+}
+
+async function apiAdminResendCreditEmail(token, grantId) {
+  const response = await fetch(`${API_URL}/admin/credits/grants/${encodeURIComponent(grantId)}/notify`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, status: response.status, ...data, message: apiErrorMessage(data, "E-posta gönderilemedi.") };
+}
+
 let backendWarmupPromise = null;
 
 function apiWarmup() {
@@ -354,7 +399,7 @@ function apiKeepAlive() {
 
 const CHAT_TIMEOUT_MS = 480000;
 
-async function readChatStream(response, onChunk) {
+async function readChatStream(response, onChunk, onStage = () => {}) {
   if (!response.body) {
     throw new Error("Sunucu akış yanıtı göndermedi.");
   }
@@ -379,6 +424,14 @@ async function readChatStream(response, onChunk) {
     const text = data.join("\n");
     if (eventType === "error") {
       streamError = text || "Asistan yanıt üretirken bir hata oluştu.";
+    } else if (eventType === "stage") {
+      const labels = {
+        starting: "İsteğin inceleniyor",
+        briefing: "Teknik brief hazırlanıyor",
+        handoff: "Brief yanıt modeline aktarılıyor",
+        answering: "Yanıt hazırlanıyor",
+      };
+      if (labels[text]) onStage(text);
     } else if (eventType === "message") {
       onChunk(text);
     }
@@ -410,7 +463,7 @@ async function readChatStream(response, onChunk) {
   return streamError ? { ok: false, message: streamError } : { ok: true };
 }
 
-async function apiChat(message, userId, token, history, onChunk, attachment = null, mode = "normal") {
+async function apiChat(message, userId, token, history, onChunk, attachment = null, mode = "normal", onStage = () => {}) {
   const headers = {
     "Content-Type": "application/json",
   };
@@ -457,7 +510,7 @@ async function apiChat(message, userId, token, history, onChunk, attachment = nu
       };
     }
 
-    const streamResult = await readChatStream(res, onChunk);
+    const streamResult = await readChatStream(res, onChunk, onStage);
     uiSetBackendStatus(
       streamResult.ok ? "ready" : "error",
       streamResult.ok ? "Asistan sunucusu hazır." : "Asistan modeli şu anda yanıt üretemiyor."

@@ -286,7 +286,16 @@
         </div>
 
         <footer class="chat-composer-area">
-          <div id="typing-indicator" class="typing hidden"><span></span><span></span><span></span><span>HaKING düşünüyor...</span></div>
+          <div id="low-credit-alert" class="credit-low-alert hidden" role="status" aria-live="polite" aria-hidden="true">
+            <span>Çılgın Mod kredin azalıyor. Paket ayrıntılarına göz at.</span>
+            <a href="./crazy.html#paket">Kredi al <span aria-hidden="true">↗</span></a>
+          </div>
+          <div id="typing-indicator" class="typing hidden" role="status" aria-live="polite" aria-atomic="true">
+            <span class="typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span id="typing-stage-text">HaKING yanıt hazırlıyor…</span>
+            <span id="typing-stage-count" class="typing-stage-count">1/4</span>
+            <span class="typing-progress" aria-hidden="true"><i id="typing-stage-progress"></i></span>
+          </div>
           <div class="composer">
             <div id="file-selection" class="file-selection hidden" role="status" aria-live="polite">
               <span class="file-selection-icon" aria-hidden="true">&lt;/&gt;</span>
@@ -294,22 +303,18 @@
               <button id="remove-file-btn" class="remove-file-btn" type="button" aria-label="Eklenen dosyayı kaldır">Kaldır</button>
             </div>
             <textarea id="chat-input" rows="1" placeholder="Bir kod yapıştırın veya C#, Python, HTML hakkında bir soru sorun..." aria-label="Mesajını yaz"></textarea>
-            <div class="composer-mode-row">
-              <label class="composer-mode-label" for="ai-mode">Yanıt modu</label>
-              <select id="ai-mode" aria-describedby="ai-mode-note ai-credits-status">
-                <option value="normal">Normal · kredi harcamaz</option>
-                <option value="crazy">Çılgın Mod · 10 kredi</option>
-              </select>
-              <span id="ai-credits-status" class="ai-credits-status" role="status" aria-live="polite">Kredi bakiyesi girişten sonra yüklenir</span>
-            </div>
-            <p id="ai-mode-note" class="composer-mode-note">Çılgın Mod önce isteğini ayrıntılı bir brief'e dönüştürür, ardından yanıtı üretir.</p>
             <div class="composer-bottom">
               <div class="composer-tools">
+                <select id="ai-mode" aria-label="Yanıt modu" aria-describedby="ai-credits-status">
+                <option value="normal">Normal · kredi harcamaz</option>
+                <option value="crazy">Çılgın Mod · 10 kredi</option>
+                </select>
+                <span id="ai-credits-status" class="ai-credits-status" role="status" aria-live="polite">Kredi bakiyesi yükleniyor…</span>
+                <a class="composer-mode-info" href="./crazy.html" aria-label="Çılgın Mod ve krediler hakkında bilgi">i</a>
                 <input id="file-input" class="hidden" type="file" accept=".html,.htm,.css,.js,.mjs,.cjs,.ts,.tsx,.jsx,.py,.java,.cs,.c,.h,.cpp,.hpp,.go,.rs,.php,.rb,.json,.md,.txt,.xml,.yaml,.yml,.sql,.sh,.vue,.svelte,.toml,.ini" />
                 <button id="attach-file-btn" class="attach-file-btn" type="button" aria-label="Kod dosyası ekle" title="Kod veya metin dosyası ekle">
                   <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7.5 10.8 5.2-5.2a2.6 2.6 0 0 1 3.7 3.7l-7.2 7.2a4 4 0 0 1-5.7-5.7l7-7"/><path d="m6.1 12.2 6.2-6.2"/></svg>
                 </button>
-                <span class="composer-hint"><kbd>Enter</kbd> gönder <span>·</span> <kbd>Shift + Enter</kbd> yeni satır</span>
               </div>
               <button id="send-btn" class="send-btn" type="button" aria-label="Mesajı gönder" title="Mesajı gönder">
                 <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m3 9 14-6-6 14-2.3-5.7L3 9Z"/><path d="m8.7 11.3 4-4"/></svg>
@@ -333,6 +338,13 @@
               <div><dt>Ad</dt><dd id="settings-account-name">—</dd></div>
               <div><dt>Gmail adresi</dt><dd id="settings-account-email">—</dd></div>
             </dl>
+          </section>
+
+          <section class="settings-section settings-credit-section">
+            <div class="settings-section-heading"><div><h3>Çılgın Mod kredileri</h3><p>Normal sohbet kredi kullanmaz. Çılgın Mod isteği 10 kredi harcar.</p></div><span id="settings-credit-total" class="settings-credit-total">—</span></div>
+            <p id="settings-credit-details" class="settings-credit-details" role="status" aria-live="polite">Bakiye yükleniyor…</p>
+            <div class="settings-links"><a href="./crazy.html">Kredi sistemi ve paket ayrıntıları</a><a href="./crazy.html#paket">Kredi al</a></div>
+            <a id="founder-credit-link" class="settings-founder-link hidden" href="./founder-credits.html">Kurucu kredi yönetimi <span aria-hidden="true">↗</span></a>
           </section>
 
           <section class="settings-section">

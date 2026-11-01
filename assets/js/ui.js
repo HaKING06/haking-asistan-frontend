@@ -284,9 +284,31 @@ chatWindowEl.addEventListener("click", async (event) => {
   }, 1800);
 });
 
-function uiShowTyping(show) {
-  if (show) typingIndicatorEl.classList.remove("hidden");
-  else typingIndicatorEl.classList.add("hidden");
+function uiShowTyping(show, mode = "normal") {
+  if (show) {
+    typingIndicatorEl.classList.remove("hidden");
+    typingIndicatorEl.classList.toggle("is-staged", mode === "crazy");
+    uiSetTypingStage("starting");
+  } else {
+    typingIndicatorEl.classList.add("hidden");
+    typingIndicatorEl.classList.remove("is-staged");
+  }
+}
+
+function uiSetTypingStage(stage) {
+  const labels = {
+    starting: ["İsteğin inceleniyor", 1],
+    briefing: ["Teknik brief hazırlanıyor", 2],
+    handoff: ["Brief yanıt modeline aktarılıyor", 3],
+    answering: ["Yanıt hazırlanıyor", 4],
+  };
+  const [label, step] = labels[stage] || labels.starting;
+  const text = document.getElementById("typing-stage-text");
+  const count = document.getElementById("typing-stage-count");
+  const progress = document.getElementById("typing-stage-progress");
+  if (text) text.textContent = label;
+  if (count) count.textContent = `${step}/4`;
+  if (progress) progress.style.setProperty("--stage-progress", `${step * 25}%`);
 }
 
 function uiScrollChat() {

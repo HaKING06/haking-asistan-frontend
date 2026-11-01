@@ -10,6 +10,7 @@ const fileSelectionEl = document.getElementById("file-selection");
 const fileSelectionNameEl = document.getElementById("file-selection-name");
 const aiModeSelectEl = document.getElementById("ai-mode");
 const aiCreditsStatusEl = document.getElementById("ai-credits-status");
+const lowCreditAlertEl = document.getElementById("low-credit-alert");
 const BACKEND_KEEPALIVE_INTERVAL_MS = 10 * 60 * 1000;
 const MAX_SOURCE_FILE_BYTES = 64 * 1024;
 const ALLOWED_SOURCE_FILE_EXTENSIONS = new Set([
@@ -29,12 +30,22 @@ async function refreshAiCreditBalance() {
   try {
     const balance = await apiGetAiCredits(AppState.token);
     if (!balance.ok) throw new Error(balance.message);
-    const renewsAt = new Date(`${balance.period_renews_at}T00:00:00`);
+    const renewsAt = new Date(`${balance.period_renews_at}T12:00:00+03:00`);
     const renewsLabel = Number.isNaN(renewsAt.getTime())
       ? ""
       : ` · ${new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long" }).format(renewsAt)} yenilenir`;
-    aiCreditsStatusEl.textContent = `${balance.total_credits} kredi kaldı · ${balance.monthly_credits} aylık + ${balance.purchased_credits} ek${renewsLabel}`;
-    aiCreditsStatusEl.title = `${balance.monthly_credits}/${balance.monthly_allowance} aylık kredi + ${balance.purchased_credits} ek kredi. Her Çılgın Mod isteği ${balance.crazy_mode_cost} kredi kullanır.`;
+    aiCreditsStatusEl.textContent = `${balance.total_credits} aktif kredi${renewsLabel}`;
+    aiCreditsStatusEl.dataset.low = String(balance.total_credits <= 30);
+    const nextExpiry = (balance.purchased_lots || []).find((lot) => lot.credits_remaining > 0);
+    const expiryLabel = nextExpiry
+      ? new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long" }).format(new Date(nextExpiry.expires_at))
+      : "henüz ek kredi yok";
+    aiCreditsStatusEl.title = `${balance.monthly_credits}/${balance.monthly_allowance} aylık kredi · ${balance.purchased_credits} ek kredi · Ek kredilerin en yakını: ${expiryLabel} · Her Çılgın Mod isteği ${balance.crazy_mode_cost} kredi.`;
+    if (lowCreditAlertEl) {
+      lowCreditAlertEl.classList.toggle("hidden", balance.total_credits > 30);
+      lowCreditAlertEl.setAttribute("aria-hidden", String(balance.total_credits > 30));
+    }
+    AppState.credits = balance;
     const crazyOption = aiModeSelectEl?.querySelector('option[value="crazy"]');
     if (crazyOption) crazyOption.textContent = `Çılgın Mod · ${balance.crazy_mode_cost} kredi`;
   } catch (error) {
@@ -263,7 +274,7 @@ async function sendMessageFromUI() {
   newChatBtnEl.disabled = true;
   attachFileBtnEl.disabled = true;
   removeFileBtnEl.disabled = true;
-  uiShowTyping(true);
+  uiShowTyping(true, mode);
 
   let assistantBubble = null;
   let hasReceivedChunk = false;
@@ -284,7 +295,8 @@ async function sendMessageFromUI() {
         uiAppendAssistantStream(assistantBubble, chunk);
       },
       attachment,
-      mode
+      mode,
+      (stage) => uiSetTypingStage(stage)
     );
 
     if (!result.ok) {
