@@ -16,6 +16,8 @@ const crazyModePickerTitleEl = document.getElementById("mode-option-crazy-title"
 const aiCreditsStatusEl = document.getElementById("ai-credits-status");
 const lowCreditAlertEl = document.getElementById("low-credit-alert");
 const BACKEND_KEEPALIVE_INTERVAL_MS = 10 * 60 * 1000;
+const CHAT_CONTEXT_MAX_MESSAGES = 24;
+const CHAT_CONTEXT_MAX_CHARS = 24000;
 const MAX_SOURCE_FILE_BYTES = 64 * 1024;
 const ALLOWED_SOURCE_FILE_EXTENSIONS = new Set([
   "html", "htm", "css", "js", "mjs", "cjs", "ts", "tsx", "jsx", "py", "java",
@@ -328,11 +330,56 @@ document.addEventListener("keydown", (event) => {
 });
 
 document.getElementById("chat-window").addEventListener("click", (event) => {
+  if (event.target.closest("[data-continue-partial]")) {
+    event.target.closest(".continue-response-row")?.remove();
+    if (AppState.incompleteMode && aiModeSelectEl) {
+      aiModeSelectEl.value = AppState.incompleteMode;
+      aiModeSelectEl.dispatchEvent(new Event("change", { bubbles: true }));
+      syncModePickerSelection();
+    }
+    chatInputEl.value = "Kaldığın yerden devam et. Önceki yanıtında tamamladığın kodu veya açıklamayı tekrarlama; son eksik satırdan sürdür, tüm dosyaları ve kapanışları tamamla.";
+    sendMessageFromUI();
+    return;
+  }
   const promptCard = event.target.closest("[data-prompt]");
   if (!promptCard) return;
   chatInputEl.value = promptCard.dataset.prompt;
   sendMessageFromUI();
 });
+
+document.getElementById("clear-chat-history-btn")?.addEventListener("click", () => {
+  if (!AppState.email || !window.confirm("Bu cihazda saklanan aktif sohbet geçmişi silinsin mi?")) return;
+  uiStartNewChat();
+  const status = document.getElementById("chat-history-status");
+  if (status) status.textContent = "Bu cihazdaki sohbet geçmişi silindi.";
+});
+
+function buildChatContext(history) {
+  const entries = Array.isArray(history) ? history : [];
+  if (!entries.length) return [];
+  const recent = entries.slice(-(CHAT_CONTEXT_MAX_MESSAGES - 1));
+  const firstUser = entries.find((item) => item.role === "user");
+  const anchor = firstUser && !recent.includes(firstUser)
+    ? { role: "user", content: `[Projenin ilk isteği]\n${firstUser.content.slice(0, 3500)}` }
+    : null;
+  let budget = CHAT_CONTEXT_MAX_CHARS - (anchor?.content.length || 0);
+  const selected = [];
+  for (const item of recent.slice().reverse()) {
+    if (budget <= 0) break;
+    const itemBudget = Math.min(budget, 12000);
+    const content = item.content.length > itemBudget ? item.content.slice(-itemBudget) : item.content;
+    selected.unshift({ role: item.role, content });
+    budget -= content.length;
+  }
+  return anchor ? [anchor, ...selected].slice(-CHAT_CONTEXT_MAX_MESSAGES) : selected;
+}
+
+function setSendButtonBusy(busy) {
+  sendBtnEl.classList.toggle("is-busy", busy);
+  sendBtnEl.setAttribute("aria-busy", String(busy));
+  sendBtnEl.setAttribute("aria-label", busy ? "Yanıt hazırlanıyor" : "Mesajı gönder");
+  sendBtnEl.title = busy ? "Yanıt hazırlanıyor" : "Mesajı gönder";
+}
 
 async function sendMessageFromUI() {
   const attachment = selectedSourceFile;
@@ -354,6 +401,7 @@ async function sendMessageFromUI() {
   chatInputEl.value = "";
   chatInputEl.style.height = "auto";
   sendBtnEl.disabled = true;
+  setSendButtonBusy(true);
   newChatBtnEl.disabled = true;
   attachFileBtnEl.disabled = true;
   removeFileBtnEl.disabled = true;
@@ -362,14 +410,33 @@ async function sendMessageFromUI() {
   let assistantBubble = null;
   let hasReceivedChunk = false;
   let assistantReply = "";
+  const historyUserMessage = displayedMessage;
+  let draftPersistTimer = null;
+  const persistStreamingDraft = () => {
+    if (draftPersistTimer !== null) return;
+    draftPersistTimer = window.setTimeout(() => {
+      draftPersistTimer = null;
+      saveChatHistory(
+        AppState.email,
+        [...AppState.history, { role: "user", content: historyUserMessage }, { role: "assistant", content: assistantReply }],
+        true,
+        mode
+      );
+    }, 700);
+  };
+  const continueIntent = AppState.incompleteResponse && /^(?:lütfen\s+)?(?:devam(?:\s+et)?|kaldığın\s+yerden(?:\s+devam\s+et)?|sürdür)(?:[.!\s]|$)/i.test(message);
+  const requestMessage = continueIntent
+    ? `${message}\n\n[DEVAM TALİMATI: Önceki assistant mesajı yarıda kaldı. Yalnızca tamamlanmayan kısmı, önceki çıktının son satırından itibaren sürdür. Daha önce tamamlanmış kodu, dosyaları veya açıklamaları yeniden yazma. Ürettiğin her dosyayı eksiksiz kapat ve yanıtı tamamla.]`
+    : message;
   try {
     const result = await apiChat(
-      message,
+      requestMessage,
       AppState.email,
       AppState.token,
-      AppState.history.slice(-8),
+      buildChatContext(AppState.history),
       (chunk) => {
         assistantReply += chunk;
+        persistStreamingDraft();
         if (!hasReceivedChunk) {
           hasReceivedChunk = true;
           uiShowTyping(false);
@@ -391,27 +458,60 @@ async function sendMessageFromUI() {
         loginErrorEl.textContent = result.message || "Oturumun sona erdi. Lütfen tekrar giriş yap.";
         return;
       }
+      if (hasReceivedChunk) {
+        AppState.history.push(
+          { role: "user", content: historyUserMessage },
+          { role: "assistant", content: assistantReply }
+        );
+        AppState.history = retainChatHistory(AppState.history);
+        AppState.incompleteResponse = true;
+        AppState.incompleteMode = mode;
+        saveChatHistory(AppState.email);
+      }
       uiAddAssistantMessage(result.message || "Mesaj gönderilemedi. Lütfen tekrar deneyin.");
+      if ((hasReceivedChunk || AppState.incompleteResponse) && !document.querySelector("[data-continue-partial]")) {
+        uiAddContinuationAction();
+      }
     } else if (!hasReceivedChunk) {
       uiAddAssistantMessage("Asistan boş bir yanıt verdi. Lütfen tekrar deneyin.");
     } else {
       clearSelectedSourceFile();
       AppState.history.push(
-        { role: "user", content: message },
+        { role: "user", content: historyUserMessage },
         { role: "assistant", content: assistantReply }
       );
+      AppState.history = retainChatHistory(AppState.history);
+      AppState.incompleteResponse = false;
+      AppState.incompleteMode = null;
+      saveChatHistory(AppState.email);
+      document.querySelectorAll("#chat-window .continue-response-row").forEach((row) => row.remove());
     }
   } catch (err) {
     console.error(err);
+    if (hasReceivedChunk) {
+      AppState.history.push(
+        { role: "user", content: historyUserMessage },
+        { role: "assistant", content: assistantReply }
+      );
+      AppState.history = retainChatHistory(AppState.history);
+      AppState.incompleteResponse = true;
+      AppState.incompleteMode = mode;
+      saveChatHistory(AppState.email);
+    }
     uiAddAssistantMessage(
       err.message?.startsWith("Yanıt bekleme süresi")
         ? err.message
         : "Asistana bağlanırken bir sorun oldu. Lütfen tekrar deneyin."
     );
+    if ((hasReceivedChunk || AppState.incompleteResponse) && !document.querySelector("[data-continue-partial]")) {
+      uiAddContinuationAction();
+    }
   } finally {
+    if (draftPersistTimer !== null) window.clearTimeout(draftPersistTimer);
     if (assistantBubble) uiFinishAssistantStream(assistantBubble);
     uiShowTyping(false);
     sendBtnEl.disabled = false;
+    setSendButtonBusy(false);
     newChatBtnEl.disabled = false;
     attachFileBtnEl.disabled = false;
     removeFileBtnEl.disabled = false;

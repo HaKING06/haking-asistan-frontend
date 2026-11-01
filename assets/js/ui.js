@@ -40,7 +40,20 @@ function uiShowChat(email, displayName = "") {
   const isFounder = String(email || "").trim().toLowerCase() === "gunshalit@gmail.com";
   founderCreditSidebarEl?.classList.toggle("hidden", !isFounder);
   founderCreditSettingsEl?.classList.toggle("hidden", !isFounder);
-  if (!chatWindowEl.firstElementChild) uiStartNewChat();
+  const savedConversation = loadChatHistory(email);
+  AppState.history = savedConversation.history;
+  AppState.incompleteResponse = savedConversation.incompleteResponse;
+  AppState.incompleteMode = savedConversation.incompleteMode;
+  if (AppState.history.length) {
+    chatWindowEl.replaceChildren();
+    for (const item of AppState.history) {
+      if (item.role === "user") uiAddUserMessage(item.content);
+      else uiAddAssistantMessage(item.content);
+    }
+    if (AppState.incompleteResponse) uiAddContinuationAction();
+  } else {
+    uiStartNewChat(false);
+  }
   userEmailDisplayEl.textContent = email;
   const profileName = String(displayName || "").trim() || email.split("@")[0] || "Geliştirici";
   profileNameEl.textContent = profileName;
@@ -48,8 +61,11 @@ function uiShowChat(email, displayName = "") {
   if (typeof refreshAiCreditBalance === "function") void refreshAiCreditBalance();
 }
 
-function uiStartNewChat() {
+function uiStartNewChat(clearStored = true) {
+  if (clearStored) clearChatHistory(AppState.email);
   AppState.history = [];
+  AppState.incompleteResponse = false;
+  AppState.incompleteMode = null;
   chatWindowEl.replaceChildren(welcomeTemplate.cloneNode(true));
   chatWindowEl.scrollTop = 0;
 }
@@ -90,6 +106,21 @@ function uiAddAssistantMessage(text) {
 
   row.appendChild(bubble);
   chatWindowEl.appendChild(meta);
+  chatWindowEl.appendChild(row);
+  uiScrollChat();
+}
+
+function uiAddContinuationAction() {
+  const row = document.createElement("div");
+  row.className = "continue-response-row";
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "continue-response-btn";
+  button.dataset.continuePartial = "true";
+  button.textContent = AppState.incompleteMode === "crazy"
+    ? "Çılgın Mod'da devam et · 10 kredi"
+    : "Kaldığın yerden devam et";
+  row.appendChild(button);
   chatWindowEl.appendChild(row);
   uiScrollChat();
 }

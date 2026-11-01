@@ -7,6 +7,7 @@
   const backLink = document.getElementById("deletion-back-link");
   const params = new URLSearchParams(window.location.hash.slice(1));
   let token = params.get("token") || "";
+  let deletingEmail = "";
 
   // The deletion token stays in memory and is removed from the address bar immediately.
   window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}`);
@@ -20,6 +21,7 @@
     try {
       const result = await apiAccountDeletionStatus(token);
       if (!result.ok || !result.valid || !result.email) throw new Error("Bağlantı geçersiz veya süresi dolmuş. Ayarlar bölümünden yeni bir bağlantı iste.");
+      deletingEmail = result.email;
       accountLabel.textContent = `Silinecek hesap: ${result.email}. Devam etmek için mevcut şifreni gir.`;
       form.classList.remove("hidden");
       passwordInput.focus();
@@ -46,6 +48,7 @@
       const result = await apiConfirmAccountDeletion(token, passwordInput.value);
       if (!result.ok || !result.success) throw new Error(result.message || "Hesap silinemedi.");
       token = "";
+      clearChatHistory(deletingEmail);
       clearSession();
       form.classList.add("hidden");
       accountLabel.textContent = "Hesabın ve tüm aktif oturumların silindi.";

@@ -339,7 +339,8 @@
                 </button>
               </div>
               <button id="send-btn" class="send-btn" type="button" aria-label="Mesajı gönder" title="Mesajı gönder">
-                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m3 9 14-6-6 14-2.3-5.7L3 9Z"/><path d="m8.7 11.3 4-4"/></svg>
+                <svg class="send-icon-plane" viewBox="0 0 20 20" aria-hidden="true"><path d="m3 9 14-6-6 14-2.3-5.7L3 9Z"/><path d="m8.7 11.3 4-4"/></svg>
+                <svg class="send-icon-spinner" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M10 3a7 7 0 0 1 7 7"/></svg>
               </button>
             </div>
           </div>
@@ -369,7 +370,14 @@
           <section class="settings-section settings-credit-section">
             <div class="settings-section-heading"><div><h3>Çılgın Mod kredileri</h3><p>Normal sohbet kredi kullanmaz. Çılgın Mod isteği 10 kredi harcar.</p></div><span id="settings-credit-total" class="settings-credit-total">—</span></div>
             <p id="settings-credit-details" class="settings-credit-details" role="status" aria-live="polite">Bakiye yükleniyor…</p>
-            <div class="settings-links"><a href="./crazy.html">Kredi sistemi ve paket ayrıntıları</a></div>
+            <div class="settings-links settings-credit-actions"><a class="settings-buy-credits" href="./crazy.html#paket">Kredi al <span aria-hidden="true">↗</span></a><a href="./crazy.html">Kredi sistemi ve paket ayrıntıları</a></div>
+          </section>
+
+          <section class="settings-section">
+            <h3>Bu cihazdaki sohbet belleği</h3>
+            <p>Aktif sohbet bağlamı, sayfa yenilendiğinde projeye devam edebilmen için bu tarayıcıda saklanır. İstediğin zaman silebilirsin.</p>
+            <button type="button" id="clear-chat-history-btn" class="settings-secondary-btn">Sohbet geçmişini temizle</button>
+            <p id="chat-history-status" class="settings-inline-status" role="status" aria-live="polite"></p>
           </section>
 
           <section class="settings-section">

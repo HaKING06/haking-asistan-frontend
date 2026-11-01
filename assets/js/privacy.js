@@ -54,6 +54,7 @@
         <h2 id="privacy-modal-title">${heading}</h2>
         <p>${intro}</p>
         <div class="privacy-category"><div><strong>Zorunlu oturum ve tercih depolaması</strong><small>Oturum anahtarı ve bu tercih kaydı tarayıcının localStorage alanında tutulur. HTTP çerezi değildir; oturum için gereklidir.</small></div><span class="privacy-category-status">Açık (gerekli)</span></div>
+        <div class="privacy-category"><div><strong>Bu cihazdaki sohbet belleği</strong><small>Aktif sohbet bağlamı sayfa yenilendiğinde devam edebilmen için tarayıcıda saklanır; HTTP çerezi değildir ve Ayarlar'dan temizlenebilir.</small></div><span class="privacy-category-status">Açık · Ayarlardan silinebilir</span></div>
         <div class="privacy-category"><div><strong>Analiz / performans çerezleri</strong><small>Site analiz aracı kullanmıyor. Bu kategoriye izin verilmedi.</small></div><span class="privacy-category-status off">${status(choice?.analytics === true)}</span></div>
         <div class="privacy-category"><div><strong>Reklam / kişiselleştirme çerezleri</strong><small>Reklam ve çapraz site takip araçları kullanılmıyor.</small></div><span class="privacy-category-status off">${status(choice?.marketing === true)}</span></div>
         <p class="privacy-modal-footnote">AI sohbet içeriğinin otomatik seçilen Groq veya Google Gemini API'sine gönderilmesi bu tarayıcı tercihinden ayrı bir işlemdir; ayrıntılar gizlilik metninde açıklanmıştır.</p>
