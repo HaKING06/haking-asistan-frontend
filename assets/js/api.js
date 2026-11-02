@@ -433,10 +433,14 @@ async function readChatStream(response, onChunk, onStage = () => {}) {
     } else if (eventType === "stage") {
       const labels = {
         starting: "İsteğin inceleniyor",
-        direct: "Hızlı yanıt yolu seçildi",
-        briefing: "Teknik brief hazırlanıyor",
-        handoff: "Brief üretim modeline aktarılıyor",
-        model_wait: "Yanıt modeli çalışıyor · ilk çıktı bekleniyor",
+        briefing_gemini: "Gemini · istek analiz edilip teknik brief hazırlanıyor",
+        briefing_groq: "Groq · istek analiz edilip teknik brief hazırlanıyor",
+        handoff_gemini_groq: "Gemini'nin hazırladığı brief Groq'a aktarılıyor",
+        handoff_groq_gemini: "Groq'un hazırladığı brief Gemini'ye aktarılıyor",
+        handoff_gemini_gemini: "Gemini brief'i yanıt modeline aktarılıyor",
+        handoff_groq_groq: "Groq brief'i yanıt modeline aktarılıyor",
+        answering_gemini: "Gemini · brief üzerinden yanıt hazırlanıyor",
+        answering_groq: "Groq · brief üzerinden yanıt hazırlanıyor",
         writing: "Yanıt yazılıyor",
       };
       if (labels[text]) onStage(text);

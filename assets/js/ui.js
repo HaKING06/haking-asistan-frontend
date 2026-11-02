@@ -355,18 +355,22 @@ function uiShowTyping(show, mode = "normal") {
 
 function uiSetTypingStage(stage) {
   const labels = {
-    starting: ["İstek sıraya alındı", 1],
-    direct: ["Hızlı yanıt yolu seçildi", 2],
-    briefing: ["Teknik brief hazırlanıyor", 2],
-    handoff: ["Brief üretim modeline aktarılıyor", 2],
-    model_wait: ["Yanıt modeli çalışıyor · ilk çıktı bekleniyor", 3],
+    starting: ["İstek iki aşamada hazırlanıyor", 1],
+    briefing_gemini: ["Gemini · istek analiz edilip teknik brief hazırlanıyor", 2],
+    briefing_groq: ["Groq · istek analiz edilip teknik brief hazırlanıyor", 2],
+    handoff_gemini_groq: ["Gemini'nin brief'i Groq'a aktarılıyor", 3],
+    handoff_groq_gemini: ["Groq'un brief'i Gemini'ye aktarılıyor", 3],
+    handoff_gemini_gemini: ["Gemini brief'i yanıt modeline aktarılıyor", 3],
+    handoff_groq_groq: ["Groq brief'i yanıt modeline aktarılıyor", 3],
+    answering_gemini: ["Gemini · brief üzerinden yanıt hazırlanıyor", 3],
+    answering_groq: ["Groq · brief üzerinden yanıt hazırlanıyor", 3],
     writing: ["Yanıt yazılıyor", 4],
   };
   const [label, step] = labels[stage] || labels.starting;
   const text = document.getElementById("typing-stage-text");
   const count = document.getElementById("typing-stage-count");
   const progress = document.getElementById("typing-stage-progress");
-  typingIndicatorEl.classList.toggle("is-waiting", stage === "model_wait");
+  typingIndicatorEl.classList.toggle("is-waiting", stage.startsWith("answering_"));
   typingIndicatorEl.classList.toggle("is-writing", stage === "writing");
   if (text) text.textContent = label;
   if (count) count.textContent = `${step}/4`;
