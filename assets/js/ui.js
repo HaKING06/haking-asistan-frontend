@@ -530,6 +530,8 @@ function uiRenderInline(text) {
     return token;
   });
   safeText = safeText
+    .replace(/\[([^\]]+)\]\\?\(\s*<\s*\[(https?:\/\/[^\]\s]+)\]\(\s*(https?:\/\/[^)\s]+)\s*\)\s*>\s*\\?\)/g, "[$1]($3)")
+    .replace(/\[([^\]]+)\]\\?\(<(https?:\/\/[^>\s)]+)>\\?\)/g, "[$1]($2)")
     .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/(^|[\s(])\*([^*\n]+)\*(?=$|[\s).,!?:;])/g, "$1<em>$2</em>");
