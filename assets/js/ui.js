@@ -356,6 +356,8 @@ function uiShowTyping(show, mode = "normal") {
 function uiSetTypingStage(stage) {
   const labels = {
     starting: ["İstek iki aşamada hazırlanıyor", 1],
+    researching_tavily: ["Web araştırması · proje gereksinimleri ve kaynaklar inceleniyor", 2],
+    research_unavailable: ["Web araştırması erişilemiyor · AI planlamasıyla sürüyor", 2],
     briefing_gemini: ["Gemini · istek analiz edilip teknik brief hazırlanıyor", 2],
     briefing_groq: ["Groq · istek analiz edilip teknik brief hazırlanıyor", 2],
     handoff_gemini_groq: ["Gemini'nin brief'i Groq'a aktarılıyor", 3],
@@ -370,7 +372,10 @@ function uiSetTypingStage(stage) {
   const text = document.getElementById("typing-stage-text");
   const count = document.getElementById("typing-stage-count");
   const progress = document.getElementById("typing-stage-progress");
-  typingIndicatorEl.classList.toggle("is-waiting", stage.startsWith("answering_"));
+  typingIndicatorEl.classList.toggle(
+    "is-waiting",
+    stage.startsWith("answering_") || stage === "researching_tavily"
+  );
   typingIndicatorEl.classList.toggle("is-writing", stage === "writing");
   if (text) text.textContent = label;
   if (count) count.textContent = `${step}/4`;

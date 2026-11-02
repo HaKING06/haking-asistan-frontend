@@ -433,6 +433,8 @@ async function readChatStream(response, onChunk, onStage = () => {}) {
     } else if (eventType === "stage") {
       const labels = {
         starting: "İsteğin inceleniyor",
+        researching_tavily: "Web araştırması · proje gereksinimleri ve kaynaklar inceleniyor",
+        research_unavailable: "Web araştırması erişilemiyor · AI planlamasıyla devam ediliyor",
         briefing_gemini: "Gemini · istek analiz edilip teknik brief hazırlanıyor",
         briefing_groq: "Groq · istek analiz edilip teknik brief hazırlanıyor",
         handoff_gemini_groq: "Gemini'nin hazırladığı brief Groq'a aktarılıyor",

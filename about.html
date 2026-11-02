@@ -76,7 +76,7 @@
           <div class="about-feature"><strong>Hata ayıkla</strong><span>Hata mesajını ve ilgili kodu paylaş; olası nedeni, düzeltmeyi ve kontrol etmen gereken noktaları öğren.</span></div>
           <div class="about-feature"><strong>Kod ve dosya incele</strong><span>Metin/kod dosyasını ekleyip inceleme iste. İzin verilen dosyalar tarayıcıda metin olarak okunur; sunucuda çalıştırılmaz veya uygulama veritabanına kaydedilmez.</span></div>
           <div class="about-feature"><strong>Test ve alıştırma</strong><span>Kodlama test sorularını açıklamalı çözmesini, birim test taslağı hazırlamasını veya öğrendiklerini sınamasını iste.</span></div>
-          <div class="about-feature"><strong>Çılgın Mod</strong><span>Her istek brief aşamasından geçer. Proje ve kod talepleri kod odaklı modele, daha derin akıl yürütme ve eksiksiz teslimat talimatlarıyla yönlendirilir; kısa bilgi soruları ise gereksiz uzatılmaz. Mümkün olduğunda iki farklı sağlayıcı birlikte kullanılır. Her istek 10 HaKING kredisi kullanır.</span></div>
+          <div class="about-feature"><strong>Çılgın Mod</strong><span>Her istek planlanır. Yeni proje taleplerinde Tavily üzerinden kısa web araştırması yapılıp bulgular brief'e katılır; yanıt modelinden kapsamlı ve uygulanabilir teslimat istenir. Kısa bilgi sorularında gereksiz araştırma yapılmaz. Her istek 10 HaKING kredisi kullanır.</span></div>
           <div class="about-feature"><strong>Hesap güvenliği</strong><span>Şifreni tek kullanımlık e-posta bağlantısıyla yenile; hesabını e-posta onayı ve mevcut şifreyle kalıcı olarak sil.</span></div>
         </div>
       </section>
@@ -105,11 +105,12 @@
         <h2>Yanıt kalitesi ve sınırlar</h2>
         <ul>
           <li>AI; yanlış, eksik veya eski bilgi üretebilir. Üretilen kodu kendi ortamında test et.</li>
-          <li>Modelin gördüğü güncel tarih, canlı internet erişimi anlamına gelmez. Güncel kütüphane sürümü veya ürün davranışını resmî belgelerden doğrula.</li>
+          <li>Normal ve bilgi amaçlı istekler canlı web araması yapmaz. Çılgın Mod'da yeni proje taleplerinde Tavily araştırması açıksa kısa kaynak parçaları brief'e katılır ve kaynak bağlantıları listelenir; bu doğruluk garantisi değildir.</li>
           <li>Uzun yanıtlar modelin çıktı ve ücretsiz kota sınırlarına takılabilir; dosya bazında istemek daha güvenilir sonuç verir.</li>
           <li>Yüklenen dosyalar yürütülmez; ancak içerik yanıt için seçilen AI sağlayıcısına iletilebilir. Parola, API anahtarı ve özel verileri silerek paylaş.</li>
         </ul>
         <div class="about-links"><a href="https://console.groq.com/docs/models" target="_blank" rel="noopener noreferrer">Groq model belgeleri ↗</a><a href="https://ai.google.dev/gemini-api/docs/models" target="_blank" rel="noopener noreferrer">Gemini model belgeleri ↗</a></div>
+        <p>Tavily'nin ücretsiz planında aylık 1.000 API kredisi bulunur; hızlı arama isteği 1 kredi kullanır. Kota ve ücret koşulları değişebilir; ücretli kullanım açmadan önce güncel planı kontrol et. Render ortamında <code>CRAZY_WEB_RESEARCH_ENABLED=false</code> ile araştırmayı kapatabilirsin. <a href="https://docs.tavily.com/documentation/api-credits" target="_blank" rel="noopener noreferrer">Tavily kredi belgeleri ↗</a></p>
       </section>
 
       <footer>HaKING AI · Model yapılandırması canlı backend'den okunur. Gizlilik ve veri akışı için <a href="./privacy.html">gizlilik metnini</a> incele.</footer>
