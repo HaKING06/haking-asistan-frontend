@@ -399,7 +399,7 @@ function apiKeepAlive() {
 
 const CHAT_TIMEOUT_MS = 480000;
 
-async function readChatStream(response, onChunk, onStage = () => {}) {
+async function readChatStream(response, onChunk, onStage = () => {}, onUsage = () => {}) {
   if (!response.body) {
     throw new Error("Sunucu akış yanıtı göndermedi.");
   }
@@ -433,6 +433,7 @@ async function readChatStream(response, onChunk, onStage = () => {}) {
     } else if (eventType === "stage") {
       const labels = {
         starting: "İsteğin inceleniyor",
+        continuing_response: "Önceki yanıtın kaldığı yer sürdürülüyor",
         researching_tavily: "Web araştırması · proje gereksinimleri ve kaynaklar inceleniyor",
         research_unavailable: "Web araştırması erişilemiyor · AI planlamasıyla devam ediliyor",
         briefing_gemini: "Gemini · istek analiz edilip teknik brief hazırlanıyor",
@@ -446,6 +447,12 @@ async function readChatStream(response, onChunk, onStage = () => {}) {
         writing: "Yanıt yazılıyor",
       };
       if (labels[text]) onStage(text);
+    } else if (eventType === "usage") {
+      try {
+        onUsage(JSON.parse(text));
+      } catch {
+        console.warn("Yanıt sağlayıcı bilgisi okunamadı.");
+      }
     } else if (eventType === "message") {
       onChunk(text);
     }
@@ -480,7 +487,7 @@ async function readChatStream(response, onChunk, onStage = () => {}) {
   return streamError ? { ok: false, message: streamError } : { ok: true };
 }
 
-async function apiChat(message, userId, token, history, onChunk, attachment = null, mode = "normal", onStage = () => {}) {
+async function apiChat(message, userId, token, history, onChunk, attachment = null, mode = "normal", onStage = () => {}, onUsage = () => {}) {
   const headers = {
     "Content-Type": "application/json",
   };
@@ -527,7 +534,7 @@ async function apiChat(message, userId, token, history, onChunk, attachment = nu
       };
     }
 
-    const streamResult = await readChatStream(res, onChunk, onStage);
+    const streamResult = await readChatStream(res, onChunk, onStage, onUsage);
     uiSetBackendStatus(
       streamResult.ok ? "ready" : "error",
       streamResult.ok ? "Asistan sunucusu hazır." : "Asistan modeli şu anda yanıt üretemiyor."

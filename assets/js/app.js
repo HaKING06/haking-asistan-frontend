@@ -379,6 +379,39 @@ function buildChatContext(history) {
   return anchor ? [anchor, ...selected].slice(-CHAT_CONTEXT_MAX_MESSAGES) : selected;
 }
 
+function extractCompletedCodeFiles(content) {
+  const completed = [];
+  let openFilename = "";
+  let inCodeBlock = false;
+  let pendingFilename = "";
+  for (const line of String(content || "").split(/\r?\n/)) {
+    if (inCodeBlock) {
+      if (/^\s*```\s*$/.test(line)) {
+        if (openFilename) completed.push(openFilename);
+        openFilename = "";
+        inCodeBlock = false;
+      }
+      continue;
+    }
+    const opening = line.match(/^\s*```([^\s`]*)?(?:\s+(.+?))?\s*$/);
+    if (opening) {
+      openFilename = uiExtractProjectFilename(`${opening[1] || ""} ${opening[2] || ""}`) || pendingFilename;
+      pendingFilename = "";
+      inCodeBlock = true;
+      continue;
+    }
+    if (/^\s*(?:dosya(?:\s+adı)?|file)\s*[:=-]/i.test(line)) {
+      pendingFilename = uiExtractProjectFilename(line) || "";
+    }
+  }
+  return normalizeCompletedFiles(completed);
+}
+
+function rememberIncompleteCodeFiles(content, isContinuation) {
+  const previous = isContinuation ? AppState.incompleteFiles : [];
+  AppState.incompleteFiles = normalizeCompletedFiles([...previous, ...extractCompletedCodeFiles(content)]);
+}
+
 function setSendButtonBusy(busy) {
   sendBtnEl.classList.toggle("is-busy", busy);
   sendBtnEl.setAttribute("aria-busy", String(busy));
@@ -415,23 +448,33 @@ async function sendMessageFromUI() {
   let assistantBubble = null;
   let hasReceivedChunk = false;
   let assistantReply = "";
+  const continueIntent = AppState.incompleteResponse && /^(?:lütfen\s+)?(?:devam(?:\s+et)?|kaldığın\s+yerden(?:\s+devam\s+et)?|sürdür)(?:[.!\s]|$)/i.test(message);
+  const previousUsage = continueIntent
+    ? [...AppState.history].reverse().find((item) => item.role === "assistant")?.usage
+    : null;
+  const providerUsage = previousUsage
+    ? { ...previousUsage, mode, production: [...(previousUsage.production || [])] }
+    : { mode, research: "not_used", brief: null, production: [] };
+  const completedFileNote = continueIntent && AppState.incompleteFiles.length
+    ? ` Tamamlanan dosyalar: ${AppState.incompleteFiles.join(", ")}. Bunları yeniden üretme.`
+    : "";
   const historyUserMessage = displayedMessage;
   let draftPersistTimer = null;
   const persistStreamingDraft = () => {
     if (draftPersistTimer !== null) return;
     draftPersistTimer = window.setTimeout(() => {
       draftPersistTimer = null;
+      rememberIncompleteCodeFiles(assistantReply, continueIntent);
       saveChatHistory(
         AppState.email,
-        [...AppState.history, { role: "user", content: historyUserMessage }, { role: "assistant", content: assistantReply }],
+        [...AppState.history, { role: "user", content: historyUserMessage }, { role: "assistant", content: assistantReply, usage: providerUsage }],
         true,
         mode
       );
     }, 700);
   };
-  const continueIntent = AppState.incompleteResponse && /^(?:lütfen\s+)?(?:devam(?:\s+et)?|kaldığın\s+yerden(?:\s+devam\s+et)?|sürdür)(?:[.!\s]|$)/i.test(message);
   const requestMessage = continueIntent
-    ? `${message}\n\n[DEVAM TALİMATI: Önceki assistant mesajı yarıda kaldı. Yalnızca tamamlanmayan kısmı, önceki çıktının son satırından itibaren sürdür. Daha önce tamamlanmış kodu, dosyaları veya açıklamaları yeniden yazma. Ürettiğin her dosyayı eksiksiz kapat ve yanıtı tamamla.]`
+    ? `${message}\n\n[DEVAM TALİMATI: Önceki assistant mesajı yarıda kaldı. Yalnızca tamamlanmayan kısmı, önceki çıktının son satırından itibaren sürdür. Daha önce tamamlanmış kodu, dosyaları veya açıklamaları yeniden yazma. Ürettiğin her dosyayı eksiksiz kapat ve yanıtı tamamla.${completedFileNote}]`
     : message;
   try {
     const result = await apiChat(
@@ -452,7 +495,20 @@ async function sendMessageFromUI() {
       },
       attachment,
       mode,
-      (stage) => uiSetTypingStage(stage)
+      (stage) => {
+        if (stage === "researching_tavily") providerUsage.research = "tavily";
+        else if (stage === "research_unavailable") providerUsage.research = "unavailable";
+        else if (stage === "briefing_gemini") providerUsage.brief = "gemini";
+        else if (stage === "briefing_groq") providerUsage.brief = "groq";
+        else if (stage === "answering_gemini") providerUsage.production.push("gemini");
+        else if (stage === "answering_groq") providerUsage.production.push("groq");
+        uiSetTypingStage(stage);
+      },
+      (usage) => {
+        if (usage?.phase === "production" && ["gemini", "groq"].includes(usage.provider)) {
+          providerUsage.production.push(usage.provider);
+        }
+      }
     );
 
     if (!result.ok) {
@@ -465,9 +521,10 @@ async function sendMessageFromUI() {
         return;
       }
       if (hasReceivedChunk) {
+        rememberIncompleteCodeFiles(assistantReply, continueIntent);
         AppState.history.push(
           { role: "user", content: historyUserMessage },
-          { role: "assistant", content: assistantReply }
+          { role: "assistant", content: assistantReply, usage: providerUsage }
         );
         AppState.history = retainChatHistory(AppState.history);
         AppState.incompleteResponse = true;
@@ -484,20 +541,22 @@ async function sendMessageFromUI() {
       clearSelectedSourceFile();
       AppState.history.push(
         { role: "user", content: historyUserMessage },
-        { role: "assistant", content: assistantReply }
+        { role: "assistant", content: assistantReply, usage: providerUsage }
       );
       AppState.history = retainChatHistory(AppState.history);
       AppState.incompleteResponse = false;
       AppState.incompleteMode = null;
+      AppState.incompleteFiles = [];
       saveChatHistory(AppState.email);
       document.querySelectorAll("#chat-window .continue-response-row").forEach((row) => row.remove());
     }
   } catch (err) {
     console.error(err);
     if (hasReceivedChunk) {
+      rememberIncompleteCodeFiles(assistantReply, continueIntent);
       AppState.history.push(
         { role: "user", content: historyUserMessage },
-        { role: "assistant", content: assistantReply }
+        { role: "assistant", content: assistantReply, usage: providerUsage }
       );
       AppState.history = retainChatHistory(AppState.history);
       AppState.incompleteResponse = true;
@@ -514,7 +573,7 @@ async function sendMessageFromUI() {
     }
   } finally {
     if (draftPersistTimer !== null) window.clearTimeout(draftPersistTimer);
-    if (assistantBubble) uiFinishAssistantStream(assistantBubble);
+    if (assistantBubble) uiFinishAssistantStream(assistantBubble, providerUsage);
     uiShowTyping(false);
     sendBtnEl.disabled = false;
     setSendButtonBusy(false);
