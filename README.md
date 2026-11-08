@@ -101,3 +101,7 @@ artwork shows the configured 1,000-credit, 59.90 TL package and its 30-day
 validity; update the graphics if those terms change. See
 `assets/brand/BRAND-GUIDE.md` and `assets/brand/IMAGEGEN-PROMPTS.md` for usage
 notes and copy-ready prompts.
+
+## Sürüm 1.0.0
+
+Proje bağlamı korunur, açık kod bloğu için devam eylemi gösterilir. Sonraki sürüm kaynak klasörde python release.py patch komutuyla artırılır. minor ve major seçenekleri de desteklenir.

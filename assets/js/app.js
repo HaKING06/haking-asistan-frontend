@@ -364,12 +364,13 @@ function buildChatContext(history) {
   if (!entries.length) return [];
   const recent = entries.slice(-(CHAT_CONTEXT_MAX_MESSAGES - 1));
   const firstUser = entries.find((item) => item.role === "user");
-  const anchor = firstUser && !recent.includes(firstUser)
+  const anchor = firstUser && (!recent.includes(firstUser) || recent.reduce((size, item) => size + item.content.length, 0) > CHAT_CONTEXT_MAX_CHARS)
     ? { role: "user", content: `[Projenin ilk isteği]\n${firstUser.content.slice(0, 3500)}` }
     : null;
   let budget = CHAT_CONTEXT_MAX_CHARS - (anchor?.content.length || 0);
   const selected = [];
   for (const item of recent.slice().reverse()) {
+    if (anchor && item === firstUser) continue;
     if (budget <= 0) break;
     const itemBudget = Math.min(budget, 12000);
     const content = item.content.length > itemBudget ? item.content.slice(-itemBudget) : item.content;
@@ -448,7 +449,7 @@ async function sendMessageFromUI() {
   let assistantBubble = null;
   let hasReceivedChunk = false;
   let assistantReply = "";
-  const continueIntent = AppState.incompleteResponse && /^(?:lütfen\s+)?(?:devam(?:\s+et)?|kaldığın\s+yerden(?:\s+devam\s+et)?|sürdür)(?:[.!\s]|$)/i.test(message);
+  const continueIntent = AppState.history.some((item) => item.role === "assistant") && /^(?:lütfen\s+)?(?:devam(?:\s+et)?|kaldığın\s+yerden(?:\s+devam\s+et)?|sürdür)(?:[.!\s]|$)/i.test(message);
   const previousUsage = continueIntent
     ? [...AppState.history].reverse().find((item) => item.role === "assistant")?.usage
     : null;
@@ -511,6 +512,11 @@ async function sendMessageFromUI() {
       }
     );
 
+    const openCodeBlock = assistantReply.split(/\r?\n/).filter(line => /^\s*```/.test(line)).length % 2 === 1;
+    if (result.ok && openCodeBlock) {
+      result.ok = false;
+      result.message = "Kod bloğu yarım kaldı. Kaldığın yerden devam et düğmesini kullanabilirsin.";
+    }
     if (!result.ok) {
       if (result.unauthorized) {
         stopBackendKeepAlive();
