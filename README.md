@@ -1,117 +1,52 @@
 ![HaKING AI](./assets/img/og-haKING-ai.svg)
 
-# HaKING Frontend
+# HaKING AI — Ön yüz
 
-Static frontend for the HaKING software assistant. This repository root is the
-Cloudflare Workers asset root and contains `index.html`, `assets/`, and
-`wrangler.jsonc` directly.
+HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.0.2**.
 
-## Cloudflare Workers
+## Teknoloji ve yayınlama
 
-- Root directory: `/`
-- Build command: `npm run build` (optional dry-run validation)
-- Deploy command: `npx wrangler deploy`
-- Search files: `robots.txt` and `sitemap.xml` are served from the site root.
+- HTML, CSS ve tarayıcı JavaScript'i; kullanıcı arayüzü için ek bir uygulama çatısı kullanılmaz.
+- Dağıtım ve statik dosyalar Cloudflare Workers ile sunulur.
+- Giriş, kayıt, e-posta doğrulama, ayarlar, kredi ve sohbet API'leri Render'daki ayrı backend servisini kullanır.
+- Yerel geliştirme: `npm run dev`
+- Yayın öncesi derleme kontrolü: `npm run build` (Wrangler dry-run; yayın yapmaz)
+- Yayınlama: `npm run deploy`
 
-The frontend calls `https://haking-asistan-backend.onrender.com` for login,
-registration, health checks, and streamed chat responses. Keep
-`GROQ_API_KEY`, `GEMINI_API_KEY`, `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `RESEND_API_KEY`,
-and `EMAIL_VERIFICATION_SECRET` only in the private Render backend service.
-Do not add backend secrets to this public repository. Registration/login are
-Gmail-only; a new account is created only after the user enters a 6-digit code
-sent through Resend. The sender domain must be verified in Resend and the
-provider's DNS records added before production email delivery works.
-HaKING is for adults aged 18 or older. The login, registration, and verification
-screens ask users to attest that they meet this requirement; no birth date or
-identity document is collected. This is self-attestation, not age verification.
+Cloudflare yapılandırmasında depo kök dizini `/`, derleme komutu `npm run build`, dağıtım komutu `npx wrangler deploy` olmalıdır. `robots.txt` ve `sitemap.xml` kök dizinden sunulur.
 
-The signed-in interface checks backend health when it opens and when the user
-returns to the tab. While a signed-in tab is visible, it also sends a tiny API
-root request about every 10 minutes to reduce Render's idle spin-down. The
-heartbeat stops when the tab is hidden or the user logs out; it does not call
-Gemini or query Neon. It cannot prevent Render platform restarts or monthly
-free-instance-hour limits, and the free plan can still have cold starts.
+## Özellikler
 
-The signed-in sidebar includes Settings with the account profile, live
-AI-provider/model status, privacy/About links, and account security actions.
-Users can request a password reset by email or start account deletion. Reset
-links are single-use and expire after 30 minutes. Account deletion also
-requires the current password after opening its email confirmation link.
-`reset-password.html` and `delete-account.html` are static recovery pages; they
-remove one-time tokens from the address bar before making API requests.
+- E-posta doğrulamalı kayıt, giriş, parola sıfırlama ve hesap silme akışları.
+- Groq ve Google Gemini sağlayıcılarına yönlendirilen sohbet; yanıtlar akış halinde gösterilir.
+- Normal sohbet ve önce proje brief'i hazırlayıp ardından yanıt üreten, kredi kullanan Çılgın Mod.
+- Uygun yeni proje isteklerinde Tavily ile web araştırması; yanıt altında kullanılan hizmetlerin ve varsa kaynakların gösterilmesi.
+- Kod bloklarında kopyalama ve indirme; tek HTML dosyasını güvenli, yalıtılmış önizlemede açma; çok dosyalı yanıtları dosya sekmeleri ve ZIP olarak sunma.
+- Metin/kod dosyası ekleyerek içerik inceletme. Dosyalar tarayıcıda okunur; uygulama dosyaları çalıştırmaz veya kalıcı olarak saklamaz.
+- Sohbet geçmişini hesap bazında tarayıcının `localStorage` alanında tutma; ayarlar ve kredi bakiyesi görünümü.
+- Zorunlu tarayıcı depolaması için çerez tercihi açıklaması; şu an analiz ve reklam izleyicisi kullanılmaz.
+- Mobil uyumlu koyu arayüz, gizlilik/hakkında sayfaları ve HaKING marka varlıkları.
 
+## Yanıt akışı ve hız
 
-## Crazy Mode, credits, and order handling
+Sohbet, backend'den Server-Sent Events (SSE) akışı alır. Uzun yanıtlar boyunca Markdown'ı her gelen küçük parçada yeniden işlemek pahalı olduğundan 1.0.2, yanıt uzadıkça ekrandaki yeniden çizim sıklığını kademeli azaltır; tamamlandığında son içerik hemen işlenir. Bu, uzun kod yanıtlarında tarayıcı tarafındaki gereksiz işi azaltır. Modelin üretim süresini, sağlayıcı kotasını veya Render'ın ücretsiz plandaki soğuk başlangıçlarını ortadan kaldırmaz.
 
-- `crazy.html` explains the two-stage response flow and the credit rules. One request costs 10 credits; the monthly free balance resets to 100 at the start of each Europe/Istanbul month, and unused monthly credits do not roll over.
-- A fixed ItemSatış package is presented as 1,000 HaKING credits for 59.90 TRY. Each purchased lot is separate and expires 30 days after it is applied. The UI explains that ItemSatış checkout is external and credit application is manual after the operator verifies the paid order.
-- Settings displays the live balance and purchased-lot expiry dates. At 30 or fewer active credits, the chat shows a link to the package page.
-- `founder-credits.html` is `noindex` and is only an operator interface. Its UI check is not an access-control boundary; the backend independently requires a valid session belonging to `gunshalit@gmail.com`, a registered buyer Gmail address, a unique order reference, and an explicit payment-verification flag. Never grant from a browser claim without checking ItemSatış.
-- Do not send ItemSatış credentials, customer passwords, or login/verification codes through the seller workflow. The buyer only needs to provide their registered Gmail and order reference through the marketplace's order messages.
-For local preview, run `npm run dev`. The build command uses Wrangler's dry-run
-mode and does not publish the site.
+Çılgın Mod'daki aşama göstergeleri işlemin hangi adımda olduğunu bildirir; modelin özel düşünme içeriğini göstermez. Yeni proje isteğinde araştırma açıksa Tavily kısa kaynak parçalarını brief aşamasına ekler. Kısa bilgi soruları ve mevcut kodu düzeltme istekleri proje araştırması akışına yönlendirilmez.
 
-## Privacy and browser storage
+## Gizlilik ve güvenlik
 
-- `privacy.html` describes the current data flows, providers, AI processing,
-  browser storage, and operational logs. The login screen links to it.
-- The preference banner explains that the app uses required `localStorage` for
-  the session and preference record. The app currently has no analytics,
-  advertising, or cross-site tracking cookies. After saving a choice, the UI
-  shows the exact saved categories. This is not consent to send AI prompts to a
-  model providers; that processing is described separately.
-- The session token is kept in `localStorage`; the account email is no longer
-  persisted there and is loaded from the authenticated API session. Chat text
-  stays in tab memory and is sent to the backend and automatically selected
-  Groq or Google Gemini API to generate answers; during provider failover, the
-  same request may reach both providers. The backend does not store chat
-  transcripts in Neon.
-- The chat can read one UTF-8 source/text file at a time (64 KiB maximum) in the
-  browser. It accepts a short allowlist of code/text extensions, rejects binary
-  text and some recognizable secret formats, and sends the contents only when
-  the user submits the message. The app never saves or executes uploaded files;
-  the contents are sent to the selected AI provider for analysis (and may reach
-  the fallback provider), so users should
-  remove credentials and private data before attaching a file. Secret detection
-  is best-effort and cannot guarantee that every credential is found.
-- No analytics or advertising SDK is installed. Google Fonts is currently a
-  third-party font request and is disclosed in the privacy page; it may receive
-  connection data such as an IP address.
+- Backend anahtarlarını (`GROQ_API_KEY`, `GEMINI_API_KEY`, isteğe bağlı `TAVILY_API_KEY`, `RESEND_API_KEY`, veritabanı adresleri ve imzalama sırları) yalnızca özel Render ortam değişkenlerinde saklayın. Bu depoya veya Cloudflare ön yüz değişkenlerine koymayın.
+- Oturum belirteci ve hesap bazlı sohbet geçmişi tarayıcı `localStorage` alanında tutulur; sohbet metni uygulama veritabanında arşivlenmez. Mesajlar yanıt üretmek için backend'e ve seçilen AI sağlayıcısına iletilir; yedek sağlayıcıya geçişte aynı istek ona da gönderilebilir.
+- Sohbet eki olarak tek bir izinli metin/kod dosyası, en fazla 64 KiB olacak şekilde gönderilebilir. Gizli anahtar algılama sınırlı bir önlemdir; dosyaya parola, API anahtarı veya paylaşılmaması gereken veri koymayın.
+- Üretilen HTML önizlemesi yalıtılmış iframe içinde çalıştırılır. Üretilen kodu indirmeden/çalıştırmadan önce inceleyin.
+- Gizlilik sayfası sağlayıcıları ve mevcut veri akışlarını açıklar. Dağıtım ortamındaki gerçek yapılandırmayla belgeleri eşleşir tutun.
 
-The privacy notice identifies the individual student project operator and
-contact email supplied for HaKING. It describes the current technical data
-flows; it is not a legal opinion or a guarantee that every deployment has the
-same legal obligations. Applicable requirements depend on the service setup
-and the operator's role.
+Yayınlama ve yapılandırma ayrıntıları için [backend deposundaki README'ye](https://github.com/HaKING06/haking-asistan-backend) bakın. Güvenlik bildirimi için [`SECURITY.md`](./SECURITY.md), katkı kuralları için [`CONTRIBUTING.md`](./CONTRIBUTING.md), sürüm notları için [`CHANGELOG.md`](./CHANGELOG.md) dosyalarını inceleyin.
 
-## Search appearance
+## Marka varlıkları
 
-The landing page uses Turkish title/description metadata, a canonical URL,
-Open Graph and social preview fields, and `WebSite`/`WebApplication` JSON-LD.
-Keep the visible page copy consistent with those claims. Google does not use
-the `meta keywords` tag for ranking, so this project does not add one or stuff
-search phrases into hidden text. Google chooses the displayed title/snippet
-and may take time to recrawl a deployment; metadata cannot guarantee a ranking.
+Güncel kimlik; taçlı mor kaplumbağa maskotunu, site simgelerini, sosyal medya görsellerini ve kredi paketi afişlerini içerir. Küçük arayüz simgelerinde maskotun sade baş görseli, büyük tanıtım çalışmalarında tam gövde görseli kullanılır. Paket fiyatı veya içeriği değişirse ilgili afişleri de güncelleyin. Kullanım notları `assets/brand/BRAND-GUIDE.md` dosyasındadır.
 
-## Brand kit
+## Sürümleme
 
-The current identity uses the high-detail crowned purple turtle artwork across
-the site mark, app icons, social graphics, and ItemSatış package ads. The supplied crowned-head artwork is used unchanged in composition for small
-UI/app marks; the full-body version anchors larger promotional designs. SVG artboards embed the supplied mascot so
-they render when opened directly, and matching PNGs are ready for upload. The
-artwork shows the configured 1,000-credit, 59.90 TL package and its 30-day
-validity; update the graphics if those terms change. See
-`assets/brand/BRAND-GUIDE.md` and `assets/brand/IMAGEGEN-PROMPTS.md` for usage
-notes and copy-ready prompts.
-
-## Sürüm 1.0.0
-
-Proje bağlamı korunur, açık kod bloğu için devam eylemi gösterilir. Sonraki sürüm kaynak klasörde python release.py patch komutuyla artırılır. minor ve major seçenekleri de desteklenir.
-
-## Sürüm 1.0.1
-
-Sayfa açılışında API köküne hafif istek gönderilir. Yapay zekâ üretimi başlatılmaz ve AI kredisi harcanmaz. Sekmeye dönüşte ve ağ bağlantısı geri geldiğinde kontrol yenilenir.
-
-Uyuyan Render servisi ilk açılışta yine gecikebilir. Bu sürüm uyandırmayı ziyaret başlangıcına taşır. Sürekli hızlı ilk bağlantı için uyumayan bir sunucu planı gerekir. Model sağlayıcısının ilk yanıt süresi ayrıca ölçülmelidir.
-
-Katkılar için CONTRIBUTING.md, güvenlik için SECURITY.md ve sürüm notları için CHANGELOG.md dosyalarını inceleyin.
+Güncel sürüm `1.0.2`'dir. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.

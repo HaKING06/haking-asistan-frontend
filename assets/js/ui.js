@@ -143,7 +143,12 @@ function uiCreateAssistantStreamMessage() {
   bubble.className = "message-bubble";
   row.appendChild(bubble);
   chatWindowEl.append(meta, row);
-  assistantStreamContent.set(bubble, { content: "", frameId: null });
+  assistantStreamContent.set(bubble, {
+    content: "",
+    frameId: null,
+    timerId: null,
+    lastRenderAt: 0,
+  });
   uiScrollChat();
   return bubble;
 }
@@ -152,18 +157,32 @@ function uiAppendAssistantStream(bubble, chunk) {
   const stream = assistantStreamContent.get(bubble);
   if (!stream) return;
   stream.content += chunk;
-  if (stream.frameId !== null) return;
+  if (stream.frameId !== null || stream.timerId !== null) return;
 
-  stream.frameId = requestAnimationFrame(() => {
-    stream.frameId = null;
-    bubble.innerHTML = uiRenderMarkdown(stream.content);
-    uiScrollChat();
-  });
+  // Rendering the whole Markdown transcript for every token becomes expensive
+  // on long code answers. Keep short replies responsive and batch long replies.
+  const renderInterval = stream.content.length > 16000 ? 180 : stream.content.length > 5000 ? 120 : 70;
+  const scheduleRender = () => {
+    stream.timerId = null;
+    stream.frameId = requestAnimationFrame(() => {
+      stream.frameId = null;
+      stream.lastRenderAt = performance.now();
+      bubble.innerHTML = uiRenderMarkdown(stream.content);
+      uiScrollChat();
+    });
+  };
+  const delay = renderInterval - (performance.now() - stream.lastRenderAt);
+  if (delay > 0) stream.timerId = window.setTimeout(scheduleRender, delay);
+  else scheduleRender();
 }
 
 function uiFinishAssistantStream(bubble, usage = null) {
   const stream = assistantStreamContent.get(bubble);
   if (!stream) return;
+  if (stream.timerId !== null) {
+    window.clearTimeout(stream.timerId);
+    stream.timerId = null;
+  }
   if (stream.frameId !== null) {
     cancelAnimationFrame(stream.frameId);
     stream.frameId = null;
