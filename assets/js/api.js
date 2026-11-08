@@ -339,7 +339,7 @@ function apiWarmup() {
   uiSetBackendStatus("checking", "Asistan sunucusu hazırlanıyor...");
   backendWarmupPromise = (async () => {
     try {
-      const response = await fetch(`${API_URL}/health`, {
+      const response = await fetch(`${API_URL}/`, {
         cache: "no-store",
         signal: controller.signal,
       });

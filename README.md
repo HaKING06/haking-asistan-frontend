@@ -1,3 +1,5 @@
+![HaKING AI](./assets/img/og-haKING-ai.svg)
+
 # HaKING Frontend
 
 Static frontend for the HaKING software assistant. This repository root is the
@@ -105,3 +107,11 @@ notes and copy-ready prompts.
 ## Sürüm 1.0.0
 
 Proje bağlamı korunur, açık kod bloğu için devam eylemi gösterilir. Sonraki sürüm kaynak klasörde python release.py patch komutuyla artırılır. minor ve major seçenekleri de desteklenir.
+
+## Sürüm 1.0.1
+
+Sayfa açılışında API köküne hafif istek gönderilir. Yapay zekâ üretimi başlatılmaz ve AI kredisi harcanmaz. Sekmeye dönüşte ve ağ bağlantısı geri geldiğinde kontrol yenilenir.
+
+Uyuyan Render servisi ilk açılışta yine gecikebilir. Bu sürüm uyandırmayı ziyaret başlangıcına taşır. Sürekli hızlı ilk bağlantı için uyumayan bir sunucu planı gerekir. Model sağlayıcısının ilk yanıt süresi ayrıca ölçülmelidir.
+
+Katkılar için CONTRIBUTING.md, güvenlik için SECURITY.md ve sürüm notları için CHANGELOG.md dosyalarını inceleyin.
