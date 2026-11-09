@@ -1,0 +1,1 @@
+"""HaKING AI masaüstü uygulaması."""

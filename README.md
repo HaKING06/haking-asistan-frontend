@@ -2,7 +2,7 @@
 
 # HaKING AI — Ön yüz
 
-HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.0.4**.
+HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.0.5**.
 
 ## Teknoloji ve yayınlama
 
@@ -27,6 +27,7 @@ Cloudflare yapılandırmasında depo kök dizini `/`, derleme komutu `npm run bu
 - Zorunlu tarayıcı depolaması için çerez tercihi açıklaması; şu an analiz ve reklam izleyicisi kullanılmaz.
 - Mobil uyumlu koyu arayüz, gizlilik/hakkında sayfaları ve HaKING marka varlıkları.
 - Herkese açık `download.html` sayfasında HaKING AI Desktop ZIP paketi, sistem gereksinimleri, kurulum, veri kaynağı, çevrimdışı kapsam ve güvenlik açıklamaları.
+- HaKING AI Desktop kaynak kodu `desktop-app/` klasöründe tutulur; Cloudflare statik varlıklarına dahil edilmez.
 
 ## Yanıt akışı ve hız
 

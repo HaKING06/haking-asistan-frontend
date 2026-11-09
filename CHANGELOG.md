@@ -1,5 +1,11 @@
 # Değişiklik geçmişi
 
+## 1.0.5 — 2026-11-09
+
+- HaKING AI Desktop indirme paketini v0.1.2 ile güncelledi; ürün arama ve hata analizi arayüzleri yenilendi.
+- İndirme sayfasındaki geliştirme süreci bölümü kaldırıldı.
+- İstemci varlıkları için önbellek sürümü 1.0.5'e çıkarıldı.
+
 ## 1.0.4 — 2026-11-09
 
 - HaKING AI Desktop Windows başlangıcında Tk yazı tipi ayrıştırma hatası düzeltildi ve indirme paketi 0.1.1 sürümüne çıkarıldı.

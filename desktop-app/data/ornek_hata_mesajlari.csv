@@ -1,0 +1,5 @@
+language,error_message,source_code
+Python,"ModuleNotFoundError: No module named 'requests'","import requests"
+JavaScript/TypeScript,"TypeError: Cannot read properties of undefined (reading 'name')","const name = user.name;"
+C#,"error CS0103: The name 'result' does not exist in the current context","Console.WriteLine(result);"
+SQL,"ERROR: relation users does not exist","SELECT * FROM users;"

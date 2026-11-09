@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.py[cod]
+data/raw/
+models/*.joblib
+results/*.csv
+results/*.json
+!models/product_search.joblib
+!models/error_classifier.joblib
+!results/metrics.json
+!results/synthetic_queries.csv
+!results/test_predictions.csv
+!data/ornek_*.csv

@@ -1,0 +1,398 @@
+{
+  "app_version": "0.1.2",
+  "trained_at_utc": "2026-11-09T17:58:17.332377+00:00",
+  "random_seed": 20261109,
+  "dataset": {
+    "name": "UCI Product Classification and Clustering (PriceRunner)",
+    "rows": 35311,
+    "clusters": 13233,
+    "categories": 10,
+    "source": "https://archive.ics.uci.edu/dataset/837/product+classification",
+    "license": "CC BY 4.0"
+  },
+  "query_experiment": {
+    "total": 600,
+    "validation": 300,
+    "test": 300,
+    "split_unit": "Cluster ID; a cluster occurs in only one split",
+    "per_error_type_counts": {
+      "test": {
+        "harf_degistirme": 50,
+        "harf_ekleme": 52,
+        "harf_silme": 50,
+        "kelime_birlestirme": 41,
+        "klavye_komsusu": 50,
+        "temiz": 57
+      },
+      "validation": {
+        "harf_degistirme": 50,
+        "harf_ekleme": 48,
+        "harf_silme": 50,
+        "kelime_birlestirme": 59,
+        "klavye_komsusu": 50,
+        "temiz": 43
+      }
+    }
+  },
+  "selected_bm25_weight": 0.4,
+  "methods": {
+    "Klasik tam eşleşme": {
+      "query_count": 300,
+      "recall_at_5": 0.16,
+      "recall_at_10": 0.17,
+      "mrr": 0.13905555555555557,
+      "mean_latency_ms": 23.99232399999164,
+      "per_error_type": [
+        {
+          "error_type": "harf_degistirme",
+          "count": 50,
+          "recall_at_5": 0.04,
+          "recall_at_10": 0.04,
+          "mrr": 0.04,
+          "mean_latency_ms": 25.09274199990614
+        },
+        {
+          "error_type": "harf_ekleme",
+          "count": 52,
+          "recall_at_5": 0.0,
+          "recall_at_10": 0.0,
+          "mrr": 0.0,
+          "mean_latency_ms": 24.69542500001318
+        },
+        {
+          "error_type": "harf_silme",
+          "count": 50,
+          "recall_at_5": 0.04,
+          "recall_at_10": 0.04,
+          "mrr": 0.04,
+          "mean_latency_ms": 24.548887999953877
+        },
+        {
+          "error_type": "kelime_birlestirme",
+          "count": 41,
+          "recall_at_5": 0.0,
+          "recall_at_10": 0.0,
+          "mrr": 0.0,
+          "mean_latency_ms": 20.069085365898122
+        },
+        {
+          "error_type": "klavye_komsusu",
+          "count": 50,
+          "recall_at_5": 0.06,
+          "recall_at_10": 0.06,
+          "mrr": 0.03166666666666666,
+          "mean_latency_ms": 24.439762000038172
+        },
+        {
+          "error_type": "temiz",
+          "count": 57,
+          "recall_at_5": 0.7192982456140351,
+          "recall_at_10": 0.7719298245614035,
+          "mrr": 0.6339181286549708,
+          "mean_latency_ms": 24.32689473684341
+        }
+      ]
+    },
+    "BM25": {
+      "query_count": 300,
+      "recall_at_5": 0.51,
+      "recall_at_10": 0.5666666666666667,
+      "mrr": 0.4347354497354497,
+      "mean_latency_ms": 16.51068733331461,
+      "per_error_type": [
+        {
+          "error_type": "harf_degistirme",
+          "count": 50,
+          "recall_at_5": 0.48,
+          "recall_at_10": 0.52,
+          "mrr": 0.3906666666666666,
+          "mean_latency_ms": 14.031759999779752
+        },
+        {
+          "error_type": "harf_ekleme",
+          "count": 52,
+          "recall_at_5": 0.4423076923076923,
+          "recall_at_10": 0.5,
+          "mrr": 0.4175442612942613,
+          "mean_latency_ms": 15.105426923163087
+        },
+        {
+          "error_type": "harf_silme",
+          "count": 50,
+          "recall_at_5": 0.6,
+          "recall_at_10": 0.66,
+          "mrr": 0.5415,
+          "mean_latency_ms": 17.292119999947317
+        },
+        {
+          "error_type": "kelime_birlestirme",
+          "count": 41,
+          "recall_at_5": 0.34146341463414637,
+          "recall_at_10": 0.4146341463414634,
+          "mrr": 0.25670731707317074,
+          "mean_latency_ms": 13.58106341472083
+        },
+        {
+          "error_type": "klavye_komsusu",
+          "count": 50,
+          "recall_at_5": 0.4,
+          "recall_at_10": 0.48,
+          "mrr": 0.3611666666666667,
+          "mean_latency_ms": 14.600120000068273
+        },
+        {
+          "error_type": "temiz",
+          "count": 57,
+          "recall_at_5": 0.7368421052631579,
+          "recall_at_10": 0.7719298245614035,
+          "mrr": 0.5880116959064328,
+          "mean_latency_ms": 23.064919298185647
+        }
+      ]
+    },
+    "Karakter TF-IDF": {
+      "query_count": 300,
+      "recall_at_5": 0.6233333333333333,
+      "recall_at_10": 0.6733333333333333,
+      "mrr": 0.534617724867725,
+      "mean_latency_ms": 15.170838999996098,
+      "per_error_type": [
+        {
+          "error_type": "harf_degistirme",
+          "count": 50,
+          "recall_at_5": 0.5,
+          "recall_at_10": 0.52,
+          "mrr": 0.41533333333333333,
+          "mean_latency_ms": 14.087384000013117
+        },
+        {
+          "error_type": "harf_ekleme",
+          "count": 52,
+          "recall_at_5": 0.6153846153846154,
+          "recall_at_10": 0.6346153846153846,
+          "mrr": 0.5216575091575092,
+          "mean_latency_ms": 16.332965384453228
+        },
+        {
+          "error_type": "harf_silme",
+          "count": 50,
+          "recall_at_5": 0.64,
+          "recall_at_10": 0.72,
+          "mrr": 0.5635238095238095,
+          "mean_latency_ms": 16.91921799989359
+        },
+        {
+          "error_type": "kelime_birlestirme",
+          "count": 41,
+          "recall_at_5": 0.7804878048780488,
+          "recall_at_10": 0.8780487804878049,
+          "mrr": 0.6417634533488192,
+          "mean_latency_ms": 12.7488512194626
+        },
+        {
+          "error_type": "klavye_komsusu",
+          "count": 50,
+          "recall_at_5": 0.54,
+          "recall_at_10": 0.6,
+          "mrr": 0.4898571428571429,
+          "mean_latency_ms": 14.482098000116821
+        },
+        {
+          "error_type": "temiz",
+          "count": 57,
+          "recall_at_5": 0.6842105263157895,
+          "recall_at_10": 0.7192982456140351,
+          "mrr": 0.5879142300194932,
+          "mean_latency_ms": 15.873677193124884
+        }
+      ]
+    },
+    "Hibrit": {
+      "query_count": 300,
+      "recall_at_5": 0.62,
+      "recall_at_10": 0.6833333333333333,
+      "mrr": 0.5369365079365079,
+      "mean_latency_ms": 14.398284333371217,
+      "per_error_type": [
+        {
+          "error_type": "harf_degistirme",
+          "count": 50,
+          "recall_at_5": 0.52,
+          "recall_at_10": 0.54,
+          "mrr": 0.41785714285714287,
+          "mean_latency_ms": 14.35477400013042
+        },
+        {
+          "error_type": "harf_ekleme",
+          "count": 52,
+          "recall_at_5": 0.6153846153846154,
+          "recall_at_10": 0.6153846153846154,
+          "mrr": 0.5358974358974359,
+          "mean_latency_ms": 14.952053846277872
+        },
+        {
+          "error_type": "harf_silme",
+          "count": 50,
+          "recall_at_5": 0.66,
+          "recall_at_10": 0.72,
+          "mrr": 0.5860793650793651,
+          "mean_latency_ms": 14.970758000090427
+        },
+        {
+          "error_type": "kelime_birlestirme",
+          "count": 41,
+          "recall_at_5": 0.7560975609756098,
+          "recall_at_10": 0.9024390243902439,
+          "mrr": 0.6126984126984127,
+          "mean_latency_ms": 12.948024390203589
+        },
+        {
+          "error_type": "klavye_komsusu",
+          "count": 50,
+          "recall_at_5": 0.5,
+          "recall_at_10": 0.6,
+          "mrr": 0.4835238095238095,
+          "mean_latency_ms": 14.256746000064595
+        },
+        {
+          "error_type": "temiz",
+          "count": 57,
+          "recall_at_5": 0.6842105263157895,
+          "recall_at_10": 0.7543859649122807,
+          "mrr": 0.5915900863269284,
+          "mean_latency_ms": 14.596414034952575
+        }
+      ]
+    }
+  },
+  "error_classifier": {
+    "train_examples": 1110,
+    "validation_examples": 450,
+    "validation_accuracy": 0.9333333333333333,
+    "categories": [
+      "Aritmetik",
+      "Bağlantı",
+      "Bağımlılık",
+      "Beklenti uyuşmazlığı",
+      "Dizin sınırı",
+      "Dosya yolu",
+      "Eksik anahtar",
+      "Girinti",
+      "Null / eksik değer",
+      "Sözdizimi",
+      "Tanımsız ad",
+      "Tür uyuşmazlığı",
+      "Veritabanı",
+      "Özyineleme",
+      "İzin"
+    ],
+    "evaluation_note": "Kategori başına kaynak hata imzası grupları ayrılarak sentetik held-out örneklerde ölçülmüştür; gerçek hata mesajlarında kesinlik garantisi değildir.",
+    "classification_report": {
+      "Aritmetik": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Bağlantı": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Bağımlılık": {
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1-score": 0.6666666666666666,
+        "support": 30.0
+      },
+      "Beklenti uyuşmazlığı": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Dizin sınırı": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Dosya yolu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 30.0
+      },
+      "Eksik anahtar": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Girinti": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Null / eksik değer": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Sözdizimi": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Tanımsız ad": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Tür uyuşmazlığı": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Veritabanı": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Özyineleme": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "İzin": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "accuracy": 0.9333333333333333,
+      "macro avg": {
+        "precision": 0.9,
+        "recall": 0.9333333333333333,
+        "f1-score": 0.9111111111111111,
+        "support": 450.0
+      },
+      "weighted avg": {
+        "precision": 0.9,
+        "recall": 0.9333333333333333,
+        "f1-score": 0.9111111111111111,
+        "support": 450.0
+      }
+    }
+  },
+  "total_training_seconds": 39.23,
+  "limits": "Offline suggestions are ranked retrievals and likely error diagnoses, not proof or a guarantee for every language/compiler/version."
+}
