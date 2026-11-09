@@ -2,7 +2,7 @@
 
 # HaKING AI — Ön yüz
 
-HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.0.2**.
+HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.0.3**.
 
 ## Teknoloji ve yayınlama
 
@@ -26,10 +26,11 @@ Cloudflare yapılandırmasında depo kök dizini `/`, derleme komutu `npm run bu
 - Sohbet geçmişini hesap bazında tarayıcının `localStorage` alanında tutma; ayarlar ve kredi bakiyesi görünümü.
 - Zorunlu tarayıcı depolaması için çerez tercihi açıklaması; şu an analiz ve reklam izleyicisi kullanılmaz.
 - Mobil uyumlu koyu arayüz, gizlilik/hakkında sayfaları ve HaKING marka varlıkları.
+- Herkese açık `download.html` sayfasında HaKING AI Desktop ZIP paketi, sistem gereksinimleri, kurulum, veri kaynağı, çevrimdışı kapsam ve güvenlik açıklamaları.
 
 ## Yanıt akışı ve hız
 
-Sohbet, backend'den Server-Sent Events (SSE) akışı alır. Uzun yanıtlar boyunca Markdown'ı her gelen küçük parçada yeniden işlemek pahalı olduğundan 1.0.2, yanıt uzadıkça ekrandaki yeniden çizim sıklığını kademeli azaltır; tamamlandığında son içerik hemen işlenir. Bu, uzun kod yanıtlarında tarayıcı tarafındaki gereksiz işi azaltır. Modelin üretim süresini, sağlayıcı kotasını veya Render'ın ücretsiz plandaki soğuk başlangıçlarını ortadan kaldırmaz.
+Sohbet, backend'den Server-Sent Events (SSE) akışı alır. Uzun yanıtlar boyunca Markdown'ı her gelen küçük parçada yeniden işlemek pahalı olduğundan, yanıt uzadıkça ekrandaki yeniden çizim sıklığı kademeli azaltılır; tamamlandığında son içerik hemen işlenir. Bu, uzun kod yanıtlarında tarayıcı tarafındaki gereksiz işi azaltır. Modelin üretim süresini, sağlayıcı kotasını veya Render'ın ücretsiz plandaki soğuk başlangıçlarını ortadan kaldırmaz.
 
 Çılgın Mod'daki aşama göstergeleri işlemin hangi adımda olduğunu bildirir; modelin özel düşünme içeriğini göstermez. Yeni proje isteğinde araştırma açıksa Tavily kısa kaynak parçalarını brief aşamasına ekler. Kısa bilgi soruları ve mevcut kodu düzeltme istekleri proje araştırması akışına yönlendirilmez.
 
@@ -41,7 +42,7 @@ Sohbet, backend'den Server-Sent Events (SSE) akışı alır. Uzun yanıtlar boyu
 - Üretilen HTML önizlemesi yalıtılmış iframe içinde çalıştırılır. Üretilen kodu indirmeden/çalıştırmadan önce inceleyin.
 - Gizlilik sayfası sağlayıcıları ve mevcut veri akışlarını açıklar. Dağıtım ortamındaki gerçek yapılandırmayla belgeleri eşleşir tutun.
 
-Yayınlama ve yapılandırma ayrıntıları için [backend deposundaki README'ye](https://github.com/HaKING06/haking-asistan-backend) bakın. Güvenlik bildirimi için [`SECURITY.md`](./SECURITY.md), katkı kuralları için [`CONTRIBUTING.md`](./CONTRIBUTING.md), sürüm notları için [`CHANGELOG.md`](./CHANGELOG.md) dosyalarını inceleyin.
+Backend'in yapılandırma ve yayınlama ayrıntıları backend deposundaki README'de yer alır. Güvenlik bildirimi için [`SECURITY.md`](./SECURITY.md), katkı kuralları için [`CONTRIBUTING.md`](./CONTRIBUTING.md), sürüm notları için [`CHANGELOG.md`](./CHANGELOG.md) dosyalarını inceleyin.
 
 ## Marka varlıkları
 
@@ -49,4 +50,4 @@ Güncel kimlik; taçlı mor kaplumbağa maskotunu, site simgelerini, sosyal medy
 
 ## Sürümleme
 
-Güncel sürüm `1.0.2`'dir. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
+Güncel sürüm `1.0.3`'dir. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.

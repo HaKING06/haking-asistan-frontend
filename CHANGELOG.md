@@ -1,5 +1,12 @@
 # Değişiklik geçmişi
 
+## 1.0.3 — 2026-11-09
+
+- HaKING AI Desktop için herkese açık indirme ve kurulum sayfası eklendi.
+- Oturum açma ekranına masaüstü uygulaması indirme bağlantısı eklendi.
+- Cloudflare statik varlık yayınında `node_modules`, `.wrangler`, `.git` ve ortam sırları hariç tutuldu; büyük paket dosyalarının yanlışlıkla uygulama varlığı olarak derlenmesi önlendi.
+- Sürüm bilgileri ve istemci önbellek etiketleri 1.0.3 ile eşitlendi.
+
 ## 1.0.2 — 2026-11-08
 
 - Uzun yanıt akışlarında Markdown yeniden işleme sıklığı kademeli azaltıldı; kısa yanıtlardaki hızlı görünüm korunurken uzun çıktılarda tarayıcı iş yükü düşürüldü.
