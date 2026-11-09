@@ -1,5 +1,11 @@
 # Değişiklik geçmişi
 
+## 1.0.6 — 2026-11-09
+
+- Kurucu kredi paneline, e-posta önekiyle çalışan ve yalnızca kurucu oturumuyla erişilen hesap önerileri eklendi.
+- Öneri seçimi doğrudan mevcut hesap doğrulama akışını başlatıyor; klavye ile seçim ve mobil görünüm destekleniyor.
+- İstemci varlıkları için önbellek sürümü 1.0.6'ya çıkarıldı.
+
 ## 1.0.5 — 2026-11-09
 
 - HaKING AI Desktop indirme paketini v0.1.2 ile güncelledi; ürün arama ve hata analizi arayüzleri yenilendi.

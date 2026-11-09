@@ -306,6 +306,19 @@ async function apiAdminGetCreditAccount(token, email) {
   return { ok: response.ok, status: response.status, ...data, message: apiErrorMessage(data, "Hesap bilgisi alınamadı.") };
 }
 
+async function apiAdminSearchCreditAccounts(token, query, signal) {
+  const response = await fetch(`${API_URL}/admin/credits/accounts/search`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ query }),
+    cache: "no-store",
+    signal,
+  });
+  let data = {};
+  try { data = await response.json(); } catch {}
+  return { ok: response.ok, status: response.status, ...data, message: apiErrorMessage(data, "Hesap önerileri alınamadı.") };
+}
+
 async function apiAdminGrantCredits(token, email, orderReference) {
   const response = await fetch(`${API_URL}/admin/credits/grants`, {
     method: "POST",

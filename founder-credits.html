@@ -14,9 +14,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./assets/css/main.css" />
-  <link rel="stylesheet" href="./assets/css/privacy.css" />
-  <link rel="stylesheet" href="./assets/css/crazy.css" />
+  <link rel="stylesheet" href="./assets/css/main.css?v=1.0.6" />
+  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.0.6" />
+  <link rel="stylesheet" href="./assets/css/crazy.css?v=1.0.6" />
 </head>
 <body>
   <main class="privacy-page founder-page">
@@ -44,7 +44,13 @@
         <div class="founder-section-heading"><div><span class="crazy-section-kicker">1 · HESABI BUL</span><h2>Kayıtlı Gmail adresi</h2></div></div>
         <form id="founder-lookup-form" class="founder-form" novalidate>
           <label for="founder-email">Alıcının HaKING hesabındaki Gmail</label>
-          <div class="founder-inline-form"><input id="founder-email" type="email" autocomplete="off" inputmode="email" maxlength="254" placeholder="ornek@gmail.com" required /><button class="crazy-button secondary" type="submit">Hesabı bul</button></div>
+          <div class="founder-inline-form">
+            <div class="founder-email-picker">
+              <input id="founder-email" type="email" autocomplete="off" inputmode="email" maxlength="254" placeholder="ornek@gmail.com" aria-autocomplete="list" aria-controls="founder-email-suggestions" aria-expanded="false" required />
+              <div id="founder-email-suggestions" class="founder-email-suggestions" role="listbox" aria-label="E-posta önerileri" hidden></div>
+            </div>
+            <button class="crazy-button secondary" type="submit">Hesabı bul</button>
+          </div>
         </form>
         <p id="founder-account-status" class="founder-status" role="status" aria-live="polite"></p>
         <div id="founder-account-card" class="founder-account-card hidden" aria-live="polite"></div>
@@ -68,7 +74,7 @@
       <p class="founder-security-note">Bu sayfa arama motorlarında listelenmez; gerçek yetki backend'de oturum ve kurucu Gmail adresiyle ayrıca doğrulanır. Sipariş numarasını yalnızca ödeme onayından sonra kullan. Şifre, oturum anahtarı veya e-posta doğrulama kodu isteme.</p>
     </div>
   </main>
-  <script src="./assets/js/api.js"></script>
-  <script src="./assets/js/founder-credits.js"></script>
+  <script src="./assets/js/api.js?v=1.0.6"></script>
+  <script src="./assets/js/founder-credits.js?v=1.0.6"></script>
 </body>
 </html>
