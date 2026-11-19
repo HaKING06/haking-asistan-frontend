@@ -10,7 +10,7 @@
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 60000);
         try {
-          const response = await fetch('https://haking-asistan-backend.onrender.com/', {
+          const response = await fetch('https://haking-asistan-backend.vercel.app/', {
             cache: 'no-store', signal: controller.signal,
           });
           if (!response.ok) throw new Error('Backend is starting');

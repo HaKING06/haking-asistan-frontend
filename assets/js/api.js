@@ -1,4 +1,4 @@
-const API_URL = "https://haking-asistan-backend.onrender.com";
+const API_URL = "https://haking-asistan-backend.vercel.app";
 
 function apiErrorMessage(data, fallback) {
   if (!data || typeof data !== "object") return fallback;

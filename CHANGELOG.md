@@ -1,3 +1,7 @@
+# 1.0.7 — 2026-11-19
+
+- Switch production API endpoints from Render to Vercel.
+
 # Değişiklik geçmişi
 
 ## 1.0.6 — 2026-11-09

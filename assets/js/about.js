@@ -1,5 +1,5 @@
 (() => {
-  const API_URL = "https://haking-asistan-backend.onrender.com/ai/providers";
+  const API_URL = "https://haking-asistan-backend.vercel.app/ai/providers";
   const status = document.querySelector("#provider-route-status");
   const container = document.querySelector("#provider-models");
 
