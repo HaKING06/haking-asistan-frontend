@@ -2,7 +2,7 @@
 
 # HaKING AI — Ön yüz
 
-HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.0.7**.
+HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.1.0**.
 
 ## Teknoloji ve yayınlama
 
@@ -16,6 +16,8 @@ HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet su
 Cloudflare yapılandırmasında depo kök dizini `/`, derleme komutu `npm run build`, dağıtım komutu `npx wrangler deploy` olmalıdır. `robots.txt` ve `sitemap.xml` kök dizinden sunulur.
 
 ## Özellikler
+
+- Giriş ve kayıt öncesi Cloudflare Turnstile doğrulaması. Her istekten sonra yeni belirteç alınır; e-posta kodu aşaması tekrar CAPTCHA istemez.
 
 - E-posta doğrulamalı kayıt, giriş, parola sıfırlama ve hesap silme akışları.
 - Groq ve Google Gemini sağlayıcılarına yönlendirilen sohbet; yanıtlar akış halinde gösterilir.
@@ -50,4 +52,4 @@ Güncel kimlik; taçlı mor kaplumbağa maskotunu, site simgelerini, sosyal medy
 
 ## Sürümleme
 
-Güncel sürüm `1.0.7`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
+Güncel sürüm `1.1.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.

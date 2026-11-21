@@ -217,6 +217,7 @@ function startResendCooldown(seconds = 60) {
 
 function enterVerificationMode(email, message, credentials = {}) {
   verificationMode = true;
+  AuthTurnstile.setMode(authMode, true);
   pendingVerificationEmail = email || "";
   pendingVerificationToken = credentials.verificationToken || "";
   pendingEmailLinkToken = credentials.emailLinkToken || "";
@@ -249,6 +250,7 @@ function enterVerificationMode(email, message, credentials = {}) {
 function switchToLogin(clearStoredToken = true) {
   clearVerificationMode(clearStoredToken);
   authMode = "login";
+  AuthTurnstile.setMode(authMode);
   nameGroupEl.classList.add("hidden");
   passwordConfirmGroupEl.classList.add("hidden");
   fullNameInputEl.required = false;
@@ -270,6 +272,7 @@ function switchToLogin(clearStoredToken = true) {
 function switchToRegister() {
   clearVerificationMode();
   authMode = "register";
+  AuthTurnstile.setMode(authMode);
   nameGroupEl.classList.remove("hidden");
   passwordConfirmGroupEl.classList.remove("hidden");
   fullNameInputEl.required = true;
@@ -306,6 +309,7 @@ function setAuthLoading(isLoading) {
 
 // Başlangıç durumu
 switchToLogin(false);
+AuthTurnstile.start();
 
 showRegisterBtnEl.addEventListener("click", switchToRegister);
 showLoginBtnEl.addEventListener("click", switchToLogin);
@@ -428,6 +432,12 @@ loginFormEl.addEventListener("submit", async (e) => {
     }
   }
 
+  const turnstileToken = AuthTurnstile.getToken();
+  if (!verificationMode && !turnstileToken) {
+    showAuthError("Devam etmek için Cloudflare güvenlik doğrulamasını tamamla.");
+    return;
+  }
+  const protectedSubmission = !verificationMode;
   setAuthLoading(true);
   try {
     if (verificationMode) {
@@ -453,7 +463,7 @@ loginFormEl.addEventListener("submit", async (e) => {
       finishAuthentication(result.token, result.email || email, result.name);
     } else if (authMode === "login") {
       // GİRİŞ
-      const result = await apiLogin(email, password, adultConfirmedInputEl.checked);
+      const result = await apiLogin(email, password, adultConfirmedInputEl.checked, turnstileToken);
       if (!result.ok || !result.success || !result.token) {
         loginErrorEl.textContent = authFailureMessage(
           result,
@@ -480,6 +490,7 @@ loginFormEl.addEventListener("submit", async (e) => {
         password,
         fullName,
         adultConfirmedInputEl.checked,
+        turnstileToken,
       );
       if (!result.ok || !result.success) {
         showAuthError(authFailureMessage(result, "Kayıt başarısız. Daha sonra tekrar dene."));
@@ -502,6 +513,7 @@ loginFormEl.addEventListener("submit", async (e) => {
         : "İşlem tamamlanamadı. Lütfen bilgilerini kontrol edip tekrar deneyin."
     );
   } finally {
+    if (protectedSubmission) AuthTurnstile.reset();
     setAuthLoading(false);
   }
 });

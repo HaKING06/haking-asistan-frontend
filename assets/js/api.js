@@ -52,11 +52,11 @@ function apiErrorMessage(data, fallback) {
   return fallback;
 }
 
-async function apiLogin(email, password, adultConfirmed) {
+async function apiLogin(email, password, adultConfirmed, turnstileToken) {
   const res = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password, adult_confirmed: adultConfirmed }),
+    body: JSON.stringify({ email, password, adult_confirmed: adultConfirmed, turnstile_token: turnstileToken }),
   });
 
   let data = {};
@@ -75,11 +75,11 @@ async function apiLogin(email, password, adultConfirmed) {
   };
 }
 
-async function apiRegister(email, password, name, adultConfirmed) {
+async function apiRegister(email, password, name, adultConfirmed, turnstileToken) {
   const res = await fetch(`${API_URL}/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password, name, adult_confirmed: adultConfirmed }),
+    body: JSON.stringify({ email, password, name, adult_confirmed: adultConfirmed, turnstile_token: turnstileToken }),
   });
 
   let data = {};

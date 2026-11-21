@@ -1,5 +1,10 @@
 # 1.0.7 — 2026-11-19
 
+## 1.1.0 — 2026-11-21
+
+- Giriş ve kayıt ekranlarına Cloudflare Turnstile doğrulaması, hata/yenileme durumları ve işlem bazlı belirteçler eklendi.
+- Vercel API adresi korundu; Cloudflare veri işleme açıklaması güncellendi.
+
 - Switch production API endpoints from Render to Vercel.
 
 # Değişiklik geçmişi

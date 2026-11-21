@@ -692,3 +692,9 @@
     font-size: 27px;
   }
 }
+.auth-turnstile {
+  width: 100%;
+  min-width: 0;
+  min-height: 65px;
+  margin-block: 12px;
+}
