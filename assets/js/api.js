@@ -1,5 +1,24 @@
 const API_URL = "https://haking-asistan-backend.vercel.app";
 
+async function apiGoogleConfig() {
+  const response = await fetch(`${API_URL}/auth/google/config`, { cache: "no-store", signal: AbortSignal.timeout(30000) });
+  const data = await response.json();
+  if (!response.ok) throw new Error(apiErrorMessage(data, "Google ile giriş şu anda kullanılamıyor."));
+  return data;
+}
+
+async function apiGoogleLogin(credential, challenge, adultConfirmed, turnstileToken) {
+  const response = await fetch(`${API_URL}/auth/google`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ credential, challenge, adult_confirmed: adultConfirmed, turnstile_token: turnstileToken }),
+  });
+  const data = await response.json();
+  return { ...data, ok: response.ok, status: response.status,
+    requestId: response.headers.get("X-Request-ID"),
+    message: apiErrorMessage(data, "Google ile giriş tamamlanamadı.") };
+}
+
 function apiErrorMessage(data, fallback) {
   if (!data || typeof data !== "object") return fallback;
   if (typeof data.message === "string" && data.message) return data.message;

@@ -32,6 +32,7 @@ const showLoginBtnEl = document.getElementById("show-login");
 const PENDING_VERIFICATION_KEY = "haking_pending_verification";
 
 let authMode = "login"; // "login" | "register"
+let authMethod = "google";
 let verificationMode = false;
 let pendingVerificationEmail = "";
 let pendingVerificationToken = "";
@@ -217,6 +218,8 @@ function startResendCooldown(seconds = 60) {
 
 function enterVerificationMode(email, message, credentials = {}) {
   verificationMode = true;
+  authMethod = "email";
+  updateAuthMethod();
   AuthTurnstile.setMode(authMode, true);
   pendingVerificationEmail = email || "";
   pendingVerificationToken = credentials.verificationToken || "";
@@ -248,9 +251,10 @@ function enterVerificationMode(email, message, credentials = {}) {
 }
 
 function switchToLogin(clearStoredToken = true) {
+  if (GoogleSignIn.isBusy()) return;
   clearVerificationMode(clearStoredToken);
   authMode = "login";
-  AuthTurnstile.setMode(authMode);
+  AuthTurnstile.setMode(authMethod === "google" ? "google" : authMode);
   nameGroupEl.classList.add("hidden");
   passwordConfirmGroupEl.classList.add("hidden");
   fullNameInputEl.required = false;
@@ -267,12 +271,14 @@ function switchToLogin(clearStoredToken = true) {
   authSubtitleEl.textContent = "Türkçe yapay zekâ kodlama asistanına devam etmek için Gmail hesabınla giriş yap.";
   submitBtnEl.querySelector("span").textContent = "Giriş yap";
   showAuthError("");
+  updateAuthMethod();
 }
 
 function switchToRegister() {
+  if (GoogleSignIn.isBusy()) return;
   clearVerificationMode();
   authMode = "register";
-  AuthTurnstile.setMode(authMode);
+  AuthTurnstile.setMode(authMethod === "google" ? "google" : authMode);
   nameGroupEl.classList.remove("hidden");
   passwordConfirmGroupEl.classList.remove("hidden");
   fullNameInputEl.required = true;
@@ -290,7 +296,42 @@ function switchToRegister() {
   authSubtitleEl.textContent = "Kayıt için Gmail adresini doğrula. Şifren en az 8 karakter olmalı.";
   submitBtnEl.querySelector("span").textContent = "Hesap oluştur";
   showAuthError("");
+  updateAuthMethod();
 }
+
+function updateAuthMethod() {
+  const google = authMethod === "google" && !verificationMode;
+  document.getElementById("auth-methods").classList.toggle("hidden", verificationMode);
+  document.getElementById("method-google").classList.toggle("active", google);
+  document.getElementById("method-google").setAttribute("aria-pressed", String(google));
+  document.getElementById("method-email").classList.toggle("active", !google);
+  document.getElementById("method-email").setAttribute("aria-pressed", String(!google));
+  document.getElementById("email-fields").classList.toggle("hidden", google);
+  document.getElementById("google-intro").classList.toggle("hidden", !google);
+  document.getElementById("google-signin-section").classList.toggle("hidden", !google);
+  document.querySelector(".auth-switch").classList.toggle("hidden", google || verificationMode);
+  forgotPasswordRowEl.classList.toggle("hidden", google || verificationMode || authMode !== "login");
+  submitBtnEl.classList.toggle("hidden", google);
+  GoogleSignIn.setVisible(google);
+  if (google) {
+    authTitleEl.textContent = "Fikirlerini koda dönüştür";
+    authSubtitleEl.textContent = "Google hesabınla giriş yap veya saniyeler içinde hesabını oluştur.";
+  }
+}
+
+function selectAuthMethod(method) {
+  if (GoogleSignIn.isBusy() || submitBtnEl.disabled) return;
+  authMethod = method;
+  switchToLogin();
+}
+
+document.getElementById("method-google").addEventListener("click", () => selectAuthMethod("google"));
+document.getElementById("method-email").addEventListener("click", () => selectAuthMethod("email"));
+document.addEventListener("google-auth-busy", (event) => {
+  document.getElementById("method-google").disabled = event.detail;
+  document.getElementById("method-email").disabled = event.detail;
+  adultConfirmedInputEl.disabled = event.detail;
+});
 
 function setAuthLoading(isLoading) {
   submitBtnEl.disabled = isLoading;
@@ -310,6 +351,7 @@ function setAuthLoading(isLoading) {
 // Başlangıç durumu
 switchToLogin(false);
 AuthTurnstile.start();
+GoogleSignIn.start(finishAuthentication, showAuthError);
 
 showRegisterBtnEl.addEventListener("click", switchToRegister);
 showLoginBtnEl.addEventListener("click", switchToLogin);
@@ -376,6 +418,8 @@ editRegistrationBtnEl.addEventListener("click", switchToRegister);
 
 loginFormEl.addEventListener("submit", async (e) => {
   e.preventDefault();
+  if (authMethod === "google" && !verificationMode) return;
+  if (submitBtnEl.disabled || GoogleSignIn.isBusy()) return;
   showAuthError("");
 
   const email = verificationMode ? pendingVerificationEmail : emailInputEl.value.trim();

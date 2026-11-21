@@ -10,8 +10,8 @@
   <link rel="icon" type="image/png" sizes="64x64" href="./assets/img/favicon.png?v=4" />
   <link rel="apple-touch-icon" href="./assets/img/apple-touch-icon.png?v=4" />
   <link rel="manifest" href="./site.webmanifest" />
-  <link rel="stylesheet" href="./assets/css/main.css" />
-  <link rel="stylesheet" href="./assets/css/recovery.css" />
+  <link rel="stylesheet" href="./assets/css/main.css?v=1.2.0" />
+  <link rel="stylesheet" href="./assets/css/recovery.css?v=1.2.0" />
 </head>
 <body>
   <main class="recovery-page">
@@ -21,6 +21,7 @@
       <h1 id="delete-account-title">Hesap silme onayı</h1>
       <p id="deletion-account-label" class="recovery-intro">Onay bağlantısı kontrol ediliyor…</p>
       <form id="delete-account-form" class="recovery-form hidden" novalidate>
+        <p class="field-help">Hesabını Google ile açtıysan ve henüz HaKING şifren yoksa, giriş ekranında Gmail ve şifre → Şifremi unuttum? adımlarıyla önce şifre oluştur.</p>
         <label for="current-password">Mevcut şifren</label>
         <input id="current-password" type="password" autocomplete="current-password" maxlength="128" required placeholder="Hesap şifreni gir" />
         <p class="recovery-warning">Onaylarsan hesabın, profil bilgin ve tüm oturumların silinir. Bu işlem geri alınamaz.</p>
@@ -30,8 +31,8 @@
       <a id="deletion-back-link" class="recovery-back" href="./index.html">Vazgeç ve giriş ekranına dön</a>
     </section>
   </main>
-  <script src="./assets/js/state.js"></script>
-  <script src="./assets/js/api.js"></script>
-  <script src="./assets/js/delete-account.js"></script>
+  <script src="./assets/js/state.js?v=1.2.0"></script>
+  <script src="./assets/js/api.js?v=1.2.0"></script>
+  <script src="./assets/js/delete-account.js?v=1.2.0"></script>
 </body>
 </html>

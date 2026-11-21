@@ -12,6 +12,7 @@ const AuthTurnstile = (() => {
   const message = (text, canRetry = false) => {
     status.textContent = text;
     retry.classList.toggle("hidden", !canRetry || hidden);
+    document.dispatchEvent(new Event("auth-verification-change"));
   };
   function render() {
     token = "";
@@ -48,7 +49,7 @@ const AuthTurnstile = (() => {
     getToken: () => token,
     reset: render,
     setMode(mode, verification = false) {
-      action = mode === "register" ? "signup" : "login";
+      action = mode === "google" ? "google" : mode === "register" ? "signup" : "login";
       hidden = verification;
       render();
     },

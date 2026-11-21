@@ -226,7 +226,7 @@
 
 .auth-heading {
   position: relative;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .auth-privacy-info {
@@ -282,7 +282,82 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 19px;
+  gap: 16px;
+}
+
+.email-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  padding: 5px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-strong);
+  border-radius: 13px;
+  background: var(--surface);
+}
+
+.auth-method {
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: var(--text-soft);
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.auth-method.active {
+  color: var(--text);
+  border-color: var(--border-strong);
+  background: var(--surface-raised);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 12%);
+}
+
+.auth-method:focus-visible, #google-signin-retry:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.auth-method-intro {
+  margin: 0 0 24px;
+  color: var(--text-soft);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.google-signin-section { min-width: 0; }
+.google-signin-button { width: 100%; min-height: 44px; }
+.google-signin-button[aria-disabled="true"] { opacity: .55; }
+.google-signin-section .verification-help { margin-block: 12px 0; }
+
+@media (prefers-color-scheme: light) {
+  .auth-screen {
+    color-scheme: light;
+    --surface: #f5f4fa;
+    --surface-raised: #fff;
+    --border: rgb(41 32 78 / 12%);
+    --border-strong: rgb(41 32 78 / 20%);
+    --text: #242133;
+    --text-soft: #5b566e;
+    --text-muted: #716a83;
+    --accent: #7052cf;
+    --error: #ad2444;
+    color: var(--text);
+    background: #faf9ff;
+  }
+  .auth-panel { background: #faf9ff; }
+  .auth-showcase { color: #f3f3f7; }
+  .auth-screen input { background: #fff; color: var(--text); }
+  .auth-screen .link-btn { color: #7052cf; }
+  .auth-screen .brand-name { color: var(--text); }
 }
 
 .form-group {

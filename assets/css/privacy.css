@@ -380,6 +380,70 @@
   }
 }
 
+/* Consent panel: compact information card and keyboard-accessible details. */
+.privacy-cookie-banner {
+  right: 24px;
+  bottom: 24px;
+  left: auto;
+  display: block;
+  width: min(450px, calc(100% - 32px));
+  margin: 0;
+  padding: 25px;
+  border: 1px solid rgb(171 151 255 / 22%);
+  border-radius: 22px;
+  background: #171923;
+  color: #f3f3f7;
+  box-shadow: 0 16px 64px rgb(0 0 0 / 32%);
+}
+.privacy-cookie-heading { display: flex; align-items: center; gap: 13px; }
+.privacy-shield { display: grid; place-items: center; width: 43px; height: 43px; border-radius: 13px; color: #b6a5ff; background: rgb(151 126 255 / 11%); }
+.privacy-shield svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
+.privacy-kicker { color: #a699d0; font-size: 9px; font-weight: 700; letter-spacing: 1.4px; }
+.privacy-cookie-heading h2 { margin: 3px 0 0; font-size: 22px; font-weight: 650; letter-spacing: -.5px; }
+.privacy-cookie-description { margin: 16px 0 20px; color: #b1adbf; font-size: 12px; line-height: 1.8; }
+.privacy-cookie-actions { display: grid; grid-template-columns: .85fr 1.4fr; gap: 9px; }
+.privacy-cookie-actions button, .privacy-modal-actions button { min-height: 44px; font-size: 12px; transition: background 150ms ease, border-color 150ms ease; }
+.privacy-cookie-actions button { color: #f3f3f7; background: transparent; border-color: rgb(255 255 255 / 14%); }
+.privacy-cookie-actions .privacy-primary, .privacy-modal-actions .privacy-primary { background: #8970e9; color: #fff; }
+.privacy-primary:hover { filter: brightness(1.08); }
+.privacy-cookie-note { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin: 17px 0 0; color: #a19aaa; font-size: 9px; line-height: 1.7; }
+.privacy-cookie-note > span { margin-right: 2px; color: #83d7b3; font-size: 7px; }
+.privacy-cookie-note a { margin-left: auto; color: #b9acd9; text-underline-offset: 3px; }
+.privacy-modal { width: min(580px, 100%); padding: 28px; color: #f3f3f7; background: #171923; }
+.privacy-modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 19px; }
+.privacy-close { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid rgb(255 255 255 / 12%); border-radius: 50%; background: transparent; color: #b1adbf; font-size: 24px; cursor: pointer; }
+.privacy-modal h2 { margin: 8px 0 12px; font-size: clamp(22px, 5vw, 28px); letter-spacing: -.8px; }
+.privacy-modal > p { color: #b1adbf; font-size: 12px; }
+.privacy-category { display: block; padding: 0; border-color: rgb(255 255 255 / 9%); }
+.privacy-category summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 53px; padding: 13px; cursor: pointer; font-size: 12px; font-weight: 600; list-style: none; }
+.privacy-category summary::-webkit-details-marker { display: none; }
+.privacy-category summary > span:first-child::before { content: '+'; display: inline-block; width: 17px; color: #b6a5ff; }
+.privacy-category[open] summary > span:first-child::before { content: '−'; }
+.privacy-category-status { color: #a89bbc; font-size: 10px; font-weight: 500; white-space: nowrap; }
+.privacy-category-status.off { color: #aaa3b7; }
+.privacy-category p { margin: 0; padding: 0 14px 15px 30px; color: #a9a3b7; font-size: 12px; line-height: 1.8; }
+.privacy-modal-actions { align-items: center; justify-content: space-between; padding-top: 8px; }
+.privacy-modal-actions a { color: #b6a5ff; font-size: 11px; text-underline-offset: 3px; }
+.privacy-cookie-banner button:focus-visible, .privacy-modal :is(button,a,summary):focus-visible { outline: 2px solid #b6a5ff; outline-offset: 3px; }
+.privacy-toast { position: fixed; z-index: 1002; right: 20px; bottom: 20px; max-width: min(420px, calc(100% - 40px)); margin: 0; padding: 15px 20px; border: 1px solid rgb(145 214 174 / 30%); border-radius: 14px; background: #202a27; color: #daf7e8; box-shadow: 0 10px 35px rgb(0 0 0 / 20%); font-size: 12px; line-height: 1.6; }
+@media (max-width: 520px) {
+  .privacy-cookie-banner { right: 12px; bottom: 12px; left: 12px; width: auto; padding: 20px; border-radius: 19px; }
+  .privacy-cookie-actions { grid-template-columns: .8fr 1.4fr; }
+  .privacy-modal-backdrop { padding: 12px; }
+  .privacy-modal { padding: 21px; max-height: calc(100dvh - 24px); border-radius: 20px; }
+  .privacy-modal-actions { align-items: stretch; flex-direction: column-reverse; gap: 16px; text-align: center; }
+}
+@media (prefers-color-scheme: light) {
+  .privacy-cookie-banner, .privacy-modal { background: #fff; color: #242133; border-color: #e4deee; }
+  .privacy-cookie-description, .privacy-modal > p, .privacy-category p { color: #635b73; }
+  .privacy-cookie-actions button { color: #4d4265; border-color: #ddd4e8; }
+  .privacy-cookie-actions .privacy-primary, .privacy-modal-actions .privacy-primary { background: #7654cc; color: white; }
+  .privacy-category { border-color: #e4deee; background: #fbfaff; }
+  .privacy-shield, .privacy-category summary > span:first-child::before { color: #7654cc; }
+  .privacy-kicker, .privacy-cookie-note a, .privacy-modal-actions a { color: #7654aa; }
+  .privacy-close { border-color: #e4deee; color: #635b73; }
+}
+
 /* Subtle page polish shared by the About and privacy pages. */
 .privacy-page {
   position: relative;

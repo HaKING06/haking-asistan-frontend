@@ -1,5 +1,11 @@
 # 1.0.7 — 2026-11-19
 
+## 1.2.0 — 2026-11-21
+
+- Google Identity Services ile Google hesabı girişi ve kayıt eklendi; aynı Gmail mevcut hesabına bağlanır.
+- Giriş yöntemleri, açık/koyu tema desteği ve mobil düzen güncellendi.
+- Çerez/depolama bilgi kartı, erişilebilir ayrıntılar penceresi ve kısa kayıt bildirimi eklendi; Google ve Cloudflare veri akışları açıklandı.
+
 ## 1.1.0 — 2026-11-21
 
 - Giriş ve kayıt ekranlarına Cloudflare Turnstile doğrulaması, hata/yenileme durumları ve işlem bazlı belirteçler eklendi.

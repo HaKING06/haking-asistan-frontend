@@ -2,13 +2,13 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <script src="./assets/js/normalize-app-fragment.js"></script>
+  <script src="./assets/js/normalize-app-fragment.js?v=1.2.0"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="referrer" content="no-referrer" />
   <meta name="description" content="HaKING AI; Python, JavaScript, C#, HTML ve web geliştirme için Türkçe yapay zekâ chatbotu ve kodlama asistanıdır. Kod öğren, hataları bul, yazılım sorularına yanıt al." />
   <meta name="author" content="Halit Güneş (HaKING)" />
   <meta name="application-name" content="HaKING AI" />
-  <meta name="application-version" content="1.1.0" />
+  <meta name="application-version" content="1.2.0" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="theme-color" content="#0b0d12" />
   <meta property="og:type" content="website" />
@@ -57,12 +57,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./assets/css/main.css?v=1.1.0" />
-  <link rel="stylesheet" href="./assets/css/auth.css?v=1.1.0" />
-  <link rel="stylesheet" href="./assets/css/chat.css?v=1.1.0" />
-  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.1.0" />
+  <link rel="stylesheet" href="./assets/css/main.css?v=1.2.0" />
+  <link rel="stylesheet" href="./assets/css/auth.css?v=1.2.0" />
+  <link rel="stylesheet" href="./assets/css/chat.css?v=1.2.0" />
+  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.2.0" />
 <link rel="preconnect" href="https://haking-asistan-backend.vercel.app" crossorigin>
-<script defer src="./assets/js/warmup.js?v=1.1.0"></script>
+<script defer src="./assets/js/warmup.js?v=1.2.0"></script>
 </head>
 <body>
   <main class="app-shell">
@@ -110,10 +110,17 @@
             <span class="eyebrow auth-eyebrow">HAKING AI · TÜRKÇE KODLAMA ASİSTANI</span>
             <h2 id="auth-title">Tekrar hoş geldin</h2>
             <p id="auth-subtitle">Hesabına giriş yap ve kaldığın yerden devam et.</p>
-            <p class="auth-seo-intro">Python, JavaScript, C# ve web geliştirmede kod öğren; hata ayıkla ve çözümleri anlayarak ilerle. Giriş ve kayıt için doğrulanmış Gmail gerekir.</p>
+            <p class="auth-seo-intro">Kod yaz, öğren, geliştir. Mevcut hesabın ve sohbetlerin aynı yerde.</p>
           </header>
 
+          <div class="auth-methods" role="group" aria-label="Giriş yöntemi" id="auth-methods">
+            <button type="button" class="auth-method active" id="method-google" aria-pressed="true">Google hesabı</button>
+            <button type="button" class="auth-method" id="method-email" aria-pressed="false">Gmail ve şifre</button>
+          </div>
+          <p id="google-intro" class="auth-method-intro">Şifre oluşturmadan devam et. İlk girişinde hesabın açılır; kayıtlı Gmail hesabın varsa ona bağlanırsın.</p>
+
           <form id="login-form" class="form" novalidate>
+            <div id="email-fields" class="email-fields hidden">
             <div class="form-group hidden" id="name-group">
               <label for="fullName">Ad Soyad</label>
               <input type="text" id="fullName" placeholder="Adın Soyadın" autocomplete="name" maxlength="80" aria-describedby="name-help" />
@@ -157,6 +164,8 @@
               </div>
             </div>
 
+            </div>
+
             <div class="age-confirmation" id="age-confirmation-group">
               <label for="adult-confirmed">
                 <input type="checkbox" id="adult-confirmed" required />
@@ -173,7 +182,13 @@
             <p id="turnstile-status" class="verification-help" role="status" aria-live="polite">Güvenlik doğrulaması yükleniyor…</p>
             <button type="button" id="turnstile-retry" class="link-btn hidden">Güvenlik doğrulamasını yeniden yükle</button>
 
-            <button type="submit" class="btn primary full auth-submit" id="submit-btn">
+            <div id="google-signin-section" class="google-signin-section">
+              <div id="google-signin-button" class="google-signin-button" inert aria-disabled="true"></div>
+              <p id="google-signin-status" class="verification-help" role="status" aria-live="polite">Google ile giriş hazırlanıyor…</p>
+              <button type="button" class="link-btn hidden" id="google-signin-retry">Google ile girişi yeniden yükle</button>
+            </div>
+
+            <button type="submit" class="btn primary full auth-submit hidden" id="submit-btn">
               <span>Giriş yap</span>
               <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" /></svg>
             </button>
@@ -429,13 +444,14 @@
     </section>
   </main>
 
-  <script src="./assets/js/state.js?v=1.1.0"></script>
-  <script src="./assets/js/api.js?v=1.1.0"></script>
-  <script src="./assets/js/ui.js?v=1.1.0"></script>
-  <script src="./assets/js/turnstile.js?v=1.1.0"></script>
-  <script src="./assets/js/auth.js?v=1.1.0"></script>
-  <script src="./assets/js/app.js?v=1.1.0"></script>
-  <script src="./assets/js/settings.js?v=1.1.0"></script>
-  <script src="./assets/js/privacy.js?v=1.1.0"></script>
+  <script src="./assets/js/state.js?v=1.2.0"></script>
+  <script src="./assets/js/api.js?v=1.2.0"></script>
+  <script src="./assets/js/ui.js?v=1.2.0"></script>
+  <script src="./assets/js/turnstile.js?v=1.2.0"></script>
+  <script src="./assets/js/google-auth.js?v=1.2.0"></script>
+  <script src="./assets/js/auth.js?v=1.2.0"></script>
+  <script src="./assets/js/app.js?v=1.2.0"></script>
+  <script src="./assets/js/settings.js?v=1.2.0"></script>
+  <script src="./assets/js/privacy.js?v=1.2.0"></script>
 </body>
 </html>

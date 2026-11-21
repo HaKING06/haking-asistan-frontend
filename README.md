@@ -2,13 +2,13 @@
 
 # HaKING AI — Ön yüz
 
-HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.1.0**.
+HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.2.0**.
 
 ## Teknoloji ve yayınlama
 
 - HTML, CSS ve tarayıcı JavaScript'i; kullanıcı arayüzü için ek bir uygulama çatısı kullanılmaz.
 - Dağıtım ve statik dosyalar Cloudflare Workers ile sunulur.
-- Giriş, kayıt, e-posta doğrulama, ayarlar, kredi ve sohbet API'leri Render'daki ayrı backend servisini kullanır.
+- Giriş, kayıt, e-posta doğrulama, ayarlar, kredi ve sohbet API'leri Vercel'deki FastAPI backend servisini kullanır.
 - Yerel geliştirme: `npm run dev`
 - Yayın öncesi derleme kontrolü: `npm run build` (Wrangler dry-run; yayın yapmaz)
 - Yayınlama: `npm run deploy`
@@ -16,6 +16,9 @@ HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet su
 Cloudflare yapılandırmasında depo kök dizini `/`, derleme komutu `npm run build`, dağıtım komutu `npx wrangler deploy` olmalıdır. `robots.txt` ve `sitemap.xml` kök dizinden sunulur.
 
 ## Özellikler
+
+- Google hesabıyla giriş/kayıt ve ayrı Gmail/şifre yöntemi; ortak 18+ ve Turnstile kontrolü. Google client ID backend'in `/auth/google/config` yanıtından alınır, frontend'e secret konmaz.
+- Geliştirilmiş çerez/depolama kartı ve klavye ile kullanılabilen ayrıntılar penceresi. Kabul işleminden sonra tekrar modal açılmaz; seçim localStorage'da saklanır. Panel gerçek depolama ve sağlayıcı davranışlarını açıklar, işlevsiz analiz/reklam anahtarları içermez.
 
 - Giriş ve kayıt öncesi Cloudflare Turnstile doğrulaması. Her istekten sonra yeni belirteç alınır; e-posta kodu aşaması tekrar CAPTCHA istemez.
 
@@ -38,7 +41,7 @@ Sohbet, backend'den Server-Sent Events (SSE) akışı alır. Uzun yanıtlar boyu
 
 ## Gizlilik ve güvenlik
 
-- Backend anahtarlarını (`GROQ_API_KEY`, `GEMINI_API_KEY`, isteğe bağlı `TAVILY_API_KEY`, `RESEND_API_KEY`, veritabanı adresleri ve imzalama sırları) yalnızca özel Render ortam değişkenlerinde saklayın. Bu depoya veya Cloudflare ön yüz değişkenlerine koymayın.
+- Backend anahtarlarını (`GROQ_API_KEY`, `GEMINI_API_KEY`, isteğe bağlı `TAVILY_API_KEY`, `RESEND_API_KEY`, veritabanı adresleri ve imzalama sırları) yalnızca özel Vercel ortam değişkenlerinde saklayın. Bu depoya veya Cloudflare ön yüz değişkenlerine koymayın.
 - Oturum belirteci ve hesap bazlı sohbet geçmişi tarayıcı `localStorage` alanında tutulur; sohbet metni uygulama veritabanında arşivlenmez. Mesajlar yanıt üretmek için backend'e ve seçilen AI sağlayıcısına iletilir; yedek sağlayıcıya geçişte aynı istek ona da gönderilebilir.
 - Sohbet eki olarak tek bir izinli metin/kod dosyası, en fazla 64 KiB olacak şekilde gönderilebilir. Gizli anahtar algılama sınırlı bir önlemdir; dosyaya parola, API anahtarı veya paylaşılmaması gereken veri koymayın.
 - Üretilen HTML önizlemesi yalıtılmış iframe içinde çalıştırılır. Üretilen kodu indirmeden/çalıştırmadan önce inceleyin.
@@ -52,4 +55,4 @@ Güncel kimlik; taçlı mor kaplumbağa maskotunu, site simgelerini, sosyal medy
 
 ## Sürümleme
 
-Güncel sürüm `1.1.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
+Güncel sürüm `1.2.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
