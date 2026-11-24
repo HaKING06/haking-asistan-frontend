@@ -4,6 +4,8 @@ const AppState = {
   token: null,
   email: null,
   sessionReady: false,
+  promptContextStart: null,
+  promptReady: false,
   history: [],
   incompleteResponse: false,
   incompleteMode: null,
@@ -152,6 +154,8 @@ function saveSession(token, email) {
 }
 
 function clearSession() {
+  AppState.promptContextStart = null;
+  AppState.promptReady = false;
   AppState.token = null;
   AppState.email = null;
   AppState.sessionReady = false;

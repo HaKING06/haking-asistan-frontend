@@ -49,7 +49,14 @@ function syncModePickerSelection() {
   modePickerLabelEl.textContent = selectedMode === "crazy"
     ? (crazyModePickerTitleEl?.textContent || selectedNativeOption?.textContent || "Çılgın Mod")
     : selectedMode === "prompt" ? "Prompt Modu · 5 kredi" : "Normal · kredi harcamaz";
-  document.getElementById("prompt-intake").hidden = selectedMode !== "prompt";
+  document.getElementById("prompt-workshop-bar").hidden = selectedMode !== "prompt";
+  chatInputEl.placeholder = selectedMode === "prompt" ? "Ne yaptırmak istiyorsun? Kısaca anlat…" : "Bir fikir veya kod paylaş…";
+  if (selectedMode === "prompt" && AppState.promptContextStart == null) {
+    AppState.promptContextStart = AppState.history.length;
+    AppState.promptReady = false;
+    document.getElementById("prompt-generate-btn").disabled = true;
+    document.getElementById("prompt-workshop-status").textContent = "İsteğini anlat; soruları sohbetten yanıtla. Keşif ücretsiz.";
+  }
 }
 
 function closeModePicker(restoreFocus = false) {
@@ -430,6 +437,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
   if ((!message && !attachment) || sendBtnEl.disabled || isReadingSourceFile) return;
 
   const mode = ["crazy", "prompt"].includes(aiModeSelectEl?.value) ? aiModeSelectEl.value : "normal";
+  if (mode === "prompt" && AppState.promptContextStart == null) AppState.promptContextStart = AppState.history.length;
 
   if (!AppState.email || !AppState.token) {
     uiShowLogin();
@@ -437,13 +445,9 @@ async function sendMessageFromUI(promptAction = "clarify") {
     return;
   }
 
-  if (mode === "prompt" && promptAction === "generate" && !getPromptAgentProfile()) {
-    document.getElementById("prompt-workshop-status").textContent = "Önce agent profilindeki beş alanı doldur. Bilmediğin alana bilmiyorum, talimat yoksa yok yaz.";
-    document.getElementById("prompt-intake").open = true;
-    return;
-  }
   const generateButton = document.getElementById("prompt-generate-btn");
   if (generateButton) generateButton.disabled = true;
+  document.getElementById("prompt-new-task-btn").disabled = true;
   const displayedMessage = attachment
     ? `${message}\n\nEklenen dosya: ${attachment.name}`
     : message;
@@ -461,7 +465,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
   let assistantBubble = null;
   let hasReceivedChunk = false;
   let assistantReply = "";
-  const continueIntent = AppState.history.some((item) => item.role === "assistant") && /^(?:lütfen\s+)?(?:devam(?:\s+et)?|kaldığın\s+yerden(?:\s+devam\s+et)?|sürdür)(?:[.!\s]|$)/i.test(message);
+  const continueIntent = mode !== "prompt" && AppState.history.some((item) => item.role === "assistant") && /^(?:lütfen\s+)?(?:devam(?:\s+et)?|kaldığın\s+yerden(?:\s+devam\s+et)?|sürdür)(?:[.!\s]|$)/i.test(message);
   const previousUsage = continueIntent
     ? [...AppState.history].reverse().find((item) => item.role === "assistant")?.usage
     : null;
@@ -494,7 +498,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
       requestMessage,
       AppState.email,
       AppState.token,
-      buildChatContext(AppState.history),
+      buildChatContext(mode === "prompt" ? AppState.history.slice(AppState.promptContextStart ?? AppState.history.length) : AppState.history),
       (chunk) => {
         assistantReply += chunk;
         persistStreamingDraft();
@@ -518,6 +522,10 @@ async function sendMessageFromUI(promptAction = "clarify") {
         uiSetTypingStage(stage);
       },
       (usage) => {
+        if (mode === "prompt" && usage?.phase === "prompt_brief") {
+          AppState.promptReady = usage.ready === true;
+          document.getElementById("prompt-workshop-status").textContent = AppState.promptReady ? `Hazır: ${usage.goal}` : "Soruları sohbetten yanıtla; kredi harcanmaz.";
+        }
         if (usage?.phase === "production" && ["gemini", "groq"].includes(usage.provider)) {
           providerUsage.production.push(usage.provider);
         }
@@ -595,7 +603,8 @@ async function sendMessageFromUI(promptAction = "clarify") {
     if (assistantBubble) uiFinishAssistantStream(assistantBubble, providerUsage);
     uiShowTyping(false);
     sendBtnEl.disabled = false;
-    if (generateButton) generateButton.disabled = false;
+    if (generateButton) generateButton.disabled = !AppState.promptReady;
+    document.getElementById("prompt-new-task-btn").disabled = false;
     setSendButtonBusy(false);
     newChatBtnEl.disabled = false;
     document.getElementById("mobile-new-chat-btn").disabled = false;
@@ -605,17 +614,13 @@ async function sendMessageFromUI(promptAction = "clarify") {
   }
 }
 
-// Keep the current agent profile local to the form; never store it as a secret.
-function getPromptAgentProfile() {
-  const profile = {};
-  for (const key of ["agent", "model", "tools", "platform", "instructions"]) {
-    profile[key] = document.getElementById(`prompt-${key}`).value.trim();
-  }
-  return Object.values(profile).every(Boolean) ? profile : null;
-}
-
 document.getElementById("prompt-generate-btn")?.addEventListener("click", () => sendMessageFromUI("generate"));
-document.getElementById("prompt-reset-btn")?.addEventListener("click", () => {
-  for (const key of ["agent", "model", "tools", "platform", "instructions"]) document.getElementById(`prompt-${key}`).value = "";
-  document.getElementById("prompt-workshop-status").textContent = "Agent profili temizlendi. Yeni bir hedef için Yeni sohbet düğmesini kullan.";
+document.getElementById("prompt-new-task-btn")?.addEventListener("click", () => {
+  if (sendBtnEl.disabled) return;
+  AppState.promptContextStart = AppState.history.length;
+  AppState.promptReady = false;
+  document.getElementById("prompt-generate-btn").disabled = true;
+  document.getElementById("prompt-workshop-status").textContent = "Yeni görev: Ne yaptırmak istiyorsun?";
+  uiAddAssistantMessage("Yeni bir prompt hazırlayalım. Agente ne yaptırmak istiyorsun?");
+  chatInputEl.focus();
 });

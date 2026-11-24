@@ -1,5 +1,13 @@
 # 1.0.7 — 2026-11-19
 
+## 1.6.0 — 2026-11-24
+
+- Açılır agent formu kaldırıldı; istek, model, yetki ve özel talimatlar sohbet içinde netleştirilir.
+- Prompt oturumu önceki mod ve örnek görevlerden ayrıldı; Yeni görev bağımsız bir bağlam başlatır.
+- Güncel hedef kullanıcı alıntısıyla doğrulanan görev kartına çıkarılır; eski asistan promptları gereksinim sayılmaz.
+- Araştırma ve nihai üretim sadece güncel kartı kullanır; son taslak konu ve kısıt uyumu açısından incelenir.
+- Eksik brief ücretsiz soru aşamasına döner; başarısız nihai incelemede çıktı verilmeden kredi iadesi yapılır.
+
 ## 1.5.0 — 2026-11-24
 
 - Prompt Atölyesi: ücretsiz gereksinim soruları, agent/model/araç profili, araştırmalı plan ve 5 kredilik nihai prompt.

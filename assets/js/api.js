@@ -539,7 +539,7 @@ async function apiChat(message, userId, token, history, onChunk, attachment = nu
         userId,
         history,
         mode,
-        ...(mode === "prompt" ? { agent_profile: getPromptAgentProfile(), prompt_action: promptAction } : {}),
+        ...(mode === "prompt" ? { prompt_action: promptAction } : {}),
         ...(attachment
           ? { attachment_name: attachment.name, attachment_content: attachment.content }
           : {}),

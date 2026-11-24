@@ -2,7 +2,7 @@
 
 # HaKING AI — Ön yüz
 
-HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.5.0**.
+HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.6.0**.
 
 ## Teknoloji ve yayınlama
 
@@ -59,12 +59,12 @@ Güncel kimlik; taçlı mor kaplumbağa maskotunu, site simgelerini, sosyal medy
 
 ## Sürümleme
 
-Güncel sürüm `1.5.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
+Güncel sürüm `1.6.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
 
 
-## Prompt Atölyesi (1.5.0)
+## Sohbetle Prompt Atölyesi (1.6.0)
 
-Mod menüsündeki Prompt Modu, agent/model/araç/platform ve özel talimat formuyla açılır.
-Gönder düğmesi ücretsiz keşif soruları sorar; cevaplar konuşma bağlamında korunur.
-“Promptu üret · 5 kredi” araştırma, kalite planı ve nihai agent promptunu üretir.
-Backend Vercel’de, frontend Cloudflare’da yayınlanır. Google giriş, Turnstile ve 1.4.1 tasarımı korunur.
+Prompt Modu'nda isteğini doğrudan yaz. Asistan agent, model, araç erişimi ve özel talimatları gerektiğinde
+sohbet içinde sorar. Hazır görev kartı gösterilince küçük üretim düğmesi etkinleşir. Nihai üretim 5 kredidir.
+Yeni görev düğmesi önceki prompttan bağımsız bir bağlam açar. Eski konuşmalar görünür kalır; yeni göreve gönderilmez.
+Yeni moda ilk girişte önceki normal/çılgın sohbet otomatik gereksinim olarak alınmaz.

@@ -89,6 +89,12 @@ function uiShowSessionShell(message = "Oturumun kontrol ediliyor…", retry = fa
 function uiStartNewChat(clearStored = true) {
   if (clearStored) clearChatHistory(AppState.email);
   AppState.history = [];
+  AppState.promptContextStart = null;
+  AppState.promptReady = false;
+  const promptButton = document.getElementById("prompt-generate-btn");
+  if (promptButton) promptButton.disabled = true;
+  const promptStatus = document.getElementById("prompt-workshop-status");
+  if (promptStatus) promptStatus.textContent = "Yeni görev: Ne yaptırmak istiyorsun?";
   AppState.incompleteResponse = false;
   AppState.incompleteMode = null;
   AppState.incompleteFiles = [];
