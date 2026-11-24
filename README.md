@@ -2,7 +2,7 @@
 
 # HaKING AI — Ön yüz
 
-HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.6.0**.
+HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.7.0**.
 
 ## Teknoloji ve yayınlama
 
@@ -59,7 +59,7 @@ Güncel kimlik; taçlı mor kaplumbağa maskotunu, site simgelerini, sosyal medy
 
 ## Sürümleme
 
-Güncel sürüm `1.6.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
+Güncel sürüm `1.7.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
 
 
 ## Sohbetle Prompt Atölyesi (1.6.0)
@@ -68,3 +68,15 @@ Prompt Modu'nda isteğini doğrudan yaz. Asistan agent, model, araç erişimi ve
 sohbet içinde sorar. Hazır görev kartı gösterilince küçük üretim düğmesi etkinleşir. Nihai üretim 5 kredidir.
 Yeni görev düğmesi önceki prompttan bağımsız bir bağlam açar. Eski konuşmalar görünür kalır; yeni göreve gönderilmez.
 Yeni moda ilk girişte önceki normal/çılgın sohbet otomatik gereksinim olarak alınmaz.
+
+
+## Prompt karar belleği (1.7.0)
+
+Görev kartı `prompt_state` ile sonraki tura taşınır. Prompt oturumunun kimliği, verilen kararlar ve hazırlık durumu
+bu cihazdaki sohbet kaydında korunur; normal sohbet ve diğer prompt görevleri bu kapsama karışmaz.
+Gerekli alanlar eksikken sorular ücretsizdir. Model/araç seçimini asistana bırakmak ilerlemeyi engellemez.
+Codex model önerileri resmî model sayfasından günlük önbellekle kontrol edilir; canlı kaynak yoksa
+24 Kasım 2026 doğrulanmış kaydı ve tarihi açıklanır. Hesapta görünmeyen model veya sınırsız Pro kotası vaat edilmez.
+Nihai prompt istemini sohbetten yazmak da üretimi başlatabilir; eksik hedef/agent/platform varsa kredi alınmadan soru sorulur.
+İç görev analizi ve denetim JSON çıktı moduyla yapılır. Kesilmiş JSON parçaları farklı sağlayıcılardan birleştirilmez.
+Üretim sağlayıcıları ücretsiz katmanlı mevcut Groq/Gemini modelleridir; OpenAI ücretli API isteği eklenmez.

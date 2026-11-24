@@ -1,5 +1,13 @@
 # 1.0.7 — 2026-11-19
 
+## 1.7.0 — 2026-11-24
+
+- Karar belleği: önceki cevapları koruyan görev durumu ve sayfa yenilemede devam eden ayrı prompt oturumları.
+- “Sen öner” ve “uygun araçları seç” taleplerinde soru döngüsü yerine gerekçeli öneri ve açık varsayımlar.
+- Codex iş ağırlığına göre resmî kaynaklı, tarih belirtilen model önerileri; erişim ve kota garantisi verilmez.
+- Sağlayıcı JSON modu, hatalı çıktı toleransı ve kesik JSON'u yeniden başlatan sağlayıcı yedeği.
+- Kullanıcının bildirdiği hesap makinesi konuşması, eksik/bozuk analiz çıktılarıyla regresyon testi olarak eklendi.
+
 ## 1.6.0 — 2026-11-24
 
 - Açılır agent formu kaldırıldı; istek, model, yetki ve özel talimatlar sohbet içinde netleştirilir.

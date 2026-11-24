@@ -53,6 +53,10 @@ function uiShowChat(email, displayName = "") {
   founderCreditSettingsEl?.classList.toggle("hidden", !isFounder);
   const savedConversation = loadChatHistory(email);
   AppState.history = savedConversation.history;
+  AppState.promptBrief = savedConversation.promptBrief || null;
+  AppState.promptSessionId = savedConversation.promptSessionId || null;
+  AppState.promptReady = savedConversation.promptReady === true;
+  AppState.promptContextStart = AppState.promptSessionId ? AppState.history.length : null;
   AppState.incompleteResponse = savedConversation.incompleteResponse;
   AppState.incompleteMode = savedConversation.incompleteMode;
   AppState.incompleteFiles = savedConversation.incompleteFiles;
@@ -90,6 +94,8 @@ function uiStartNewChat(clearStored = true) {
   if (clearStored) clearChatHistory(AppState.email);
   AppState.history = [];
   AppState.promptContextStart = null;
+  AppState.promptSessionId = null;
+  AppState.promptBrief = null;
   AppState.promptReady = false;
   const promptButton = document.getElementById("prompt-generate-btn");
   if (promptButton) promptButton.disabled = true;

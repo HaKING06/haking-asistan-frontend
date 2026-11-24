@@ -52,10 +52,17 @@ function syncModePickerSelection() {
   document.getElementById("prompt-workshop-bar").hidden = selectedMode !== "prompt";
   chatInputEl.placeholder = selectedMode === "prompt" ? "Ne yaptırmak istiyorsun? Kısaca anlat…" : "Bir fikir veya kod paylaş…";
   if (selectedMode === "prompt" && AppState.promptContextStart == null) {
+    const previous = [...AppState.history].reverse().find(item => item.role === "user" && item.mode === "prompt" && item.promptSession);
+    AppState.promptSessionId = previous?.promptSession || crypto.randomUUID();
     AppState.promptContextStart = AppState.history.length;
     AppState.promptReady = false;
+    AppState.promptBrief = null;
     document.getElementById("prompt-generate-btn").disabled = true;
     document.getElementById("prompt-workshop-status").textContent = "İsteğini anlat; soruları sohbetten yanıtla. Keşif ücretsiz.";
+  }
+  if (selectedMode === "prompt" && AppState.promptBrief && !sendBtnEl.disabled) {
+    document.getElementById("prompt-generate-btn").disabled = !AppState.promptReady;
+    document.getElementById("prompt-workshop-status").textContent = AppState.promptReady ? `Hazır: ${AppState.promptBrief.goal}` : "Kaldığımız yerden devam edelim; cevaplarını yaz.";
   }
 }
 
@@ -437,7 +444,8 @@ async function sendMessageFromUI(promptAction = "clarify") {
   if ((!message && !attachment) || sendBtnEl.disabled || isReadingSourceFile) return;
 
   const mode = ["crazy", "prompt"].includes(aiModeSelectEl?.value) ? aiModeSelectEl.value : "normal";
-  if (mode === "prompt" && AppState.promptContextStart == null) AppState.promptContextStart = AppState.history.length;
+  if (mode === "prompt" && promptAction === "clarify" && /prompt(?:u|unu)?[\s\S]{0,40}(?:hazırla|üret|oluştur)/i.test(message)) promptAction = "generate";
+  if (mode === "prompt" && !AppState.promptSessionId) AppState.promptSessionId = crypto.randomUUID();
 
   if (!AppState.email || !AppState.token) {
     uiShowLogin();
@@ -484,7 +492,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
       rememberIncompleteCodeFiles(assistantReply, continueIntent);
       saveChatHistory(
         AppState.email,
-        [...AppState.history, { role: "user", content: historyUserMessage }, { role: "assistant", content: assistantReply, usage: providerUsage }],
+        [...AppState.history, { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }, { role: "assistant", content: assistantReply, usage: providerUsage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }],
         true,
         mode
       );
@@ -498,7 +506,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
       requestMessage,
       AppState.email,
       AppState.token,
-      buildChatContext(mode === "prompt" ? AppState.history.slice(AppState.promptContextStart ?? AppState.history.length) : AppState.history),
+      buildChatContext(mode === "prompt" ? AppState.history.filter(item => item.mode === "prompt" && item.promptSession === AppState.promptSessionId) : AppState.history),
       (chunk) => {
         assistantReply += chunk;
         persistStreamingDraft();
@@ -524,6 +532,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
       (usage) => {
         if (mode === "prompt" && usage?.phase === "prompt_brief") {
           AppState.promptReady = usage.ready === true;
+          AppState.promptBrief = usage.brief || null;
           document.getElementById("prompt-workshop-status").textContent = AppState.promptReady ? `Hazır: ${usage.goal}` : "Soruları sohbetten yanıtla; kredi harcanmaz.";
         }
         if (usage?.phase === "production" && ["gemini", "groq"].includes(usage.provider)) {
@@ -550,8 +559,8 @@ async function sendMessageFromUI(promptAction = "clarify") {
       if (hasReceivedChunk) {
         rememberIncompleteCodeFiles(assistantReply, continueIntent);
         AppState.history.push(
-          { role: "user", content: historyUserMessage },
-          { role: "assistant", content: assistantReply, usage: providerUsage }
+          { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) },
+          { role: "assistant", content: assistantReply, usage: providerUsage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }
         );
         AppState.history = retainChatHistory(AppState.history);
         AppState.incompleteResponse = true;
@@ -567,8 +576,8 @@ async function sendMessageFromUI(promptAction = "clarify") {
     } else {
       clearSelectedSourceFile();
       AppState.history.push(
-        { role: "user", content: historyUserMessage },
-        { role: "assistant", content: assistantReply, usage: providerUsage }
+        { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) },
+        { role: "assistant", content: assistantReply, usage: providerUsage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }
       );
       AppState.history = retainChatHistory(AppState.history);
       AppState.incompleteResponse = false;
@@ -582,8 +591,8 @@ async function sendMessageFromUI(promptAction = "clarify") {
     if (hasReceivedChunk) {
       rememberIncompleteCodeFiles(assistantReply, continueIntent);
       AppState.history.push(
-        { role: "user", content: historyUserMessage },
-        { role: "assistant", content: assistantReply, usage: providerUsage }
+        { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) },
+        { role: "assistant", content: assistantReply, usage: providerUsage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }
       );
       AppState.history = retainChatHistory(AppState.history);
       AppState.incompleteResponse = true;
@@ -618,6 +627,8 @@ document.getElementById("prompt-generate-btn")?.addEventListener("click", () => 
 document.getElementById("prompt-new-task-btn")?.addEventListener("click", () => {
   if (sendBtnEl.disabled) return;
   AppState.promptContextStart = AppState.history.length;
+  AppState.promptSessionId = crypto.randomUUID();
+  AppState.promptBrief = null;
   AppState.promptReady = false;
   document.getElementById("prompt-generate-btn").disabled = true;
   document.getElementById("prompt-workshop-status").textContent = "Yeni görev: Ne yaptırmak istiyorsun?";

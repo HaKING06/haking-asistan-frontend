@@ -6,6 +6,8 @@ const AppState = {
   sessionReady: false,
   promptContextStart: null,
   promptReady: false,
+  promptSessionId: null,
+  promptBrief: null,
   history: [],
   incompleteResponse: false,
   incompleteMode: null,
@@ -16,6 +18,12 @@ const CHAT_HISTORY_STORAGE_VERSION = 1;
 const CHAT_HISTORY_MAX_MESSAGES = 80;
 const CHAT_HISTORY_MAX_CHARS = 100000;
 const CHAT_USAGE_PROVIDERS = new Set(["tavily", "gemini", "groq"]);
+
+function conversationScope(item) {
+  const mode = ["normal", "crazy", "prompt"].includes(item.mode) ? item.mode : undefined;
+  const promptSession = typeof item.promptSession === "string" && /^[a-zA-Z0-9-]{1,64}$/.test(item.promptSession) ? item.promptSession : undefined;
+  return { ...(mode ? {mode} : {}), ...(mode === "prompt" && promptSession ? {promptSession} : {}) };
+}
 
 function normalizeChatUsage(value) {
   if (!value || typeof value !== "object") return null;
@@ -72,11 +80,14 @@ function loadChatHistory(email) {
     const history = saved.history
       .filter((item) => item && ["user", "assistant"].includes(item.role) && typeof item.content === "string")
       .map((item) => item.role === "assistant"
-        ? { role: item.role, content: item.content, ...(normalizeChatUsage(item.usage) ? { usage: normalizeChatUsage(item.usage) } : {}) }
-        : { role: item.role, content: item.content })
+        ? { role: item.role, content: item.content, ...conversationScope(item), ...(normalizeChatUsage(item.usage) ? { usage: normalizeChatUsage(item.usage) } : {}) }
+        : { role: item.role, content: item.content, ...conversationScope(item) })
       .slice(-CHAT_HISTORY_MAX_MESSAGES);
     return {
       history,
+      promptBrief: saved.promptBrief && typeof saved.promptBrief === "object" ? saved.promptBrief : null,
+      promptSessionId: typeof saved.promptSessionId === "string" ? saved.promptSessionId : null,
+      promptReady: saved.promptReady === true,
       incompleteResponse: saved.incompleteResponse === true,
       incompleteMode: ["normal", "crazy", "prompt"].includes(saved.incompleteMode) ? saved.incompleteMode : null,
       incompleteFiles: normalizeCompletedFiles(saved.incompleteFiles),
@@ -104,6 +115,7 @@ function saveChatHistory(
     bounded.unshift({
       role: item.role,
       content,
+      ...conversationScope(item),
       ...(item.role === "assistant" && normalizeChatUsage(item.usage) ? { usage: normalizeChatUsage(item.usage) } : {}),
     });
     totalChars += content.length;
@@ -115,6 +127,9 @@ function saveChatHistory(
       incompleteResponse: incompleteResponse === true,
       incompleteMode: ["normal", "crazy", "prompt"].includes(incompleteMode) ? incompleteMode : null,
       incompleteFiles: normalizeCompletedFiles(incompleteFiles),
+      promptBrief: AppState.promptBrief,
+      promptSessionId: AppState.promptSessionId,
+      promptReady: AppState.promptReady,
       updatedAt: Date.now(),
     }));
     return true;
@@ -155,6 +170,8 @@ function saveSession(token, email) {
 
 function clearSession() {
   AppState.promptContextStart = null;
+  AppState.promptSessionId = null;
+  AppState.promptBrief = null;
   AppState.promptReady = false;
   AppState.token = null;
   AppState.email = null;
