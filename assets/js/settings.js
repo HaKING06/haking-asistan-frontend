@@ -112,7 +112,7 @@
       } else {
         lines.push("Ek paket kredisi bulunmuyor.");
       }
-      lines.push(`Çılgın Mod isteği ${balance.crazy_mode_cost} kredi kullanır. Ek krediler ücretsiz aylık kredilerden ayrı tutulur.`);
+      lines.push(`Çılgın Mod ${balance.crazy_mode_cost}, Prompt Modu nihai üretimi ${balance.prompt_mode_cost || 5} kredi kullanır; ikisi aynı bakiyeden harcar. Keşif ve normal sohbet ücretsizdir.`);
       settingsCreditDetails.textContent = lines.join("\n");
       AppState.credits = balance;
     } catch (error) {

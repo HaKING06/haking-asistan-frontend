@@ -549,7 +549,7 @@ async function apiChat(message, userId, token, history, onChunk, attachment = nu
 
     if (!res.ok) {
       if (res.status === 402) {
-        uiSetBackendStatus("ready", "Kredi bakiyesi güncel; Çılgın Mod için yeterli kredi gereklidir.");
+        uiSetBackendStatus("ready", "Ortak kredi bakiyesi güncel; Çılgın Mod ve Prompt Modu aynı bakiyeyi kullanır.");
       } else {
         uiSetBackendStatus("error", `Asistan isteği başarısız oldu (HTTP ${res.status}).`);
       }

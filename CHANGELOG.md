@@ -1,3 +1,8 @@
+## 1.7.1 — 2026-11-24
+
+- Çılgın Mod ve Prompt Modu için ortak kredi açıklamaları.
+- Kurucu hesabı için uygulama ve PostgreSQL silme/kimlik koruması.
+
 # 1.0.7 — 2026-11-19
 
 ## 1.7.0 — 2026-11-24

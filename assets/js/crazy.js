@@ -20,9 +20,9 @@
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(data.price_try));
-      setText("crazy-package-summary", creditCount + " kredi · " + Math.floor(data.credits / data.crazy_mode_cost) + " Çılgın Mod isteği");
+      setText("crazy-package-summary", creditCount + " ortak kredi · Çılgın Mod " + data.crazy_mode_cost + " / Prompt Modu 5 kredi");
     })
     .catch(() => {
-      // The static package details remain visible if the Render API is sleeping.
+      // The static package details remain visible if the API is unavailable.
     });
 })();
