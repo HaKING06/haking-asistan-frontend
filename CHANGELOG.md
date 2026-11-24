@@ -1,5 +1,13 @@
 # 1.0.7 — 2026-11-19
 
+## 1.3.0 — 2026-11-24
+
+- Tüm web sayfalarına koyu mürdüm Studio tasarım sistemi, sade gezinme ve okunabilir bölüm düzeni eklendi.
+- Giriş ekranı sadeleştirildi; sistemin açık tema tercihinin mor kimliği değiştirmesi kaldırıldı.
+- Kayıtlı oturumda çalışma alanı hemen açılır; sunucu doğrulaması bitene kadar gönderim kapalıdır. Geçici ağ hatası oturumu silmez; yeniden deneme sunulur.
+- Oturum doğrulanırken Google ve Turnstile gereksiz yere yüklenmez.
+- Mobil üst çubuğa erişilebilir yeni sohbet düğmesi eklendi.
+
 ## 1.2.0 — 2026-11-21
 
 - Google Identity Services ile Google hesabı girişi ve kayıt eklendi; aynı Gmail mevcut hesabına bağlanır.

@@ -32,11 +32,18 @@ function uiSetBackendStatus(state, message) {
 }
 
 function uiShowLogin() {
+  AppState.sessionReady = false;
+  delete document.documentElement.dataset.session;
+  if (typeof startAuthServices === "function") startAuthServices();
   loginCardEl.classList.remove("hidden");
   chatCardEl.classList.add("hidden");
 }
 
 function uiShowChat(email, displayName = "") {
+  delete document.documentElement.dataset.session;
+  AppState.sessionReady = true;
+  document.getElementById("session-notice").classList.add("hidden");
+  document.getElementById("send-btn").disabled = false;
   loginCardEl.classList.add("hidden");
   chatCardEl.classList.remove("hidden");
   const isFounder = String(email || "").trim().toLowerCase() === "gunshalit@gmail.com";
@@ -62,6 +69,18 @@ function uiShowChat(email, displayName = "") {
   profileNameEl.textContent = profileName;
   userAvatarEl.textContent = profileName.trim().charAt(0) || "H";
   if (typeof refreshAiCreditBalance === "function") void refreshAiCreditBalance();
+}
+
+function uiShowSessionShell(message = "Oturumun kontrol ediliyor…", retry = false) {
+  loginCardEl.classList.add("hidden");
+  chatCardEl.classList.remove("hidden");
+  document.documentElement.dataset.session = "checking";
+  const notice = document.getElementById("session-notice");
+  notice.classList.remove("hidden");
+  document.getElementById("session-notice-text").textContent = message;
+  document.getElementById("session-retry").classList.toggle("hidden", !retry);
+  document.getElementById("session-signin").classList.toggle("hidden", !retry);
+  document.getElementById("send-btn").disabled = true;
 }
 
 function uiStartNewChat(clearStored = true) {

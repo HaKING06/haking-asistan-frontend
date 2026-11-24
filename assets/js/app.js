@@ -245,44 +245,38 @@ function startBackendKeepAlive() {
   }, BACKEND_KEEPALIVE_INTERVAL_MS);
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-  loadSession();
-
-  if (!AppState.token) {
-    clearSession();
-    uiShowLogin();
-    loginErrorEl.textContent = "Sohbeti kullanmak için önce hesabına giriş yapmalısın.";
-    return;
-  }
-
-  uiShowLogin();
-  loginErrorEl.dataset.state = "pending";
-  loginErrorEl.textContent = "Oturum doğrulanıyor...";
-
+let sessionValidationPending = false;
+async function restoreSession() {
+  if (sessionValidationPending) return;
+  if (!AppState.token) { uiShowLogin(); return; }
+  const token = AppState.token;
+  sessionValidationPending = true;
+  AppState.sessionReady = false;
+  uiShowSessionShell();
   try {
-    const session = await apiValidateSession(AppState.token);
+    const session = await apiValidateSession(token);
+    if (AppState.token !== token) return;
     if (!session.ok) {
-      if (session.unauthorized) clearSession();
-      loginErrorEl.removeAttribute("data-state");
-      loginErrorEl.textContent = session.message;
+      if (session.unauthorized) {
+        clearSession(); uiShowLogin();
+        showAuthError("Oturumun sona erdi. Yeniden giriş yapabilirsin.");
+      } else {
+        uiShowSessionShell("Sunucuya henüz ulaşılamadı. Oturumun korunuyor.", true);
+      }
       return;
     }
-
-    saveSession(AppState.token, session.email);
-    loginErrorEl.removeAttribute("data-state");
-    loginErrorEl.textContent = "";
+    saveSession(token, session.email);
     uiShowChat(session.email, session.name);
     startBackendKeepAlive();
-    void apiWarmup().catch((error) => {
-      console.info("Backend hazırlanıyor:", error.message);
-    });
-  } catch (error) {
-    console.info("Oturum doğrulaması tamamlanamadı:", error.message);
-    loginErrorEl.removeAttribute("data-state");
-    loginErrorEl.textContent =
-      "Oturum doğrulanamadı. Sunucu bağlantısını kontrol edip yeniden dene.";
-  }
-});
+    void apiWarmup().catch(() => {});
+  } catch {
+    if (AppState.token === token) uiShowSessionShell("Bağlantı bekleniyor. Yeniden deneyebilirsin.", true);
+  } finally { sessionValidationPending = false; }
+}
+
+document.addEventListener("DOMContentLoaded", restoreSession);
+document.getElementById("session-retry").addEventListener("click", restoreSession);
+document.getElementById("session-signin").addEventListener("click", () => { clearSession(); uiShowLogin(); });
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
@@ -317,7 +311,7 @@ chatInputEl.addEventListener("input", () => {
   chatInputEl.style.height = `${Math.min(chatInputEl.scrollHeight, 170)}px`;
 });
 
-newChatBtnEl.addEventListener("click", () => {
+function startNewConversation() {
   if (sendBtnEl.disabled) return;
   uiShowTyping(false);
   chatInputEl.value = "";
@@ -325,7 +319,9 @@ newChatBtnEl.addEventListener("click", () => {
   clearSelectedSourceFile();
   uiStartNewChat();
   chatInputEl.focus();
-});
+}
+newChatBtnEl.addEventListener("click", startNewConversation);
+document.getElementById("mobile-new-chat-btn").addEventListener("click", startNewConversation);
 
 document.addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
@@ -421,6 +417,7 @@ function setSendButtonBusy(busy) {
 }
 
 async function sendMessageFromUI() {
+  if (!AppState.sessionReady) return;
   const attachment = selectedSourceFile;
   const message = chatInputEl.value.trim() || (attachment ? "Yüklediğim dosyayı incele ve varsa hataları açıkla; gerekirse düzeltilmiş kodu öner." : "");
   if ((!message && !attachment) || sendBtnEl.disabled || isReadingSourceFile) return;
@@ -442,6 +439,7 @@ async function sendMessageFromUI() {
   sendBtnEl.disabled = true;
   setSendButtonBusy(true);
   newChatBtnEl.disabled = true;
+  document.getElementById("mobile-new-chat-btn").disabled = true;
   attachFileBtnEl.disabled = true;
   removeFileBtnEl.disabled = true;
   uiShowTyping(true, mode);
@@ -584,6 +582,7 @@ async function sendMessageFromUI() {
     sendBtnEl.disabled = false;
     setSendButtonBusy(false);
     newChatBtnEl.disabled = false;
+    document.getElementById("mobile-new-chat-btn").disabled = false;
     attachFileBtnEl.disabled = false;
     removeFileBtnEl.disabled = false;
     if (mode === "crazy") void refreshAiCreditBalance();

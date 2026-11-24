@@ -24,7 +24,7 @@ const AuthTurnstile = (() => {
     if (hidden || !window.turnstile) return;
     message("Güvenlik doğrulaması bekleniyor…");
     widget = window.turnstile.render(container, {
-      sitekey, action, theme: "auto", size: "flexible", language: "tr",
+      sitekey, action, theme: "dark", size: "flexible", language: "tr",
       "response-field": false,
       callback: (value) => { token = value; message("Güvenlik doğrulaması tamamlandı."); },
       "expired-callback": () => { token = ""; message("Doğrulamanın süresi doldu. Lütfen yeniden doğrulayın.", true); },

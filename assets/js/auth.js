@@ -314,8 +314,8 @@ function updateAuthMethod() {
   submitBtnEl.classList.toggle("hidden", google);
   GoogleSignIn.setVisible(google);
   if (google) {
-    authTitleEl.textContent = "Fikirlerini koda dönüştür";
-    authSubtitleEl.textContent = "Google hesabınla giriş yap veya saniyeler içinde hesabını oluştur.";
+    authTitleEl.textContent = "Kaldığın yerden.";
+    authSubtitleEl.textContent = "Hesabınla çalışma alanına devam et.";
   }
 }
 
@@ -350,8 +350,14 @@ function setAuthLoading(isLoading) {
 
 // Başlangıç durumu
 switchToLogin(false);
-AuthTurnstile.start();
-GoogleSignIn.start(finishAuthentication, showAuthError);
+let authServicesStarted = false;
+function startAuthServices() {
+  if (authServicesStarted) return;
+  authServicesStarted = true;
+  AuthTurnstile.start();
+  GoogleSignIn.start(finishAuthentication, showAuthError);
+}
+if (!AppState.token) startAuthServices();
 
 showRegisterBtnEl.addEventListener("click", switchToRegister);
 showLoginBtnEl.addEventListener("click", switchToLogin);

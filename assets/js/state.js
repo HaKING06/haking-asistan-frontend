@@ -3,6 +3,7 @@
 const AppState = {
   token: null,
   email: null,
+  sessionReady: false,
   history: [],
   incompleteResponse: false,
   incompleteMode: null,
@@ -153,6 +154,7 @@ function saveSession(token, email) {
 function clearSession() {
   AppState.token = null;
   AppState.email = null;
+  AppState.sessionReady = false;
   try {
     localStorage.removeItem("haking_token");
     localStorage.removeItem("haking_email");
@@ -160,3 +162,5 @@ function clearSession() {
     // The in-memory session is cleared even if browser storage is unavailable.
   }
 }
+
+loadSession();

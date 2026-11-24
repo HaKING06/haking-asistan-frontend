@@ -433,16 +433,7 @@
   .privacy-modal { padding: 21px; max-height: calc(100dvh - 24px); border-radius: 20px; }
   .privacy-modal-actions { align-items: stretch; flex-direction: column-reverse; gap: 16px; text-align: center; }
 }
-@media (prefers-color-scheme: light) {
-  .privacy-cookie-banner, .privacy-modal { background: #fff; color: #242133; border-color: #e4deee; }
-  .privacy-cookie-description, .privacy-modal > p, .privacy-category p { color: #635b73; }
-  .privacy-cookie-actions button { color: #4d4265; border-color: #ddd4e8; }
-  .privacy-cookie-actions .privacy-primary, .privacy-modal-actions .privacy-primary { background: #7654cc; color: white; }
-  .privacy-category { border-color: #e4deee; background: #fbfaff; }
-  .privacy-shield, .privacy-category summary > span:first-child::before { color: #7654cc; }
-  .privacy-kicker, .privacy-cookie-note a, .privacy-modal-actions a { color: #7654aa; }
-  .privacy-close { border-color: #e4deee; color: #635b73; }
-}
+
 
 /* Subtle page polish shared by the About and privacy pages. */
 .privacy-page {

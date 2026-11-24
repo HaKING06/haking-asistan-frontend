@@ -2,7 +2,7 @@
 
 # HaKING AI — Ön yüz
 
-HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.2.0**.
+HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.3.0**.
 
 ## Teknoloji ve yayınlama
 
@@ -16,6 +16,10 @@ HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet su
 Cloudflare yapılandırmasında depo kök dizini `/`, derleme komutu `npm run build`, dağıtım komutu `npx wrangler deploy` olmalıdır. `robots.txt` ve `sitemap.xml` kök dizinden sunulur.
 
 ## Özellikler
+
+- Tüm sayfalarda ortak koyu Studio tasarımı; yan sayfalarda bölüm dizini, mobilde doğrudan yeni sohbet düğmesi.
+- Kayıtlı oturumda giriş ekranını bekletmeden çalışma alanı kabuğu gösterilir. Sunucudan onay gelmeden mesaj gönderilemez ve geçmiş yüklenmez; iptal edilmiş oturum girişe döner. Geçici ağ hatalarında kayıtlı oturum korunur ve tekrar deneme sunulur.
+- `studio.css` ortak görsel sistem, `studio.js` yan sayfa gezinmesi ve uzun metinlerin açılır ayrıntı düzenidir. Ürünün mor/koyu kimliği sistemin açık tema tercihinden bağımsızdır.
 
 - Google hesabıyla giriş/kayıt ve ayrı Gmail/şifre yöntemi; ortak 18+ ve Turnstile kontrolü. Google client ID backend'in `/auth/google/config` yanıtından alınır, frontend'e secret konmaz.
 - Geliştirilmiş çerez/depolama kartı ve klavye ile kullanılabilen ayrıntılar penceresi. Kabul işleminden sonra tekrar modal açılmaz; seçim localStorage'da saklanır. Panel gerçek depolama ve sağlayıcı davranışlarını açıklar, işlevsiz analiz/reklam anahtarları içermez.
@@ -55,4 +59,4 @@ Güncel kimlik; taçlı mor kaplumbağa maskotunu, site simgelerini, sosyal medy
 
 ## Sürümleme
 
-Güncel sürüm `1.2.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
+Güncel sürüm `1.3.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.

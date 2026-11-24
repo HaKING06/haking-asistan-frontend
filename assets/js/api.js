@@ -186,7 +186,7 @@ async function apiRegistrationStatus(verificationToken) {
 async function apiValidateSession(token) {
   try {
     const controller = new AbortController();
-    const timeoutId = window.setTimeout(() => controller.abort(), 90000);
+    const timeoutId = window.setTimeout(() => controller.abort(), 15000);
     try {
       const response = await fetch(`${API_URL}/session`, {
         headers: { Authorization: `Bearer ${token}` },

@@ -10,6 +10,7 @@ const GoogleSignIn = (() => {
   let refreshTimer;
   let scriptPromise;
   let visible = true;
+  let started = false;
   let onSuccess;
   let showError;
 
@@ -75,7 +76,7 @@ const GoogleSignIn = (() => {
     if (!visible || !configuration || !window.google?.accounts?.id) return;
     button.replaceChildren();
     window.google.accounts.id.renderButton(button, {
-      type: "standard", theme: "outline", size: "large", text: "continue_with",
+      type: "standard", theme: "filled_black", size: "large", text: "continue_with",
       shape: "rectangular", width: Math.min(400, Math.floor(button.getBoundingClientRect().width)), locale: "tr",
     });
     update();
@@ -118,10 +119,10 @@ const GoogleSignIn = (() => {
   let resizeTimer;
   window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(renderButton, 150); });
   return {
-    start(success, error) { onSuccess = success; showError = error; void prepare(); },
+    start(success, error) { started = true; onSuccess = success; showError = error; void prepare(); },
     setVisible(value) {
       visible = value;
-      if (visible && (!configuration || configuration.expires_at * 1000 <= Date.now())) void prepare();
+      if (visible && started && (!configuration || configuration.expires_at * 1000 <= Date.now())) void prepare();
       else if (visible) renderButton();
     },
     isBusy: () => busy,
