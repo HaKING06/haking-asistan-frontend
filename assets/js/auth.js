@@ -314,8 +314,8 @@ function updateAuthMethod() {
   submitBtnEl.classList.toggle("hidden", google);
   GoogleSignIn.setVisible(google);
   if (google) {
-    authTitleEl.textContent = "Kaldığın yerden.";
-    authSubtitleEl.textContent = "Hesabınla çalışma alanına devam et.";
+    authTitleEl.textContent = "Hoş geldin.";
+    authSubtitleEl.textContent = "Google hesabınla veya e-posta adresinle devam et.";
   }
 }
 

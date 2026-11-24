@@ -1,5 +1,13 @@
 # 1.0.7 — 2026-11-19
 
+## 1.4.0 — 2026-11-24
+
+- Özgün canlı mor palet geri getirildi; serif başlıklar kaldırılıp Manrope / DM Sans kullanıldı.
+- Kompakt giriş ekranı, küçük çalışma alanı önizlemesi ve yerel Google düğmesiyle yenilendi.
+- Yan sayfalar modern kartlar, belirgin başlıklar ve ölçülü JS/CSS geçişleriyle güncellendi. Hareket azaltma tercihi desteklenir.
+- Sohbet kabuğu görünür viewport'a sabitlendi; dış sayfa kayması engellendi. VisualViewport ile klavye/tarayıcı çubuğu değişimleri izlenir. Yalnızca mesaj listesi kayar.
+- Oturum açılışı ve güvenlik akışı korunur; backend sürümü 1.3.0 kalır.
+
 ## 1.3.0 — 2026-11-24
 
 - Tüm web sayfalarına koyu mürdüm Studio tasarım sistemi, sade gezinme ve okunabilir bölüm düzeni eklendi.

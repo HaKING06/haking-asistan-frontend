@@ -76,7 +76,7 @@ const GoogleSignIn = (() => {
     if (!visible || !configuration || !window.google?.accounts?.id) return;
     button.replaceChildren();
     window.google.accounts.id.renderButton(button, {
-      type: "standard", theme: "filled_black", size: "large", text: "continue_with",
+      type: "standard", theme: "outline", size: "large", text: "continue_with",
       shape: "rectangular", width: Math.min(400, Math.floor(button.getBoundingClientRect().width)), locale: "tr",
     });
     update();

@@ -2,14 +2,14 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <script src="./assets/js/normalize-app-fragment.js?v=1.3.0"></script>
+  <script src="./assets/js/normalize-app-fragment.js?v=1.4.0"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <script>try { if (localStorage.getItem("haking_token")) document.documentElement.dataset.session = "pending"; } catch {}</script>
   <meta name="description" content="HaKING AI; Python, JavaScript, C#, HTML ve web geliştirme için Türkçe yapay zekâ chatbotu ve kodlama asistanıdır. Kod öğren, hataları bul, yazılım sorularına yanıt al." />
   <meta name="author" content="Halit Güneş (HaKING)" />
   <meta name="application-name" content="HaKING AI" />
-  <meta name="application-version" content="1.3.0" />
+  <meta name="application-version" content="1.4.0" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="theme-color" content="#0b0d12" />
   <meta property="og:type" content="website" />
@@ -58,13 +58,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./assets/css/main.css?v=1.3.0" />
-  <link rel="stylesheet" href="./assets/css/auth.css?v=1.3.0" />
-  <link rel="stylesheet" href="./assets/css/chat.css?v=1.3.0" />
-  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.3.0" />
+  <link rel="stylesheet" href="./assets/css/main.css?v=1.4.0" />
+  <link rel="stylesheet" href="./assets/css/auth.css?v=1.4.0" />
+  <link rel="stylesheet" href="./assets/css/chat.css?v=1.4.0" />
+  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.4.0" />
 <link rel="preconnect" href="https://haking-asistan-backend.vercel.app" crossorigin>
-<script defer src="./assets/js/warmup.js?v=1.3.0"></script>
-  <link rel="stylesheet" href="./assets/css/studio.css?v=1.3.0" />
+<script defer src="./assets/js/warmup.js?v=1.4.0"></script>
+  <link rel="stylesheet" href="./assets/css/studio.css?v=1.4.0" />
 </head>
 <body>
   <main class="app-shell">
@@ -76,12 +76,20 @@
         </a>
 
         <div class="showcase-copy">
-          <span class="eyebrow"><span class="status-dot"></span> HAKING / WORKSPACE</span>
-          <h1>Bir fikirle başla.<br /><em>İyi kodla</em><br />devam et.</h1>
-          <p>Düşünmek, denemek ve üretmek için<br />kendine ait bir çalışma alanı.</p>
+          <span class="eyebrow"><span class="status-dot"></span> HAKING AI</span>
+          <h1>Fikrini geliştir.<br /><span class="accent-text">Koduna yön ver.</span></h1>
+          <p>Kod yaz, hataları çöz, yeni şeyler öğren. Türkçe yapay zekâ asistanınla tek bir yerde.</p>
 
-          <div class="studio-mark" aria-hidden="true"><span>h.</span><i></i><b>BAĞIMSIZ BİR ÜRETİM ALANI</b></div>
-          <div class="studio-steps"><span><b>01</b> Düşün</span><span><b>02</b> Üret</span><span><b>03</b> Geliştir</span></div>
+          <div class="auth-preview" aria-hidden="true">
+            <div class="preview-top"><span class="preview-dots"><i></i><i></i><i></i></span><strong>HaKING AI</strong><span>Önizleme</span></div>
+            <div class="preview-prompt"><span>↗</span><p data-preview-prompt>Fikrim için nereden başlamalıyım?</p></div>
+            <div class="preview-code"><span class="preview-code-label">İLK ADIM</span><pre data-preview-code>const idea = "Bir sonraki projem";
+const plan = ["tasarla", "geliştir", "dene"];
+
+plan.forEach(step => build(step));</pre></div>
+            <div class="preview-bottom"><span><i></i> Fikirden üretime</span><span>⌘ K</span></div>
+            <div class="preview-progress"><span></span></div>
+          </div>
         </div>
 
         <div class="showcase-bottom">
@@ -103,8 +111,8 @@
             <a class="auth-privacy-info" href="./privacy.html" aria-label="Gizlilik ve veri kullanımı bilgisi" title="Gizlilik ve veri kullanımı">
               <span aria-hidden="true">i</span>
             </a>
-            <span class="eyebrow auth-eyebrow">HAKING / WORKSPACE</span>
-            <h2 id="auth-title">Kaldığın yerden.</h2>
+            <span class="eyebrow auth-eyebrow">HAKING AI</span>
+            <h2 id="auth-title">Hoş geldin.</h2>
             <p id="auth-subtitle">Hesabına giriş yap ve kaldığın yerden devam et.</p>
             <p class="auth-seo-intro">Kod yaz, öğren, geliştir. Mevcut hesabın ve sohbetlerin aynı yerde.</p>
           </header>
@@ -442,15 +450,15 @@
     </section>
   </main>
 
-  <script src="./assets/js/state.js?v=1.3.0"></script>
-  <script src="./assets/js/api.js?v=1.3.0"></script>
-  <script src="./assets/js/ui.js?v=1.3.0"></script>
-  <script src="./assets/js/turnstile.js?v=1.3.0"></script>
-  <script src="./assets/js/google-auth.js?v=1.3.0"></script>
-  <script src="./assets/js/auth.js?v=1.3.0"></script>
-  <script src="./assets/js/app.js?v=1.3.0"></script>
-  <script src="./assets/js/settings.js?v=1.3.0"></script>
-  <script src="./assets/js/privacy.js?v=1.3.0"></script>
-  <script src="./assets/js/studio.js?v=1.3.0"></script>
+  <script src="./assets/js/state.js?v=1.4.0"></script>
+  <script src="./assets/js/api.js?v=1.4.0"></script>
+  <script src="./assets/js/ui.js?v=1.4.0"></script>
+  <script src="./assets/js/turnstile.js?v=1.4.0"></script>
+  <script src="./assets/js/google-auth.js?v=1.4.0"></script>
+  <script src="./assets/js/auth.js?v=1.4.0"></script>
+  <script src="./assets/js/app.js?v=1.4.0"></script>
+  <script src="./assets/js/settings.js?v=1.4.0"></script>
+  <script src="./assets/js/privacy.js?v=1.4.0"></script>
+  <script src="./assets/js/studio.js?v=1.4.0"></script>
 </body>
 </html>

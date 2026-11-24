@@ -32,6 +32,7 @@ function uiSetBackendStatus(state, message) {
 }
 
 function uiShowLogin() {
+  document.body.classList.remove("chat-view");
   AppState.sessionReady = false;
   delete document.documentElement.dataset.session;
   if (typeof startAuthServices === "function") startAuthServices();
@@ -40,6 +41,7 @@ function uiShowLogin() {
 }
 
 function uiShowChat(email, displayName = "") {
+  document.body.classList.add("chat-view");
   delete document.documentElement.dataset.session;
   AppState.sessionReady = true;
   document.getElementById("session-notice").classList.add("hidden");
@@ -72,6 +74,7 @@ function uiShowChat(email, displayName = "") {
 }
 
 function uiShowSessionShell(message = "Oturumun kontrol ediliyor…", retry = false) {
+  document.body.classList.add("chat-view");
   loginCardEl.classList.add("hidden");
   chatCardEl.classList.remove("hidden");
   document.documentElement.dataset.session = "checking";
