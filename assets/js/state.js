@@ -107,7 +107,7 @@ function saveChatHistory(
   if (!email) return false;
   const bounded = [];
   let totalChars = 0;
-  for (const item of retainChatHistory(history).reverse()) {
+  for (const item of [...retainChatHistory(history)].reverse()) {
     if (!item || !["user", "assistant"].includes(item.role) || typeof item.content !== "string") continue;
     const remaining = CHAT_HISTORY_MAX_CHARS - totalChars;
     if (remaining <= 0) break;
