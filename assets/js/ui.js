@@ -338,7 +338,7 @@ function uiFormatProviderUsage(usage) {
   const providerName = (id) => PROJECT_PROVIDER_LABELS[id] || "";
   const production = [...new Set((Array.isArray(usage.production) ? usage.production : []).map(providerName).filter(Boolean))];
   if (usage.mode === "prompt") {
-    const research = usage.research === "tavily" ? "Tavily" : "erişilemedi";
+    const research = usage.research === "tavily" ? "Tavily" : usage.research === "not_used" ? "yapılmadı" : "erişilemedi";
     return `Prompt Modu · Araştırma: ${research} · Üretim: ${production.join(" → ") || "otomatik"}`;
   }
   if (usage.mode === "crazy") {
