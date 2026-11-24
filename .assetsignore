@@ -38,3 +38,5 @@ __pycache__/
 downloads/haking-ai-desktop-v0.1.0.zip
 downloads/haking-ai-desktop-v0.1.1.zip
 desktop-app/
+
+tests/

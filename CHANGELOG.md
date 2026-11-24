@@ -2,6 +2,7 @@
 
 ## 1.7.0 — 2026-11-24
 
+- Sohbet kaydı mesaj sırasını değiştirmez; taslak kaydı ve yeniden yükleme regresyon testleri eklendi.
 - Karar belleği: önceki cevapları koruyan görev durumu ve sayfa yenilemede devam eden ayrı prompt oturumları.
 - “Sen öner” ve “uygun araçları seç” taleplerinde soru döngüsü yerine gerekçeli öneri ve açık varsayımlar.
 - Codex iş ağırlığına göre resmî kaynaklı, tarih belirtilen model önerileri; erişim ve kota garantisi verilmez.
