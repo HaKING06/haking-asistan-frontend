@@ -1577,3 +1577,18 @@ body.settings-open { overflow: hidden; }
   .settings-provider-list,.settings-account-grid { grid-template-columns: 1fr; }
   .settings-live-status { white-space: normal; text-align: right; }
 }
+
+#prompt-intake { margin: 10px 0; padding: 12px; border: 1px solid var(--border); border-radius: 12px; color: var(--text-soft); max-height: 35dvh; overflow-y: auto; }
+#prompt-intake[hidden] { display: none; }
+#prompt-intake summary { cursor: pointer; font-weight: 600; }
+#prompt-intake p { font-size: 12px; line-height: 1.5; }
+.prompt-profile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.prompt-profile-grid label { display: grid; gap: 5px; min-width: 0; font-size: 12px; }
+.prompt-profile-grid input, .prompt-profile-grid textarea { box-sizing: border-box; width: 100%; min-width: 0; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: inherit; font: inherit; }
+.prompt-profile-wide { grid-column: 1 / -1; }
+@media (max-width: 500px) { .prompt-profile-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.prompt-workshop-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.prompt-workshop-actions button { padding: 9px 12px; border: 1px solid var(--border); border-radius: 9px; color: inherit; background: transparent; cursor: pointer; font: inherit; font-size: 12px; }
+#prompt-generate-btn { background: var(--text); color: var(--bg); font-weight: 600; }
+#prompt-generate-btn:disabled { opacity: .5; cursor: wait; }

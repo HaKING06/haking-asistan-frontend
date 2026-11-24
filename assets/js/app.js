@@ -25,7 +25,7 @@ const ALLOWED_SOURCE_FILE_EXTENSIONS = new Set([
   "cs", "c", "h", "cpp", "hpp", "go", "rs", "php", "rb", "json", "md", "txt",
   "xml", "yaml", "yml", "sql", "sh", "vue", "svelte", "toml", "ini",
 ]);
-const EMBEDDED_SECRET_PATTERN = /-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----|AIza[\w-]{30,}|\b(?:sk-(?:live|test|proj)-[\w-]{12,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{20,})\b|\bpostgres(?:ql)?:\/\/[^/\s:]+:[^@\s/]+@/;
+const EMBEDDED_SECRET_PATTERN = /-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----|(?:AIza[\w-]{30,}|AQ\.[\w-]{30,})|\b(?:sk-(?:live|test|proj)-[\w-]{12,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{20,})\b|\bpostgres(?:ql)?:\/\/[^/\s:]+:[^@\s/]+@/;
 let backendKeepaliveTimer = null;
 let selectedSourceFile = null;
 let isReadingSourceFile = false;
@@ -39,16 +39,17 @@ lowCreditAlertDismissEl?.addEventListener("click", () => {
 
 function syncModePickerSelection() {
   if (!aiModeSelectEl || !modePickerMenuEl || !modePickerLabelEl) return;
-  const selectedMode = aiModeSelectEl.value === "crazy" ? "crazy" : "normal";
+  const selectedMode = ["crazy", "prompt"].includes(aiModeSelectEl.value) ? aiModeSelectEl.value : "normal";
   for (const option of modePickerMenuEl.querySelectorAll("[data-mode]")) {
     option.setAttribute("aria-selected", String(option.dataset.mode === selectedMode));
   }
   const selectedNativeOption = aiModeSelectEl.querySelector(
-    selectedMode === "crazy" ? 'option[value="crazy"]' : 'option[value="normal"]'
+    `option[value="${selectedMode}"]`
   );
   modePickerLabelEl.textContent = selectedMode === "crazy"
     ? (crazyModePickerTitleEl?.textContent || selectedNativeOption?.textContent || "Çılgın Mod")
-    : "Normal · kredi harcamaz";
+    : selectedMode === "prompt" ? "Prompt Modu · 5 kredi" : "Normal · kredi harcamaz";
+  document.getElementById("prompt-intake").hidden = selectedMode !== "prompt";
 }
 
 function closeModePicker(restoreFocus = false) {
@@ -83,7 +84,7 @@ modePickerTriggerEl?.addEventListener("keydown", (event) => {
 modePickerMenuEl?.addEventListener("click", (event) => {
   const option = event.target.closest("[data-mode]");
   if (!option || !aiModeSelectEl) return;
-  aiModeSelectEl.value = option.dataset.mode === "crazy" ? "crazy" : "normal";
+  aiModeSelectEl.value = ["crazy", "prompt"].includes(option.dataset.mode) ? option.dataset.mode : "normal";
   aiModeSelectEl.dispatchEvent(new Event("change", { bubbles: true }));
   syncModePickerSelection();
   closeModePicker(true);
@@ -416,13 +417,19 @@ function setSendButtonBusy(busy) {
   sendBtnEl.title = busy ? "Yanıt hazırlanıyor" : "Mesajı gönder";
 }
 
-async function sendMessageFromUI() {
+async function sendMessageFromUI(promptAction = "clarify") {
   if (!AppState.sessionReady) return;
+  if (typeof promptAction !== "string") promptAction = "clarify";
   const attachment = selectedSourceFile;
-  const message = chatInputEl.value.trim() || (attachment ? "Yüklediğim dosyayı incele ve varsa hataları açıkla; gerekirse düzeltilmiş kodu öner." : "");
+  if (promptAction === "generate" && !chatInputEl.value.trim() && !attachment && !AppState.history.some(item => item.role === "user")) {
+    document.getElementById("prompt-workshop-status").textContent = "Önce ne yapmak istediğini mesaj alanına yaz.";
+    chatInputEl.focus();
+    return;
+  }
+  const message = chatInputEl.value.trim() || (promptAction === "generate" ? "Konuşmada netleştirdiğimiz amaç, kararlar ve özel talimatlarla nihai agent promptunu üret." : "") || (attachment ? "Yüklediğim dosyayı incele ve varsa hataları açıkla; gerekirse düzeltilmiş kodu öner." : "");
   if ((!message && !attachment) || sendBtnEl.disabled || isReadingSourceFile) return;
 
-  const mode = aiModeSelectEl?.value === "crazy" ? "crazy" : "normal";
+  const mode = ["crazy", "prompt"].includes(aiModeSelectEl?.value) ? aiModeSelectEl.value : "normal";
 
   if (!AppState.email || !AppState.token) {
     uiShowLogin();
@@ -430,6 +437,13 @@ async function sendMessageFromUI() {
     return;
   }
 
+  if (mode === "prompt" && promptAction === "generate" && !getPromptAgentProfile()) {
+    document.getElementById("prompt-workshop-status").textContent = "Önce agent profilindeki beş alanı doldur. Bilmediğin alana bilmiyorum, talimat yoksa yok yaz.";
+    document.getElementById("prompt-intake").open = true;
+    return;
+  }
+  const generateButton = document.getElementById("prompt-generate-btn");
+  if (generateButton) generateButton.disabled = true;
   const displayedMessage = attachment
     ? `${message}\n\nEklenen dosya: ${attachment.name}`
     : message;
@@ -507,7 +521,8 @@ async function sendMessageFromUI() {
         if (usage?.phase === "production" && ["gemini", "groq"].includes(usage.provider)) {
           providerUsage.production.push(usage.provider);
         }
-      }
+      },
+      promptAction
     );
 
     const openCodeBlock = assistantReply.split(/\r?\n/).filter(line => /^\s*```/.test(line)).length % 2 === 1;
@@ -580,11 +595,27 @@ async function sendMessageFromUI() {
     if (assistantBubble) uiFinishAssistantStream(assistantBubble, providerUsage);
     uiShowTyping(false);
     sendBtnEl.disabled = false;
+    if (generateButton) generateButton.disabled = false;
     setSendButtonBusy(false);
     newChatBtnEl.disabled = false;
     document.getElementById("mobile-new-chat-btn").disabled = false;
     attachFileBtnEl.disabled = false;
     removeFileBtnEl.disabled = false;
-    if (mode === "crazy") void refreshAiCreditBalance();
+    if (["crazy", "prompt"].includes(mode)) void refreshAiCreditBalance();
   }
 }
+
+// Keep the current agent profile local to the form; never store it as a secret.
+function getPromptAgentProfile() {
+  const profile = {};
+  for (const key of ["agent", "model", "tools", "platform", "instructions"]) {
+    profile[key] = document.getElementById(`prompt-${key}`).value.trim();
+  }
+  return Object.values(profile).every(Boolean) ? profile : null;
+}
+
+document.getElementById("prompt-generate-btn")?.addEventListener("click", () => sendMessageFromUI("generate"));
+document.getElementById("prompt-reset-btn")?.addEventListener("click", () => {
+  for (const key of ["agent", "model", "tools", "platform", "instructions"]) document.getElementById(`prompt-${key}`).value = "";
+  document.getElementById("prompt-workshop-status").textContent = "Agent profili temizlendi. Yeni bir hedef için Yeni sohbet düğmesini kullan.";
+});

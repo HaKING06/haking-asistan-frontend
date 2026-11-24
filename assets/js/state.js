@@ -22,7 +22,7 @@ function normalizeChatUsage(value) {
     ? [...new Set(value.production.map(provider).filter(Boolean))].slice(0, 4)
     : [];
   const usage = {
-    mode: value.mode === "crazy" ? "crazy" : "normal",
+    mode: ["crazy", "prompt"].includes(value.mode) ? value.mode : "normal",
     research: ["tavily", "unavailable", "not_used"].includes(value.research) ? value.research : "not_used",
     brief: provider(value.brief),
     production,
@@ -76,7 +76,7 @@ function loadChatHistory(email) {
     return {
       history,
       incompleteResponse: saved.incompleteResponse === true,
-      incompleteMode: ["normal", "crazy"].includes(saved.incompleteMode) ? saved.incompleteMode : null,
+      incompleteMode: ["normal", "crazy", "prompt"].includes(saved.incompleteMode) ? saved.incompleteMode : null,
       incompleteFiles: normalizeCompletedFiles(saved.incompleteFiles),
     };
   } catch {
@@ -111,7 +111,7 @@ function saveChatHistory(
       version: CHAT_HISTORY_STORAGE_VERSION,
       history: bounded,
       incompleteResponse: incompleteResponse === true,
-      incompleteMode: ["normal", "crazy"].includes(incompleteMode) ? incompleteMode : null,
+      incompleteMode: ["normal", "crazy", "prompt"].includes(incompleteMode) ? incompleteMode : null,
       incompleteFiles: normalizeCompletedFiles(incompleteFiles),
       updatedAt: Date.now(),
     }));

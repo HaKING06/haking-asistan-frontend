@@ -2,14 +2,14 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <script src="./assets/js/normalize-app-fragment.js?v=1.4.1"></script>
+  <script src="./assets/js/normalize-app-fragment.js?v=1.5.0"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <script>try { if (localStorage.getItem("haking_token")) document.documentElement.dataset.session = "pending"; } catch {}</script>
   <meta name="description" content="HaKING AI; Python, JavaScript, C#, HTML ve web geliştirme için Türkçe yapay zekâ chatbotu ve kodlama asistanıdır. Kod öğren, hataları bul, yazılım sorularına yanıt al." />
   <meta name="author" content="Halit Güneş (HaKING)" />
   <meta name="application-name" content="HaKING AI" />
-  <meta name="application-version" content="1.4.1" />
+  <meta name="application-version" content="1.5.0" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="theme-color" content="#0b0d12" />
   <meta property="og:type" content="website" />
@@ -58,13 +58,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./assets/css/main.css?v=1.4.1" />
-  <link rel="stylesheet" href="./assets/css/auth.css?v=1.4.1" />
-  <link rel="stylesheet" href="./assets/css/chat.css?v=1.4.1" />
-  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.4.1" />
+  <link rel="stylesheet" href="./assets/css/main.css?v=1.5.0" />
+  <link rel="stylesheet" href="./assets/css/auth.css?v=1.5.0" />
+  <link rel="stylesheet" href="./assets/css/chat.css?v=1.5.0" />
+  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.5.0" />
 <link rel="preconnect" href="https://haking-asistan-backend.vercel.app" crossorigin>
-<script defer src="./assets/js/warmup.js?v=1.4.1"></script>
-  <link rel="stylesheet" href="./assets/css/studio.css?v=1.4.1" />
+<script defer src="./assets/js/warmup.js?v=1.5.0"></script>
+  <link rel="stylesheet" href="./assets/css/studio.css?v=1.5.0" />
 </head>
 <body>
   <main class="app-shell">
@@ -346,6 +346,22 @@ plan.forEach(step => build(step));</pre></div>
               <span id="file-selection-name" class="file-selection-name"></span>
               <button id="remove-file-btn" class="remove-file-btn" type="button" aria-label="Eklenen dosyayı kaldır">Kaldır</button>
             </div>
+            <details id="prompt-intake" hidden open>
+              <summary>Prompt Atölyesi · ücretsiz keşif → 5 krediyle üretim</summary>
+              <p>İsteğini yaz, agent profilini doldur ve Gönder ile ücretsiz analiz başlat. Asistan isteğine göre sorular sorar; cevaplarını konuşarak netleştir. Hazır olduğunda aşağıdaki düğmeyle araştırmalı nihai promptu 5 krediye üret. Bilmediğin alana “bilmiyorum”, özel talimat yoksa “yok” yaz.</p>
+              <div class="prompt-profile-grid">
+                <label>Hangi agent?<input id="prompt-agent" maxlength="200" placeholder="Codex, Cursor, Claude Code…"></label>
+                <label>Hangi model?<input id="prompt-model" maxlength="200" placeholder="Model adı veya bilmiyorum"></label>
+                <label>Agentin araçları neler?<input id="prompt-tools" maxlength="1000" placeholder="Web, terminal, dosyalar, test; veya yok"></label>
+                <label>Platform ve teslim biçimi?<input id="prompt-platform" maxlength="500" placeholder="Yeni web oyunu, HTML/CSS/JS, tek dosya…"></label>
+                <label class="prompt-profile-wide">Özel talimat ve sınırların?<textarea id="prompt-instructions" rows="2" maxlength="2000" placeholder="Tasarım, bütçe, mevcut proje, dil; veya yok"></textarea></label>
+              </div>
+              <div class="prompt-workshop-actions">
+                <button id="prompt-generate-btn" type="button">Promptu üret · 5 kredi</button>
+                <button id="prompt-reset-btn" type="button">Agent profilini temizle</button>
+              </div>
+              <p id="prompt-workshop-status" role="status" aria-live="polite">1. Agent profili → 2. Ücretsiz sorular → 3. Araştırma ve nihai prompt</p>
+            </details>
             <textarea id="chat-input" rows="1" placeholder="Bir fikir veya kod paylaş…" aria-label="Mesajını yaz"></textarea>
             <div class="composer-bottom">
               <div class="composer-tools">
@@ -365,10 +381,16 @@ plan.forEach(step => build(step));</pre></div>
                       <span class="mode-option-copy"><strong id="mode-option-crazy-title">Çılgın Mod · 10 kredi</strong><small>Bilgi sorularında hızlı · üretim işlerinde planlı</small></span>
                       <span class="mode-option-check" aria-hidden="true">✓</span>
                     </button>
+                    <button class="mode-picker-option" type="button" role="option" data-mode="prompt" aria-selected="false" tabindex="-1">
+                      <span class="mode-option-icon" aria-hidden="true">✎</span>
+                      <span class="mode-option-copy"><strong>Prompt Modu · 5 kredi</strong><small>Agentine özel sorular, araştırma ve görev promptu</small></span>
+                      <span class="mode-option-check" aria-hidden="true">✓</span>
+                    </button>
                   </div>
                   <select id="ai-mode" class="mode-native-select" tabindex="-1" aria-hidden="true">
                     <option value="normal">Normal · kredi harcamaz</option>
                     <option value="crazy">Çılgın Mod · 10 kredi</option>
+                    <option value="prompt">Prompt Modu · 5 kredi</option>
                   </select>
                 </div>
                 <button id="ai-credits-status" class="ai-credits-status" type="button" aria-label="Kredi bakiyesi yükleniyor">Kredi bakiyesi yükleniyor…</button>
@@ -450,15 +472,15 @@ plan.forEach(step => build(step));</pre></div>
     </section>
   </main>
 
-  <script src="./assets/js/state.js?v=1.4.1"></script>
-  <script src="./assets/js/api.js?v=1.4.1"></script>
-  <script src="./assets/js/ui.js?v=1.4.1"></script>
-  <script src="./assets/js/turnstile.js?v=1.4.1"></script>
-  <script src="./assets/js/google-auth.js?v=1.4.1"></script>
-  <script src="./assets/js/auth.js?v=1.4.1"></script>
-  <script src="./assets/js/app.js?v=1.4.1"></script>
-  <script src="./assets/js/settings.js?v=1.4.1"></script>
-  <script src="./assets/js/privacy.js?v=1.4.1"></script>
-  <script src="./assets/js/studio.js?v=1.4.1"></script>
+  <script src="./assets/js/state.js?v=1.5.0"></script>
+  <script src="./assets/js/api.js?v=1.5.0"></script>
+  <script src="./assets/js/ui.js?v=1.5.0"></script>
+  <script src="./assets/js/turnstile.js?v=1.5.0"></script>
+  <script src="./assets/js/google-auth.js?v=1.5.0"></script>
+  <script src="./assets/js/auth.js?v=1.5.0"></script>
+  <script src="./assets/js/app.js?v=1.5.0"></script>
+  <script src="./assets/js/settings.js?v=1.5.0"></script>
+  <script src="./assets/js/privacy.js?v=1.5.0"></script>
+  <script src="./assets/js/studio.js?v=1.5.0"></script>
 </body>
 </html>

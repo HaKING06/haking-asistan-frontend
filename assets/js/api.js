@@ -519,7 +519,7 @@ async function readChatStream(response, onChunk, onStage = () => {}, onUsage = (
   return streamError ? { ok: false, message: streamError } : { ok: true };
 }
 
-async function apiChat(message, userId, token, history, onChunk, attachment = null, mode = "normal", onStage = () => {}, onUsage = () => {}) {
+async function apiChat(message, userId, token, history, onChunk, attachment = null, mode = "normal", onStage = () => {}, onUsage = () => {}, promptAction = "clarify") {
   const headers = {
     "Content-Type": "application/json",
   };
@@ -539,6 +539,7 @@ async function apiChat(message, userId, token, history, onChunk, attachment = nu
         userId,
         history,
         mode,
+        ...(mode === "prompt" ? { agent_profile: getPromptAgentProfile(), prompt_action: promptAction } : {}),
         ...(attachment
           ? { attachment_name: attachment.name, attachment_content: attachment.content }
           : {}),

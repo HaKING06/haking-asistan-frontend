@@ -1,5 +1,12 @@
 # 1.0.7 — 2026-11-19
 
+## 1.5.0 — 2026-11-24
+
+- Prompt Atölyesi: ücretsiz gereksinim soruları, agent/model/araç profili, araştırmalı plan ve 5 kredilik nihai prompt.
+- GPT-OSS yanında ücretsiz kota kapsamındaki Qwen 3.8 27B yedeği.
+- Gemini auth anahtarı biçimi desteği ve gizli girişli API doğrulama aracı.
+- 1.4.1 mor tasarım, Google girişi, Turnstile ve Vercel backend yapılandırması korundu.
+
 ## 1.4.1 — 2026-11-24
 
 - Halka açık sayfalardan sağlayıcı plan kotaları, ortam değişkenleri ve yönetici kurulum yönlendirmeleri çıkarıldı.

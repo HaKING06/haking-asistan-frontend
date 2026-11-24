@@ -337,6 +337,10 @@ function uiFormatProviderUsage(usage) {
   if (!usage || typeof usage !== "object") return "";
   const providerName = (id) => PROJECT_PROVIDER_LABELS[id] || "";
   const production = [...new Set((Array.isArray(usage.production) ? usage.production : []).map(providerName).filter(Boolean))];
+  if (usage.mode === "prompt") {
+    const research = usage.research === "tavily" ? "Tavily" : "erişilemedi";
+    return `Prompt Modu · Araştırma: ${research} · Üretim: ${production.join(" → ") || "otomatik"}`;
+  }
   if (usage.mode === "crazy") {
     const research = usage.research === "tavily" ? "Tavily" : usage.research === "unavailable" ? "Tavily erişilemedi" : "kullanılmadı";
     const brief = providerName(usage.brief) || "belirtilmedi";
