@@ -1,5 +1,10 @@
 # 1.0.7 — 2026-11-19
 
+## 1.4.1 — 2026-11-24
+
+- Halka açık sayfalardan sağlayıcı plan kotaları, ortam değişkenleri ve yönetici kurulum yönlendirmeleri çıkarıldı.
+- Model durumu metinleri kullanıcı diline çevrildi; kullanıcı kredileri ve veri kullanımı açıklamaları korundu.
+
 ## 1.4.0 — 2026-11-24
 
 - Özgün canlı mor palet geri getirildi; serif başlıklar kaldırılıp Manrope / DM Sans kullanıldı.

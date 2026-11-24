@@ -25,8 +25,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./assets/css/main.css?v=1.4.0" />
-  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.4.0" />
+  <link rel="stylesheet" href="./assets/css/main.css?v=1.4.1" />
+  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.4.1" />
   <style>
     .about-model-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:18px; }
     .about-model-card { min-width:0; padding:18px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.025); }
@@ -47,7 +47,7 @@
     .about-links { display:flex; flex-wrap:wrap; gap:12px; margin-top:15px; }
     @media(max-width:680px) { .about-model-grid,.about-feature-grid { grid-template-columns:1fr; } .about-model-head { align-items:flex-start; flex-direction:column; gap:4px; } }
   </style>
-  <link rel="stylesheet" href="./assets/css/studio.css?v=1.4.0" />
+  <link rel="stylesheet" href="./assets/css/studio.css?v=1.4.1" />
 </head>
 <body>
   <main class="privacy-page">
@@ -90,10 +90,10 @@
 
       <section class="privacy-section">
         <h2>AI modelleri ve otomatik yönlendirme</h2>
-        <p>Model anahtarları yalnızca özel backend sunucusunda tutulur. Backend, kısa sorular için hızlı modeli; kod üretme, hata ayıklama ve uzun yazılım istekleri için daha kapsamlı modeli seçer. Sağlayıcı erişim, kota ya da geçici sunucu hatası verirse yapılandırılmış yedekleri dener. Kısmi yanıt oluşmuşsa yedek modelden kaldığı yerden devam etmesi istenir. Yedekleme erişilebilirliği artırır; iki modeli birlikte çalıştırıp her yanıtı doğrulamaz.</p>
+        <p>HaKING AI, isteğine uygun modeli otomatik seçer. Geçici bir sorun olduğunda başka bir sağlayıcıyla yanıt vermeyi dener. Kullanılan modelleri aşağıda inceleyebilirsin.</p>
         <p id="provider-route-status" class="about-callout" role="status" aria-live="polite">Sunucudaki sağlayıcı ayarları kontrol ediliyor…</p>
         <div id="provider-models" class="about-model-grid" aria-live="polite"></div>
-        <p>Ücretsiz planlarda istek ve token kotaları bulunur; sınırlar model, hesap ve sağlayıcı koşullarına göre değişebilir. İki sağlayıcı kullanılması hatasızlık garantisi vermez. AI çıktısını çalıştırmadan önce gözden geçir; test et ve gizli anahtarlarını sohbete ekleme.</p>
+        <p>AI yanıtları hatalı veya eksik olabilir. Üretilen kodu çalıştırmadan önce gözden geçir ve test et; gizli bilgilerini sohbette paylaşma.</p>
       </section>
 
       <section class="privacy-section">
@@ -111,15 +111,14 @@
           <li>Yüklenen dosyalar yürütülmez; ancak içerik yanıt için seçilen AI sağlayıcısına iletilebilir. Parola, API anahtarı ve özel verileri silerek paylaş.</li>
         </ul>
         <div class="about-links"><a href="https://console.groq.com/docs/models" target="_blank" rel="noopener noreferrer">Groq model belgeleri ↗</a><a href="https://ai.google.dev/gemini-api/docs/models" target="_blank" rel="noopener noreferrer">Gemini model belgeleri ↗</a></div>
-        <p>Tavily'nin ücretsiz planında aylık 1.000 API kredisi bulunur; hızlı arama isteği 1 kredi kullanır. Kota ve ücret koşulları değişebilir; ücretli kullanım açmadan önce güncel planı kontrol et. Vercel ortamında <code>CRAZY_WEB_RESEARCH_ENABLED=false</code> ile araştırmayı kapatabilirsin. <a href="https://docs.tavily.com/documentation/api-credits" target="_blank" rel="noopener noreferrer">Tavily kredi belgeleri ↗</a></p>
       </section>
 
-      <section class="privacy-section"><h2>HaKING AI sürüm <span id="app-version">1.4.0</span></h2><p>Google hesabınla şifre oluşturmadan giriş yapabilir veya Gmail ve şifre yöntemini kullanabilirsin. Aynı Gmail'e ait hesabın, kredilerin ve sohbetlerin korunur. Her iki yöntemde yaş onayı ve Cloudflare güvenlik doğrulaması gerekir.</p><p>Çerez ve tarayıcı depolama paneli; oturum, Google girişi, yerel sohbet belleği ve Cloudflare'ın çerezsiz performans ölçümünü açıklar. Google şifren, Gmail mesajların veya Drive dosyaların istenmez.</p><button type="button" class="privacy-action" data-open-privacy-settings>Gizlilik tercihlerini incele</button></section>
-      <footer>HaKING AI · Model yapılandırması canlı backend'den okunur. Gizlilik ve veri akışı için <a href="./privacy.html">gizlilik metnini</a> incele.</footer>
+      <section class="privacy-section"><h2>HaKING AI sürüm <span id="app-version">1.4.1</span></h2><p>Google hesabınla şifre oluşturmadan giriş yapabilir veya Gmail ve şifre yöntemini kullanabilirsin. Aynı Gmail'e ait hesabın, kredilerin ve sohbetlerin korunur. Her iki yöntemde yaş onayı ve Cloudflare güvenlik doğrulaması gerekir.</p><p>Çerez ve tarayıcı depolama paneli; oturum, Google girişi, yerel sohbet belleği ve Cloudflare'ın çerezsiz performans ölçümünü açıklar. Google şifren, Gmail mesajların veya Drive dosyaların istenmez.</p><button type="button" class="privacy-action" data-open-privacy-settings>Gizlilik tercihlerini incele</button></section>
+      <footer>HaKING AI · Gizlilik ve veri kullanımı için <a href="./privacy.html">gizlilik metnini</a> incele.</footer>
     </div>
   </main>
-  <script src="./assets/js/about.js?v=1.4.0"></script>
-  <script src="./assets/js/privacy.js?v=1.4.0"></script>
-  <script src="./assets/js/studio.js?v=1.4.0"></script>
+  <script src="./assets/js/about.js?v=1.4.1"></script>
+  <script src="./assets/js/privacy.js?v=1.4.1"></script>
+  <script src="./assets/js/studio.js?v=1.4.1"></script>
 </body>
 </html>

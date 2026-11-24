@@ -12,12 +12,12 @@
     title.textContent = provider.name;
     const state = document.createElement("span");
     state.className = `about-model-state${provider.configured ? " ready" : ""}`;
-    state.textContent = provider.configured ? "Sunucuda yapılandırıldı" : "Henüz etkinleştirilmedi";
+    state.textContent = provider.configured ? "Kullanılabilir" : "Şu anda kullanılamıyor";
     heading.append(title, state);
     const description = document.createElement("p");
     description.textContent = provider.configured
       ? "Bu sağlayıcı otomatik model seçiminde kullanılabilir."
-      : "Bu sağlayıcının sunucu anahtarı eklenince yedek/tercih seçeneği olur.";
+      : "Bu sağlayıcı şu anda yanıt üretiminde kullanılmıyor.";
     const list = document.createElement("ul");
     list.className = "about-model-list";
     for (const model of provider.models || []) {
@@ -42,18 +42,18 @@
       container.replaceChildren(...providers.map(modelCard));
       const activeCount = providers.filter((provider) => provider.configured).length;
       const selection = data.selection === "fixed" && data.model_override
-        ? `Sunucu belirli bir modeli kullanacak şekilde ayarlı: ${data.model_override}.`
+        ? `Yanıtlar için kullanılan model: ${data.model_override}.`
         : "İstek türüne göre model otomatik seçiliyor.";
       status.textContent = activeCount > 1
         ? `${selection} Birden fazla sağlayıcı hazır; geçici hata veya kota sınırında yedek sağlayıcı denenir.`
         : activeCount === 1
-          ? `${selection} Bir sağlayıcı hazır; ikinci anahtar eklenirse sağlayıcı yedeklemesi açılır.`
-          : "Henüz AI sağlayıcısı yapılandırılmamış. Sohbet yanıtları için backend'e en az bir sunucu anahtarı eklenmeli.";
+          ? `${selection} Şu anda bir sağlayıcı kullanılabilir.`
+          : "AI hizmeti şu anda kullanılamıyor. Lütfen daha sonra tekrar dene.";
     } catch {
-      status.textContent = "Canlı sağlayıcı durumu şu an alınamadı. Kullanılan model listesi uygulama yapılandırmasına göre değişebilir.";
+      status.textContent = "Güncel model bilgileri şu anda alınamıyor. Daha sonra tekrar deneyebilirsin.";
       const fallback = document.createElement("p");
       fallback.className = "about-model-card";
-      fallback.textContent = "GroqCloud: openai/gpt-oss-20b ve openai/gpt-oss-120b · Google Gemini: kısa ve kapsamlı yazılım istekleri için yapılandırılmış Gemini modelleri.";
+      fallback.textContent = "HaKING AI, yazılım sorularını yanıtlamak için Groq ve Google Gemini modellerinden yararlanır.";
       container.replaceChildren(fallback);
     }
   }
