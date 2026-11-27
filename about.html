@@ -25,8 +25,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./assets/css/main.css?v=1.19.1" />
-  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.19.1" />
+  <link rel="stylesheet" href="./assets/css/main.css?v=1.19.2" />
+  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.19.2" />
   <style>
     .about-model-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:18px; }
     .about-model-card { min-width:0; padding:18px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.025); }
@@ -47,7 +47,7 @@
     .about-links { display:flex; flex-wrap:wrap; gap:12px; margin-top:15px; }
     @media(max-width:680px) { .about-model-grid,.about-feature-grid { grid-template-columns:1fr; } .about-model-head { align-items:flex-start; flex-direction:column; gap:4px; } }
   </style>
-  <link rel="stylesheet" href="./assets/css/studio.css?v=1.19.1" />
+  <link rel="stylesheet" href="./assets/css/studio.css?v=1.19.2" />
 </head>
 <body>
   <main class="privacy-page">
@@ -84,6 +84,15 @@
       </section>
 
       <section class="privacy-section">
+        <h2>Prompt Modu gerçek bir sohbette nasıl çalıştı?</h2>
+        <p>Bir kullanıcı Codex için 3D tarayıcı oyunu istedi. HaKING ilk sürümde oyuncuların aynı anda oynayıp oynamayacağını sordu. Son promptta bu cevap, iki ayrı istemcinin aynı maçı tamamlayıp yeniden oynayacağı bir kabul testine dönüştü. Steam araştırması, konsept ve isim seçiminden önceye yerleştirildi.</p>
+        <p><strong>ChatGPT değerlendirmesi · 4/5 ölçüt karşılandı.</strong> Eşzamanlı oyun, ücretsiz altyapı ve SQL kısıtları, yayın hedefleri ve araştırma sırası korundu. Metin sadeliği ölçütü karşılanmadı: Bazı şartlar birden fazla bölümde tekrarlandı.</p>
+        <p><strong>Gemini değerlendirmesi · 9,7/10.</strong> Kullanıcının aynı sohbeti Gemini’ye göndererek aldığı değerlendirme, araştırmanın ayrı bir adım olarak yazılmasını ve devredilen kararların korunmasını olumlu buldu. Ham ve düzenlenmiş şartların tekrarlanmasını eleştirdi.</p>
+        <p>Bu puanlar aynı konuşmaya verilen iki ayrı nitel değerlendirmedir. Puanlama yöntemleri farklıdır ve oyunun gerçekten üretilip yayına alındığını ölçmez.</p>
+        <a class="privacy-action" href="./?mode=prompt">Kendi görevinle Prompt Modunu dene</a>
+      </section>
+
+      <section class="privacy-section">
         <h2>Ortak HaKING kredi bakiyesi</h2>
         <p>Her hesap her takvim ayında 100 ücretsiz HaKING kredisi alır. Çılgın Mod isteği 10, Prompt Modu nihai prompt üretimi 5 kredi kullanır. İki mod da aynı HaKING kredi bakiyesinden harcar; ayrı mod kredisi yoktur. Prompt Modu keşif ve soru aşaması ile normal sohbet kredi harcamaz. Aylık kullanılmayan kredi sonraki aya taşınmaz ve dönem yenilenince aylık bakiye 100'e ayarlanır. Ek paket kredileri ayrı lotlar olarak tutulur; her lot hesabına eklendiği andan itibaren 30 gün geçerlidir ve aylık yenilemede korunur.</p>
         <p>Kredi bakiyesi ve hareketleri Neon veritabanında tutulur; hareket kaydı sohbet mesajı veya AI yanıtı içermez. Sağlayıcı hatası nedeniyle hiç yanıt başlamazsa kullanılan kredi geri verilir; yanıt akmaya başladıktan sonra AI sağlayıcı maliyeti oluştuğu için kredi iade edilmez. Ek paket için bağlantı ItemSatış ilanına gider; ödeme ve sipariş orada yapılır, sipariş onaylandıktan sonra kredi kurucu tarafından manuel tanımlanır. <a href="./crazy.html">Modlar ve ortak kredi şartlarını incele.</a></p>
@@ -114,12 +123,12 @@
         <div class="about-links"><a href="https://console.groq.com/docs/models" target="_blank" rel="noopener noreferrer">Groq model belgeleri ↗</a><a href="https://ai.google.dev/gemini-api/docs/models" target="_blank" rel="noopener noreferrer">Gemini model belgeleri ↗</a></div>
       </section>
 
-      <section class="privacy-section"><h2>HaKING AI sürüm <span id="app-version">1.19.1</span></h2><p>Google hesabınla şifre oluşturmadan giriş yapabilir veya Gmail ve şifre yöntemini kullanabilirsin. Aynı Gmail'e ait hesabın, kredilerin ve sohbetlerin korunur. Her iki yöntemde yaş onayı ve Cloudflare güvenlik doğrulaması gerekir.</p><p>Çerez ve tarayıcı depolama paneli; oturum, Google girişi, yerel sohbet belleği ve Cloudflare'ın çerezsiz performans ölçümünü açıklar. Google şifren, Gmail mesajların veya Drive dosyaların istenmez.</p><button type="button" class="privacy-action" data-open-privacy-settings>Gizlilik tercihlerini incele</button></section>
+      <section class="privacy-section"><h2>HaKING AI sürüm <span id="app-version">1.19.2</span></h2><p>Google hesabınla şifre oluşturmadan giriş yapabilir veya Gmail ve şifre yöntemini kullanabilirsin. Aynı Gmail'e ait hesabın, kredilerin ve sohbetlerin korunur. Her iki yöntemde yaş onayı ve Cloudflare güvenlik doğrulaması gerekir.</p><p>Çerez ve tarayıcı depolama paneli; oturum, Google girişi, yerel sohbet belleği ve Cloudflare'ın çerezsiz performans ölçümünü açıklar. Google şifren, Gmail mesajların veya Drive dosyaların istenmez.</p><button type="button" class="privacy-action" data-open-privacy-settings>Gizlilik tercihlerini incele</button></section>
       <footer>HaKING AI · Gizlilik ve veri kullanımı için <a href="./privacy.html">gizlilik metnini</a> incele.</footer>
     </div>
   </main>
-  <script src="./assets/js/about.js?v=1.19.1"></script>
-  <script src="./assets/js/privacy.js?v=1.19.1"></script>
-  <script src="./assets/js/studio.js?v=1.19.1"></script>
+  <script src="./assets/js/about.js?v=1.19.2"></script>
+  <script src="./assets/js/privacy.js?v=1.19.2"></script>
+  <script src="./assets/js/studio.js?v=1.19.2"></script>
 </body>
 </html>

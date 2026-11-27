@@ -1,3 +1,7 @@
+## 1.19.2 — 2026-11-27
+
+- Hakkında sayfasına Prompt Modunun tek bir sohbet üzerinden değerlendirmesi eklendi.
+
 ## 1.19.1 — 2026-11-27
 
 - Uzun görevlerde devredilen seçimler ve hazır varlık izni korunur; yedek görev kartı tekrarları azaltır.
