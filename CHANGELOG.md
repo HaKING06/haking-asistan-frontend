@@ -1,3 +1,7 @@
+## 1.18.0 — 2026-11-27
+
+- Prompt üretiminde ortak bekleme bütçesi, kısa görev kartı ve netleştirilmiş çok oyunculu şartları.
+
 ## 1.17.2 — 2026-11-27
 
 - Tekrarlanan teknik taslak hatalarında doğrulanmış görev kartından kopyalanabilir prompt hazırlanır.
