@@ -1,3 +1,7 @@
+## 1.18.4 — 2026-11-27
+
+- İsteğe bağlı Steam ilhamı ve açık araştırma talepleri ayrı ele alınır.
+
 ## 1.18.3 — 2026-11-27
 
 - Yedek prompt eşzamanlı oyun ve ücretsiz altyapı tekrarlarını birleştirir, Steam ilhamını korur.
