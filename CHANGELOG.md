@@ -1,3 +1,7 @@
+## 1.13.0 — 2026-11-27
+
+- Eş zamanlı ilk sürüm talepleri ve yayın hedefi çelişkileri için bağımsız doğrulama.
+
 ## 1.12.0 — 2026-11-27
 
 - Prompt Modunda alan adı ve dağıtım çelişkileri için bağımsız denetim ve düzeltme.
