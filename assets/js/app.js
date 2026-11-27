@@ -9,6 +9,7 @@ const removeFileBtnEl = document.getElementById("remove-file-btn");
 const fileSelectionEl = document.getElementById("file-selection");
 const fileSelectionNameEl = document.getElementById("file-selection-name");
 const aiModeSelectEl = document.getElementById("ai-mode");
+if (new URLSearchParams(location.search).get("mode") === "prompt") aiModeSelectEl.value = "prompt";
 const modePickerTriggerEl = document.getElementById("mode-picker-trigger");
 const modePickerMenuEl = document.getElementById("mode-picker-menu");
 const modePickerLabelEl = document.getElementById("mode-picker-label");

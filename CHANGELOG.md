@@ -1,3 +1,7 @@
+## 1.9.0 — 2026-11-27
+
+- Prompt Modunda takip yanıtları, kapsam denetimi ve Türkçe agent promptu rehberi.
+
 ## 1.8.2 — 2026-11-27
 
 - Prompt Modu normal sohbet kararlarını ve son kısıtları üretim ve denetim aşamalarına taşır.
