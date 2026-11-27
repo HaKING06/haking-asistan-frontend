@@ -1,3 +1,7 @@
+## 1.18.2 — 2026-11-27
+
+- Konsept seçiminden önce istenen Steam araştırması nihai ve yedek promptta korunur.
+
 ## 1.18.1 — 2026-11-27
 
 - Yedek prompt eşzamanlı oyunu korur, tekrarları azaltır ve ücretsiz altyapı pilotu ister.
