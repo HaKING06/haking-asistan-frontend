@@ -1,3 +1,7 @@
+## 1.14.0 — 2026-11-27
+
+- Prompt Modu alan adı kökünü kullanıcı metninden korur; kalan yer tutucuları ve yazım sapmalarını denetler.
+
 ## 1.13.0 — 2026-11-27
 
 - Eş zamanlı ilk sürüm talepleri ve yayın hedefi çelişkileri için bağımsız doğrulama.
