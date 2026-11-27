@@ -1,3 +1,7 @@
+## 1.12.0 — 2026-11-27
+
+- Prompt Modunda alan adı ve dağıtım çelişkileri için bağımsız denetim ve düzeltme.
+
 ## 1.11.0 — 2026-11-27
 
 - Kullanıcı şartları, devredilen kararlar ve açık sorular üretimden önce gösterilir.
