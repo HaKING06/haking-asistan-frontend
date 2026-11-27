@@ -1,3 +1,8 @@
+## 1.11.0 — 2026-11-27
+
+- Kullanıcı şartları, devredilen kararlar ve açık sorular üretimden önce gösterilir.
+- Kritik gereksinimler için sonuç odaklı kabul ve test denetimi.
+
 ## 1.10.0 — 2026-11-27
 
 - Devredilen kararların görev belleği, anlatım derinliği ve kritik belirsizlik kontrolü.
