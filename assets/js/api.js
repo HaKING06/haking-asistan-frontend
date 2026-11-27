@@ -408,7 +408,7 @@ function apiKeepAlive() {
   const timeoutId = window.setTimeout(() => controller.abort(), 90000);
   backendKeepAlivePromise = (async () => {
     try {
-      // A tiny API-root request wakes and keeps Render active without querying Neon or Gemini.
+      // A tiny API-root request checks backend availability without querying Neon or Gemini.
       const response = await fetch(`${API_URL}/`, {
         method: "GET",
         cache: "no-store",

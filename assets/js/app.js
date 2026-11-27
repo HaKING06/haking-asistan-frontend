@@ -645,7 +645,7 @@ document.getElementById("prompt-new-task-btn")?.addEventListener("click", () => 
   AppState.promptBrief = null;
   AppState.promptReady = false;
   document.getElementById("prompt-generate-btn").disabled = true;
-  document.getElementById("prompt-workshop-status").textContent = "Yeni görev: Ne yaptırmak istiyorsun?";
-  uiAddAssistantMessage("Yeni bir prompt hazırlayalım. Agente ne yaptırmak istiyorsun?");
+  document.getElementById("prompt-workshop-status").textContent = "Yeni görev açıldı";
+  uiAddAssistantMessage("Aklındaki işi nasıl anlatıyorsan öyle yaz. Bir fikrin, mevcut bir planın ya da düzeltmek istediğin bir prompt varsa oradan başlayabiliriz.");
   chatInputEl.focus();
 });

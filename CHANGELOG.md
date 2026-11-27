@@ -1,3 +1,8 @@
+## 1.9.1 — 2026-11-27
+
+- Doğal ilk Prompt Modu yanıtı ve dağıtım kararlarının denetimi.
+- Eski yayın metinleri ve kullanılmayan dosyalar temizlendi.
+
 ## 1.9.0 — 2026-11-27
 
 - Prompt Modunda takip yanıtları, kapsam denetimi ve Türkçe agent promptu rehberi.

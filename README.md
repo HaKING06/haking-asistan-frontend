@@ -2,7 +2,7 @@
 
 # HaKING AI — Ön yüz
 
-HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.9.0**.
+HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.9.1**.
 
 ## Teknoloji ve yayınlama
 
@@ -39,7 +39,7 @@ Cloudflare yapılandırmasında depo kök dizini `/`, derleme komutu `npm run bu
 
 ## Yanıt akışı ve hız
 
-Sohbet, backend'den Server-Sent Events (SSE) akışı alır. Uzun yanıtlar boyunca Markdown'ı her gelen küçük parçada yeniden işlemek pahalı olduğundan, yanıt uzadıkça ekrandaki yeniden çizim sıklığı kademeli azaltılır; tamamlandığında son içerik hemen işlenir. Bu, uzun kod yanıtlarında tarayıcı tarafındaki gereksiz işi azaltır. Modelin üretim süresini, sağlayıcı kotasını veya Render'ın ücretsiz plandaki soğuk başlangıçlarını ortadan kaldırmaz.
+Sohbet, backend'den Server-Sent Events (SSE) akışı alır. Uzun yanıtlar boyunca Markdown'ı her gelen küçük parçada yeniden işlemek pahalı olduğundan, yanıt uzadıkça ekrandaki yeniden çizim sıklığı kademeli azaltılır; tamamlandığında son içerik hemen işlenir. Bu, uzun kod yanıtlarında tarayıcı tarafındaki gereksiz işi azaltır. Modelin üretim süresini, sağlayıcı kotasını veya backend soğuk başlangıçlarını ortadan kaldırmaz.
 
 Çılgın Mod'daki aşama göstergeleri işlemin hangi adımda olduğunu bildirir; modelin özel düşünme içeriğini göstermez. Yeni proje isteğinde araştırma açıksa Tavily kısa kaynak parçalarını brief aşamasına ekler. Kısa bilgi soruları ve mevcut kodu düzeltme istekleri proje araştırması akışına yönlendirilmez.
 
@@ -59,7 +59,7 @@ Güncel kimlik; taçlı mor kaplumbağa maskotunu, site simgelerini, sosyal medy
 
 ## Sürümleme
 
-Güncel sürüm `1.9.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
+Güncel sürüm `1.9.1`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
 
 
 ## Sohbetle Prompt Atölyesi (1.6.0)
@@ -70,7 +70,7 @@ Yeni görev düğmesi önceki prompttan bağımsız bir bağlam açar. Eski konu
 Yeni moda ilk girişte önceki normal/çılgın sohbet otomatik gereksinim olarak alınmaz.
 
 
-## Prompt karar belleği (1.9.0)
+## Prompt karar belleği (1.9.1)
 
 Görev kartı `prompt_state` ile sonraki tura taşınır. Prompt oturumunun kimliği, verilen kararlar ve hazırlık durumu
 bu cihazdaki sohbet kaydında korunur; normal sohbet ve diğer prompt görevleri bu kapsama karışmaz.
