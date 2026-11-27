@@ -535,6 +535,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
           AppState.promptBrief = usage.brief || null;
           document.getElementById("prompt-workshop-status").textContent = AppState.promptReady ? `Hazır: ${usage.goal}` : "Soruları sohbetten yanıtla; kredi harcanmaz.";
         }
+        if (usage?.phase === "research" && usage.provider === "tavily") providerUsage.research = "tavily";
         if (usage?.phase === "production" && ["gemini", "groq"].includes(usage.provider)) {
           providerUsage.production.push(usage.provider);
         }

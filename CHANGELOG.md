@@ -1,3 +1,7 @@
+## 1.8.1 — 2026-11-27
+
+- Prompt Modu öneri sorularına ücretsiz ve araştırmalı proje önerileri verir.
+
 ## 1.8.0 — 2026-11-27
 
 - Metinden agent promptu oluşturma, açık kararların gösterilmesi ve kapsam bazlı üretim.
