@@ -362,12 +362,27 @@ async function apiAdminResendCreditEmail(token, grantId) {
 }
 
 let backendWarmupPromise = null;
+let backendProbeFailures = 0;
+
+function backendReachable() {
+  backendProbeFailures = 0;
+  uiSetBackendStatus("ready", "Asistan sunucusuna ulaşılıyor.");
+}
+
+function backendProbeFailed() {
+  backendProbeFailures += 1;
+  if (backendProbeFailures >= 2 || navigator.onLine === false) {
+    uiSetBackendStatus("error", "Sunucuya ulaşılamadı. Bağlantı yeniden kontrol edilecek.");
+  } else if (document.getElementById("backend-status")?.dataset.state !== "ready") {
+    uiSetBackendStatus("checking", "Bağlantı yeniden kontrol edilecek.");
+  }
+}
 
 function apiWarmup() {
   if (backendWarmupPromise) return backendWarmupPromise;
 
   const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), 90000);
+  const timeoutId = window.setTimeout(() => controller.abort(), 12000);
   uiSetBackendStatus("checking", "Asistan sunucusu hazırlanıyor...");
   backendWarmupPromise = (async () => {
     try {
@@ -376,10 +391,10 @@ function apiWarmup() {
         signal: controller.signal,
       });
       if (!response.ok) throw new Error("Backend henüz hazır değil.");
-      uiSetBackendStatus("ready", "Asistan sunucusu hazır.");
+      backendReachable();
       return await response.json();
     } catch (error) {
-      uiSetBackendStatus("error", "Asistan sunucusuna şu anda ulaşılamıyor.");
+      backendProbeFailed();
       throw error;
     } finally {
       window.clearTimeout(timeoutId);
@@ -405,7 +420,7 @@ function apiKeepAlive() {
   if (backendKeepAlivePromise) return backendKeepAlivePromise;
 
   const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), 90000);
+  const timeoutId = window.setTimeout(() => controller.abort(), 12000);
   backendKeepAlivePromise = (async () => {
     try {
       // A tiny API-root request checks backend availability without querying Neon or Gemini.
@@ -415,9 +430,9 @@ function apiKeepAlive() {
         signal: controller.signal,
       });
       if (!response.ok) throw new Error(`Backend ping returned HTTP ${response.status}.`);
-      uiSetBackendStatus("ready", "Asistan sunucusu aktif.");
+      backendReachable();
     } catch (error) {
-      uiSetBackendStatus("error", "Asistan sunucusuna ulaşılamadı; tekrar kontrol edilecek.");
+      backendProbeFailed();
       throw error;
     } finally {
       window.clearTimeout(timeoutId);
@@ -548,10 +563,10 @@ async function apiChat(message, userId, token, history, onChunk, attachment = nu
     });
 
     if (!res.ok) {
-      if (res.status === 402) {
-        uiSetBackendStatus("ready", "Ortak kredi bakiyesi güncel; Çılgın Mod ve Prompt Modu aynı bakiyeyi kullanır.");
+      if (res.status >= 500) {
+        uiSetBackendStatus("busy", "Sunucu yanıt verdi ancak isteği tamamlayamadı.");
       } else {
-        uiSetBackendStatus("error", `Asistan isteği başarısız oldu (HTTP ${res.status}).`);
+        backendReachable();
       }
       let data = {};
       try {
@@ -567,14 +582,15 @@ async function apiChat(message, userId, token, history, onChunk, attachment = nu
       };
     }
 
+    backendReachable();
     const streamResult = await readChatStream(res, onChunk, onStage, onUsage);
     uiSetBackendStatus(
-      streamResult.ok ? "ready" : "error",
+      streamResult.ok ? "ready" : "busy",
       streamResult.ok ? "Asistan sunucusu hazır." : "Asistan modeli şu anda yanıt üretemiyor."
     );
     return streamResult;
   } catch (error) {
-    uiSetBackendStatus("error", "Asistan yanıt üretirken bağlantı sorunu oluştu.");
+    backendProbeFailed();
     if (error.name === "AbortError") {
       throw new Error("Yanıt bekleme süresi doldu. Lütfen tekrar deneyin.");
     }

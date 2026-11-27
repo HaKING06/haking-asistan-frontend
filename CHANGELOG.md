@@ -1,3 +1,8 @@
+## 1.16.0 — 2026-11-27
+
+- Sağlayıcı hatalarından sonra daha sağlıklı modeller öne alınır; bağlantı ve üretim durumu ayrıştırılır.
+- Prompt Modu gerçek zamanlı altyapı seçimini doğrulama ve gerekçeli alternatiflerle ele alır.
+
 ## 1.15.0 — 2026-11-27
 
 - Sohbet cevaplarının daha sağlam işlenmesi ve ayrı yayın ortamları için API adresi denetimi.

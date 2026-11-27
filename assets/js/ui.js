@@ -22,8 +22,9 @@ function uiSetBackendStatus(state, message) {
   backendStatusEl.title = message;
   if (backendStatusLabelEl) {
     const labels = {
-      offline: "Hazır olduğunda bağlanır",
-      checking: "Sunucu hazırlanıyor",
+      offline: "Bağlanıyor",
+      checking: "Bağlanıyor",
+      busy: "Yanıt aksadı",
       ready: "Asistan hazır",
       error: "Bağlantı kurulamadı",
     };

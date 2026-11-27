@@ -234,3 +234,13 @@ body.chat-view .chat-app { height:100%; min-height:0; }
   *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
   .motion-enabled .motion-reveal { opacity:1; transform:none; }
 }
+
+/* Keep service state quiet beside the conversation title. */
+.backend-status-pill {
+  gap: 7px;
+  padding: 5px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 12px;
+}
+.backend-status-pill .model-status[data-state="busy"] { background: #d9a353; }
