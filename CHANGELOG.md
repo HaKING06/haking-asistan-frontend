@@ -1,3 +1,7 @@
+## 1.10.0 — 2026-11-27
+
+- Devredilen kararların görev belleği, anlatım derinliği ve kritik belirsizlik kontrolü.
+
 ## 1.9.1 — 2026-11-27
 
 - Doğal ilk Prompt Modu yanıtı ve dağıtım kararlarının denetimi.
