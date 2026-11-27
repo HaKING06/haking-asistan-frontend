@@ -1,3 +1,7 @@
+## 1.19.0 — 2026-11-27
+
+- Prompt Modu sunum, video, görsel, yazı, araştırma, veri ve kod görevlerine göre teslimi uyarlar.
+
 ## 1.18.4 — 2026-11-27
 
 - İsteğe bağlı Steam ilhamı ve açık araştırma talepleri ayrı ele alınır.
