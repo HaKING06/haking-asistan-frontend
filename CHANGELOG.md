@@ -1,3 +1,7 @@
+## 1.18.1 — 2026-11-27
+
+- Yedek prompt eşzamanlı oyunu korur, tekrarları azaltır ve ücretsiz altyapı pilotu ister.
+
 ## 1.18.0 — 2026-11-27
 
 - Prompt üretiminde ortak bekleme bütçesi, kısa görev kartı ve netleştirilmiş çok oyunculu şartları.
