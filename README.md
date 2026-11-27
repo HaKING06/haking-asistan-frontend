@@ -2,7 +2,7 @@
 
 # HaKING AI — Ön yüz
 
-HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.16.0**.
+HaKING AI; kod yazma, kodu açıklama ve hata ayıklama için Türkçe sohbet sunan statik bir web uygulamasıdır. Bu depo, Cloudflare Workers üzerinde yayınlanan ön yüzü içerir. Güncel sürüm: **1.17.0**.
 
 ## Teknoloji ve yayınlama
 
@@ -59,7 +59,7 @@ Güncel kimlik; taçlı mor kaplumbağa maskotunu, site simgelerini, sosyal medy
 
 ## Sürümleme
 
-Güncel sürüm `1.16.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
+Güncel sürüm `1.17.0`'dır. Önceki sürümler yalnızca [`CHANGELOG.md`](./CHANGELOG.md) içinde yer alır. Sürüm numarasını `package.json`, `package-lock.json`, HTML varlık sürüm etiketleri ve uygulama bilgi ekranıyla eşleştirin.
 
 
 ## Sohbetle Prompt Atölyesi (1.6.0)
@@ -70,7 +70,7 @@ Yeni görev düğmesi önceki prompttan bağımsız bir bağlam açar. Eski konu
 Yeni moda ilk girişte önceki normal/çılgın sohbet otomatik gereksinim olarak alınmaz.
 
 
-## Prompt karar belleği (1.16.0)
+## Prompt karar belleği (1.17.0)
 
 Görev kartı `prompt_state` ile sonraki tura taşınır. Prompt oturumunun kimliği, verilen kararlar ve hazırlık durumu
 bu cihazdaki sohbet kaydında korunur; normal sohbet ve diğer prompt görevleri bu kapsama karışmaz.

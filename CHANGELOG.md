@@ -1,3 +1,7 @@
+## 1.17.0 — 2026-11-27
+
+- Resmî altyapı araştırması, gerçek zamanlı oda durumu ve güncel Wrangler komutlarının denetimi.
+
 ## 1.16.0 — 2026-11-27
 
 - Sağlayıcı hatalarından sonra daha sağlıklı modeller öne alınır; bağlantı ve üretim durumu ayrıştırılır.
