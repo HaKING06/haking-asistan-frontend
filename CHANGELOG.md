@@ -1,3 +1,7 @@
+## 1.15.0 — 2026-11-27
+
+- Sohbet cevaplarının daha sağlam işlenmesi ve ayrı yayın ortamları için API adresi denetimi.
+
 ## 1.14.1 — 2026-11-27
 
 - Ayrı frontend ve backend yayın hedefleri korunur; belirsiz çok oyunculu yanıtları kesinleşmiş gibi gösterilmez.
