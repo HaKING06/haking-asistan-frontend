@@ -1,3 +1,7 @@
+## 1.14.1 — 2026-11-27
+
+- Ayrı frontend ve backend yayın hedefleri korunur; belirsiz çok oyunculu yanıtları kesinleşmiş gibi gösterilmez.
+
 ## 1.14.0 — 2026-11-27
 
 - Prompt Modu alan adı kökünü kullanıcı metninden korur; kalan yer tutucuları ve yazım sapmalarını denetler.
