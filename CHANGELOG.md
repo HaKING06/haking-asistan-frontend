@@ -1,3 +1,7 @@
+## 1.17.2 — 2026-11-27
+
+- Tekrarlanan teknik taslak hatalarında doğrulanmış görev kartından kopyalanabilir prompt hazırlanır.
+
 ## 1.17.1 — 2026-11-27
 
 - Prompt denetimi hatalarında görev kartından yeniden üretim ve doğrulanmış kredi iadesi bildirimi.
