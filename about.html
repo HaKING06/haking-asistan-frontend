@@ -25,8 +25,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./assets/css/main.css?v=1.7.1" />
-  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.7.1" />
+  <link rel="stylesheet" href="./assets/css/main.css?v=1.8.0" />
+  <link rel="stylesheet" href="./assets/css/privacy.css?v=1.8.0" />
   <style>
     .about-model-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:18px; }
     .about-model-card { min-width:0; padding:18px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,.025); }
@@ -47,7 +47,7 @@
     .about-links { display:flex; flex-wrap:wrap; gap:12px; margin-top:15px; }
     @media(max-width:680px) { .about-model-grid,.about-feature-grid { grid-template-columns:1fr; } .about-model-head { align-items:flex-start; flex-direction:column; gap:4px; } }
   </style>
-  <link rel="stylesheet" href="./assets/css/studio.css?v=1.7.1" />
+  <link rel="stylesheet" href="./assets/css/studio.css?v=1.8.0" />
 </head>
 <body>
   <main class="privacy-page">
@@ -77,7 +77,7 @@
           <div class="about-feature"><strong>Hata ayıkla</strong><span>Hata mesajını ve ilgili kodu paylaş; olası nedeni, düzeltmeyi ve kontrol etmen gereken noktaları öğren.</span></div>
           <div class="about-feature"><strong>Kod ve dosya incele</strong><span>Metin/kod dosyasını ekleyip inceleme iste. İzin verilen dosyalar tarayıcıda metin olarak okunur; sunucuda çalıştırılmaz veya uygulama veritabanına kaydedilmez.</span></div>
           <div class="about-feature"><strong>Test ve alıştırma</strong><span>Kodlama test sorularını açıklamalı çözmesini, birim test taslağı hazırlamasını veya öğrendiklerini sınamasını iste.</span></div>
-          <div class="about-feature"><strong>Prompt Modu</strong><span>İsteğini sohbet içinde netleştirir; agent, model, araçlar ve özel talimatlarını hatırlar. Tercihin yoksa işin kapsamına göre model önerir. Keşif ücretsizdir; araştırma ve kontrol aşamalarından geçen nihai agent promptu aynı HaKING bakiyesinden 5 kredi kullanır.</span></div>
+          <div class="about-feature"><strong>Prompt Modu</strong><span>Yeni bir görevi sohbet içinde netleştirir veya yapıştırdığın metni araştırıp uygulanabilir agent promptuna dönüştürür. Açık kararları ayrıca gösterir; agent, model, araçlar ve özel talimatlarını hatırlar. Tercihin yoksa işin kapsamına göre model önerir. Keşif ücretsizdir; araştırma ve kontrol aşamalarından geçen nihai agent promptu aynı HaKING bakiyesinden 5 kredi kullanır.</span></div>
           <div class="about-feature"><strong>Çılgın Mod</strong><span>Her istek planlanır. Yeni proje taleplerinde Tavily üzerinden kısa web araştırması yapılıp bulgular brief'e katılır; yanıt modelinden kapsamlı ve uygulanabilir teslimat istenir. Kısa bilgi sorularında gereksiz araştırma yapılmaz. Her istek 10 HaKING kredisi kullanır.</span></div>
           <div class="about-feature"><strong>Hesap güvenliği</strong><span>Şifreni tek kullanımlık e-posta bağlantısıyla yenile; hesabını e-posta onayı ve mevcut şifreyle kalıcı olarak sil.</span></div>
         </div>
@@ -114,12 +114,12 @@
         <div class="about-links"><a href="https://console.groq.com/docs/models" target="_blank" rel="noopener noreferrer">Groq model belgeleri ↗</a><a href="https://ai.google.dev/gemini-api/docs/models" target="_blank" rel="noopener noreferrer">Gemini model belgeleri ↗</a></div>
       </section>
 
-      <section class="privacy-section"><h2>HaKING AI sürüm <span id="app-version">1.7.1</span></h2><p>Google hesabınla şifre oluşturmadan giriş yapabilir veya Gmail ve şifre yöntemini kullanabilirsin. Aynı Gmail'e ait hesabın, kredilerin ve sohbetlerin korunur. Her iki yöntemde yaş onayı ve Cloudflare güvenlik doğrulaması gerekir.</p><p>Çerez ve tarayıcı depolama paneli; oturum, Google girişi, yerel sohbet belleği ve Cloudflare'ın çerezsiz performans ölçümünü açıklar. Google şifren, Gmail mesajların veya Drive dosyaların istenmez.</p><button type="button" class="privacy-action" data-open-privacy-settings>Gizlilik tercihlerini incele</button></section>
+      <section class="privacy-section"><h2>HaKING AI sürüm <span id="app-version">1.8.0</span></h2><p>Google hesabınla şifre oluşturmadan giriş yapabilir veya Gmail ve şifre yöntemini kullanabilirsin. Aynı Gmail'e ait hesabın, kredilerin ve sohbetlerin korunur. Her iki yöntemde yaş onayı ve Cloudflare güvenlik doğrulaması gerekir.</p><p>Çerez ve tarayıcı depolama paneli; oturum, Google girişi, yerel sohbet belleği ve Cloudflare'ın çerezsiz performans ölçümünü açıklar. Google şifren, Gmail mesajların veya Drive dosyaların istenmez.</p><button type="button" class="privacy-action" data-open-privacy-settings>Gizlilik tercihlerini incele</button></section>
       <footer>HaKING AI · Gizlilik ve veri kullanımı için <a href="./privacy.html">gizlilik metnini</a> incele.</footer>
     </div>
   </main>
-  <script src="./assets/js/about.js?v=1.7.1"></script>
-  <script src="./assets/js/privacy.js?v=1.7.1"></script>
-  <script src="./assets/js/studio.js?v=1.7.1"></script>
+  <script src="./assets/js/about.js?v=1.8.0"></script>
+  <script src="./assets/js/privacy.js?v=1.8.0"></script>
+  <script src="./assets/js/studio.js?v=1.8.0"></script>
 </body>
 </html>

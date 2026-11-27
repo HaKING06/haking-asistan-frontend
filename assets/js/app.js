@@ -50,7 +50,7 @@ function syncModePickerSelection() {
     ? (crazyModePickerTitleEl?.textContent || selectedNativeOption?.textContent || "Çılgın Mod")
     : selectedMode === "prompt" ? "Prompt Modu · 5 kredi" : "Normal · kredi harcamaz";
   document.getElementById("prompt-workshop-bar").hidden = selectedMode !== "prompt";
-  chatInputEl.placeholder = selectedMode === "prompt" ? "Ne yaptırmak istiyorsun? Kısaca anlat…" : "Bir fikir veya kod paylaş…";
+  chatInputEl.placeholder = selectedMode === "prompt" ? "Görevini anlat veya “Şu metni promptlaştır:” yazıp metni yapıştır…" : "Bir fikir veya kod paylaş…";
   if (selectedMode === "prompt" && AppState.promptContextStart == null) {
     const previous = [...AppState.history].reverse().find(item => item.role === "user" && item.mode === "prompt" && item.promptSession);
     AppState.promptSessionId = previous?.promptSession || crypto.randomUUID();

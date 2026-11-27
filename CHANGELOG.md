@@ -1,3 +1,8 @@
+## 1.8.0 — 2026-11-27
+
+- Metinden agent promptu oluşturma, açık kararların gösterilmesi ve kapsam bazlı üretim.
+- Kısa görevlerde daha düşük çıktı bütçesi ve karar kartıyla daha kısa keşif bağlamı.
+
 ## 1.7.1 — 2026-11-24
 
 - Çılgın Mod ve Prompt Modu için ortak kredi açıklamaları.
