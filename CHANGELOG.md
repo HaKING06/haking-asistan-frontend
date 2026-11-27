@@ -1,3 +1,7 @@
+## 1.17.1 — 2026-11-27
+
+- Prompt denetimi hatalarında görev kartından yeniden üretim ve doğrulanmış kredi iadesi bildirimi.
+
 ## 1.17.0 — 2026-11-27
 
 - Resmî altyapı araştırması, gerçek zamanlı oda durumu ve güncel Wrangler komutlarının denetimi.
