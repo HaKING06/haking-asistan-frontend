@@ -1,3 +1,7 @@
+## 1.19.1 — 2026-11-27
+
+- Uzun görevlerde devredilen seçimler ve hazır varlık izni korunur; yedek görev kartı tekrarları azaltır.
+
 ## 1.19.0 — 2026-11-27
 
 - Prompt Modu sunum, video, görsel, yazı, araştırma, veri ve kod görevlerine göre teslimi uyarlar.
