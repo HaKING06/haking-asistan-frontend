@@ -22,7 +22,7 @@ const CHAT_USAGE_PROVIDERS = new Set(["tavily", "gemini", "groq"]);
 function conversationScope(item) {
   const mode = ["normal", "crazy", "prompt"].includes(item.mode) ? item.mode : undefined;
   const promptSession = typeof item.promptSession === "string" && /^[a-zA-Z0-9-]{1,64}$/.test(item.promptSession) ? item.promptSession : undefined;
-  return { ...(mode ? {mode} : {}), ...(mode === "prompt" && promptSession ? {promptSession} : {}) };
+  return { ...(mode ? {mode} : {}), ...(mode === "prompt" && promptSession ? {promptSession, ...(item.promptIncludesPrelude === true ? {promptIncludesPrelude: true} : {})} : {}) };
 }
 
 function normalizeChatUsage(value) {

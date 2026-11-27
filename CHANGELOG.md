@@ -1,3 +1,7 @@
+## 1.8.2 — 2026-11-27
+
+- Prompt Modu normal sohbet kararlarını ve son kısıtları üretim ve denetim aşamalarına taşır.
+
 ## 1.8.1 — 2026-11-27
 
 - Prompt Modu öneri sorularına ücretsiz ve araştırmalı proje önerileri verir.

@@ -54,7 +54,7 @@ function syncModePickerSelection() {
   if (selectedMode === "prompt" && AppState.promptContextStart == null) {
     const previous = [...AppState.history].reverse().find(item => item.role === "user" && item.mode === "prompt" && item.promptSession);
     AppState.promptSessionId = previous?.promptSession || crypto.randomUUID();
-    AppState.promptContextStart = AppState.history.length;
+    AppState.promptContextStart = 0;
     AppState.promptReady = false;
     AppState.promptBrief = null;
     document.getElementById("prompt-generate-btn").disabled = true;
@@ -370,6 +370,18 @@ document.getElementById("clear-chat-history-btn")?.addEventListener("click", () 
   if (status) status.textContent = "Bu cihazdaki sohbet geçmişi silindi.";
 });
 
+function buildPromptContext(history, message) {
+  const belongs = item => item.mode === "prompt" && item.promptSession === AppState.promptSessionId;
+  const first = history.findIndex(belongs);
+  const planReference = /bu plan|önceki plan|normal mod/i;
+  const importedPlan = planReference.test(message) || history.some(item => belongs(item) && item.role === "user" && planReference.test(item.content));
+  const prelude = first >= 0 && history[first].promptIncludesPrelude;
+  const start = importedPlan || prelude ? 0 : first >= 0 ? first : (AppState.promptContextStart ?? 0);
+  return buildChatContext(history.filter((item, index) =>
+    belongs(item) || (index >= start && (!item.mode || item.mode === "normal"))
+  ));
+}
+
 function buildChatContext(history) {
   const entries = Array.isArray(history) ? history : [];
   if (!entries.length) return [];
@@ -385,7 +397,7 @@ function buildChatContext(history) {
     if (budget <= 0) break;
     const itemBudget = Math.min(budget, 12000);
     const content = item.content.length > itemBudget ? item.content.slice(-itemBudget) : item.content;
-    selected.unshift({ role: item.role, content });
+    selected.unshift({ role: item.role, content, ...(item.mode ? {mode: item.mode} : {}) });
     budget -= content.length;
   }
   return anchor ? [anchor, ...selected].slice(-CHAT_CONTEXT_MAX_MESSAGES) : selected;
@@ -492,7 +504,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
       rememberIncompleteCodeFiles(assistantReply, continueIntent);
       saveChatHistory(
         AppState.email,
-        [...AppState.history, { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }, { role: "assistant", content: assistantReply, usage: providerUsage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }],
+        [...AppState.history, { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId, promptIncludesPrelude: AppState.promptContextStart === 0} : {}) }, { role: "assistant", content: assistantReply, usage: providerUsage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }],
         true,
         mode
       );
@@ -506,7 +518,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
       requestMessage,
       AppState.email,
       AppState.token,
-      buildChatContext(mode === "prompt" ? AppState.history.filter(item => item.mode === "prompt" && item.promptSession === AppState.promptSessionId) : AppState.history),
+      mode === "prompt" ? buildPromptContext(AppState.history, message) : buildChatContext(AppState.history),
       (chunk) => {
         assistantReply += chunk;
         persistStreamingDraft();
@@ -560,7 +572,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
       if (hasReceivedChunk) {
         rememberIncompleteCodeFiles(assistantReply, continueIntent);
         AppState.history.push(
-          { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) },
+          { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId, promptIncludesPrelude: AppState.promptContextStart === 0} : {}) },
           { role: "assistant", content: assistantReply, usage: providerUsage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }
         );
         AppState.history = retainChatHistory(AppState.history);
@@ -577,7 +589,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
     } else {
       clearSelectedSourceFile();
       AppState.history.push(
-        { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) },
+        { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId, promptIncludesPrelude: AppState.promptContextStart === 0} : {}) },
         { role: "assistant", content: assistantReply, usage: providerUsage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }
       );
       AppState.history = retainChatHistory(AppState.history);
@@ -592,7 +604,7 @@ async function sendMessageFromUI(promptAction = "clarify") {
     if (hasReceivedChunk) {
       rememberIncompleteCodeFiles(assistantReply, continueIntent);
       AppState.history.push(
-        { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) },
+        { role: "user", content: historyUserMessage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId, promptIncludesPrelude: AppState.promptContextStart === 0} : {}) },
         { role: "assistant", content: assistantReply, usage: providerUsage, mode, ...(mode === "prompt" ? {promptSession: AppState.promptSessionId} : {}) }
       );
       AppState.history = retainChatHistory(AppState.history);
